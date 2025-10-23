@@ -100,7 +100,7 @@
 | **Language** | TypeScript 5.x | Type safety, modern JS features |
 | **Runtime** | Node.js 20+ LTS | Stable, performant |
 | **Testing** | Vitest | Fast, modern, ESM-native |
-| **Documentation** | TSDoc | Industry standard inline docs |
+| **Documentation** | TypeDoc | Industry standard inline docs |
 
 ### Services Stack
 

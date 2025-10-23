@@ -61,7 +61,7 @@ codex7/
 - **Language**: TypeScript 5.x
 - **Runtime**: Node.js 20+ LTS
 - **Testing**: Vitest
-- **Documentation**: TSDoc
+- **Documentation**: TypeDoc
 
 ### Service Stack
 - **MCP Server**: @modelcontextprotocol/sdk
@@ -91,7 +91,7 @@ codex7/
 ### Code Standards
 1. ✨ **TypeScript-first** - Strong typing, no `any`
 2. 🧪 **Test-driven** - Write tests first, aim for >80% coverage
-3. 📝 **Document everything** - TSDoc for all public APIs
+3. 📝 **Document everything** - TypeDoc for all public APIs
 4. 🔒 **Security-first** - Encryption, least privilege, input validation
 5. 🎨 **Beautiful code** - ESLint + Prettier configured
 6. 💜 **Community-focused** - Clear, welcoming, emoji-rich!
@@ -381,7 +381,7 @@ See `docs/SELF_HOSTING.md` for comprehensive deployment guide.
 1. 🎯 **Be specific** - Clear tasks get better results
 2. 📝 **Reference files** - Use `@filename` to provide context
 3. 🧪 **Test-first** - Ask for tests alongside implementation
-4. 📚 **Document** - Request TSDoc comments for APIs
+4. 📚 **Document** - Request TypeDoc comments for APIs
 5. 🔍 **Review** - Check generated code, ask questions
 6. 🎨 **Emoji** - Remind me to use emojis liberally!
 
@@ -392,7 +392,7 @@ See `docs/SELF_HOSTING.md` for comprehensive deployment guide.
 "Create a new MCP tool for semantic search"
 "Update PLAN.md with our progress"
 "Review this code for security issues"
-"Generate TSDoc comments for this module"
+"Generate TypeDoc comments for this module"
 ```
 
 ---
