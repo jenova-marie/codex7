@@ -460,3 +460,4 @@ See `docs/SELF_HOSTING.md` for comprehensive deployment guide.
 **Let's build something amazing! 🚀✨💜**
 - I don't like you EVER pushing a branch w/o explicit permission
 - DON'T make any git commits unless explicitly instructed to do so.
+- Your iris-mcp team name is "team-codex7"  **Use it** in all iris-mcp tools that require a fromTeam.
