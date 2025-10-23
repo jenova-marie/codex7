@@ -8,10 +8,17 @@
   "scripts": {
     "dev": "tsc --watch",
     "build": "tsc",
-    "clean": "rm -rf dist *.tsbuildinfo",
+    "clean": "rm -rf dist *.tsbuildinfo src/drizzle src/migrations",
     "type-check": "tsc --noEmit",
-    "migrate": "tsx src/scripts/migrate.ts",
-    "migrate:rollback": "tsx src/scripts/migrate.ts --rollback",
+    "drizzle:schema": "tsx src/scripts/json-to-drizzle.ts ../shared/src/models/json src/drizzle",
+    "drizzle:generate": "drizzle-kit generate",
+    "drizzle:push": "drizzle-kit push",
+    "drizzle:studio": "drizzle-kit studio",
+    "migrate": "tsx src/scripts/run-migrations.ts",
+    "migrate:fresh": "docker compose -f ../../deployments/docker/docker-compose.yml down -v && docker compose -f ../../deployments/docker/docker-compose.yml up -d && sleep 3 && pnpm migrate",
+    "db:reset": "pnpm migrate:fresh",
+    "make": "pnpm drizzle:schema && pnpm drizzle:generate",
+    "setup": "pnpm make && pnpm migrate",
     "test": "vitest",
     "test:watch": "vitest --watch",
     "test:coverage": "vitest --coverage"
@@ -20,16 +27,18 @@
     "@codex7/shared": "workspace:*",
     "@jenova-marie/ts-rust-result": "^2.2.4",
     "@jenova-marie/wonder-logger": "^1.0.12",
-    "pg": "^8.11.3",
-    "pgvector": "^0.1.8",
+    "drizzle-orm": "^0.44.6",
+    "postgres": "^3.4.5",
+    "pgvector": "^0.2.0",
     "rxjs": "^7.8.1"
   },
   "devDependencies": {
-    "@types/node": "^20.11.16",
-    "@types/pg": "^8.11.0",
-    "tsx": "^4.7.0",
-    "typescript": "^5.3.3",
-    "vitest": "^1.2.2"
+    "@types/node": "^22.10.5",
+    "@vitest/coverage-v8": "^1.6.1",
+    "drizzle-kit": "^0.31.5",
+    "tsx": "^4.20.6",
+    "typescript": "^5.7.3",
+    "vitest": "^1.6.1"
   },
   "engines": {
     "node": ">=20.0.0"
