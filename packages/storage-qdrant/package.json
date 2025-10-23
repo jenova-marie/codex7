@@ -1,0 +1,33 @@
+{
+  "name": "@codex7/storage-qdrant",
+  "version": "0.1.0-alpha",
+  "description": "💾 Qdrant storage adapter for Codex7 (high-scale deployments)",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "dev": "tsc --watch",
+    "build": "tsc",
+    "clean": "rm -rf dist *.tsbuildinfo",
+    "type-check": "tsc --noEmit",
+    "test": "vitest",
+    "test:watch": "vitest --watch",
+    "test:coverage": "vitest --coverage"
+  },
+  "dependencies": {
+    "@codex7/shared": "workspace:*",
+    "@jenova-marie/ts-rust-result": "^1.0.0",
+    "@jenova-marie/wonder-logger": "^1.0.0",
+    "@qdrant/js-client-rest": "^1.8.0",
+    "rxjs": "^7.8.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.16",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3",
+    "vitest": "^1.2.2"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
