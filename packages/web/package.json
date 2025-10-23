@@ -1,7 +1,7 @@
 {
   "name": "@codex7/web",
   "version": "0.1.0-alpha",
-  "description": "🎨 Web UI dashboard for Codex7",
+  "description": "\ud83c\udfa8 Web UI dashboard for Codex7",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -19,7 +19,9 @@
     "@tanstack/react-query": "^5.17.19",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.21.3"
+    "react-router-dom": "^6.21.3",
+    "@jenova-marie/wonder-logger": "^1.0.12",
+    "@jenova-marie/ts-rust-result": "^2.2.4"
   },
   "devDependencies": {
     "@types/react": "^18.2.48",

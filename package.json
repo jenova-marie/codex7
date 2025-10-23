@@ -1,7 +1,7 @@
 {
   "name": "codex7",
   "version": "0.1.0-alpha",
-  "description": "🚀 The truly open-source documentation MCP server - transparent, self-hostable, community-driven",
+  "description": "\ud83d\ude80 The truly open-source documentation MCP server - transparent, self-hostable, community-driven",
   "private": true,
   "type": "module",
   "keywords": [
@@ -61,5 +61,9 @@
     "prettier": "^3.2.5",
     "typescript": "^5.3.3",
     "vitest": "^1.2.2"
+  },
+  "dependencies": {
+    "@jenova-marie/wonder-logger": "^1.0.12",
+    "@jenova-marie/ts-rust-result": "^2.2.4"
   }
 }

@@ -1,7 +1,7 @@
 {
   "name": "@codex7/api",
   "version": "0.1.0-alpha",
-  "description": "🌐 REST API service for Codex7",
+  "description": "\ud83c\udf10 REST API service for Codex7",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -17,8 +17,8 @@
   },
   "dependencies": {
     "@codex7/shared": "workspace:*",
-    "@jenova-marie/ts-rust-result": "^1.0.0",
-    "@jenova-marie/wonder-logger": "^1.0.0",
+    "@jenova-marie/ts-rust-result": "^2.2.4",
+    "@jenova-marie/wonder-logger": "^1.0.12",
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "express-rate-limit": "^7.1.5",

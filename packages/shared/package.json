@@ -1,7 +1,7 @@
 {
   "name": "@codex7/shared",
   "version": "0.1.0-alpha",
-  "description": "🔧 Shared types, utilities, and interfaces for Codex7",
+  "description": "\ud83d\udd27 Shared types, utilities, and interfaces for Codex7",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -33,8 +33,8 @@
     "test:coverage": "vitest --coverage"
   },
   "dependencies": {
-    "@jenova-marie/ts-rust-result": "^1.0.0",
-    "@jenova-marie/wonder-logger": "^1.0.0"
+    "@jenova-marie/ts-rust-result": "^2.2.4",
+    "@jenova-marie/wonder-logger": "^1.0.12"
   },
   "devDependencies": {
     "typescript": "^5.3.3",

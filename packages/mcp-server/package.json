@@ -1,7 +1,7 @@
 {
   "name": "@codex7/mcp-server",
   "version": "0.1.0-alpha",
-  "description": "📡 MCP server implementation for Codex7",
+  "description": "\ud83d\udce1 MCP server implementation for Codex7",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -20,8 +20,8 @@
   },
   "dependencies": {
     "@codex7/shared": "workspace:*",
-    "@jenova-marie/ts-rust-result": "^1.0.0",
-    "@jenova-marie/wonder-logger": "^1.0.0",
+    "@jenova-marie/ts-rust-result": "^2.2.4",
+    "@jenova-marie/wonder-logger": "^1.0.12",
     "@modelcontextprotocol/sdk": "^0.5.0",
     "rxjs": "^7.8.1"
   },
