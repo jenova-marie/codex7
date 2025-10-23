@@ -1,0 +1,14 @@
+# Build outputs
+dist/
+build/
+coverage/
+
+# Dependencies
+node_modules/
+pnpm-lock.yaml
+
+# Generated files
+*.tsbuildinfo
+
+# Markdown files with special formatting
+CONVERSATION.md

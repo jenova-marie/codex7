@@ -1,0 +1,16 @@
+# 🚀 Codex7 pnpm Workspace Configuration
+# The truly open-source documentation MCP server
+
+packages:
+  # All packages in the packages directory
+  - 'packages/*'
+
+  # Explicitly list packages for clarity
+  - 'packages/shared'
+  - 'packages/mcp-server'
+  - 'packages/api'
+  - 'packages/web'
+  - 'packages/indexer'
+  - 'packages/storage-postgres'
+  - 'packages/storage-sqlite'
+  - 'packages/storage-qdrant'
