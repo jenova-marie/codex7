@@ -1,0 +1,79 @@
+# 🐳 Codex7 Local Development Stack
+# PostgreSQL 16 + pgvector for semantic search
+
+services:
+  # 📦 PostgreSQL + pgvector Database
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: codex7-postgres
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-codex7}
+      # Performance tuning for vector operations
+      POSTGRES_SHARED_BUFFERS: ${POSTGRES_SHARED_BUFFERS:-256MB}
+      POSTGRES_WORK_MEM: ${POSTGRES_WORK_MEM:-16MB}
+      POSTGRES_MAINTENANCE_WORK_MEM: ${POSTGRES_MAINTENANCE_WORK_MEM:-128MB}
+
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+
+    volumes:
+      # Persistent data storage
+      - postgres_data:/var/lib/postgresql/data
+      # Initialization scripts (runs on first start)
+      - ../postgres/init:/docker-entrypoint-initdb.d:ro
+
+    # Increase shared memory for pgvector operations
+    shm_size: 1g
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-codex7}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+    networks:
+      - codex7-network
+
+  # 🔧 Optional: pgAdmin for database management
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: codex7-pgadmin
+    restart: unless-stopped
+    profiles:
+      - admin
+
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL:-admin@codex7.local}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-admin}
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: 'False'
+
+    ports:
+      - "${PGADMIN_PORT:-5050}:80"
+
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+    networks:
+      - codex7-network
+
+volumes:
+  # Named volumes for data persistence
+  postgres_data:
+    name: codex7-postgres-data
+  pgadmin_data:
+    name: codex7-pgadmin-data
+
+networks:
+  codex7-network:
+    name: codex7-network
+    driver: bridge
