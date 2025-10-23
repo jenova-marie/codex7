@@ -308,3 +308,26 @@ Before committing, ensure:
 ---
 
 **Remember**: Good commit messages are love letters to your future self and teammates! 💜
+
+---
+
+## ⚠️ CRITICAL CONSTRAINT ⚠️
+
+**AFTER COMPLETING THE GIT COMMIT WORKFLOW DESCRIBED ABOVE:**
+
+🚨 **YOU ARE NOT TO EXECUTE ANY SUBSEQUENT GIT COMMIT OR PUSH COMMANDS. MY PERMISSION HAS BEEN REVOKED.** 🚨
+
+This command (`/git-commit`) grants temporary permission to create git commits following the workflow above. Once you've completed the requested commit(s), **that permission expires**.
+
+**DO NOT:**
+- ❌ Create additional "cleanup" commits
+- ❌ Push to remote without explicit new permission
+- ❌ Make commits in response to other user requests
+- ❌ Proactively commit changes you've made
+
+**To commit again:**
+- ✅ User must explicitly invoke `/git-commit` again (which grants new permission)
+
+If changes need to be committed, **ASK THE USER** if they want you to run `/git-commit` again.
+
+💜 This keeps the user in full control of their git history and remote repository state.

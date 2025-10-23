@@ -47,7 +47,7 @@ This conversation log serves as:
 >
 > This will be a mono repo containing the mcp server, web app (status/add doc urls/etc), api, and document indexer or processor.
 >
-> We will be using pnpm, typescript, rxjs, @jenova-marie/ts-rust-result, @jenova-marie/wonder-logger, expressjs, vite, react, vitest, and tsdoc. Lets discuss any more tech frameworks you also envision.
+> We will be using pnpm, typescript, rxjs, @jenova-marie/ts-rust-result, @jenova-marie/wonder-logger, expressjs, vite, react, vitest, and TypeDoc. Lets discuss any more tech frameworks you also envision.
 >
 > In addition - codex7 will be be aimed at documenting systems that are not provided in nice clean generated docs/ folders as context7 provides, but additional sources - such as web pages. We will be using claude agent sdk and or claude code for use in processing our ingested external data sources. In addition we may consider using a llm to help identify the best docs to return in a query to the caller - like a librarian. These are high level views, but I do like the idea of one day having businesses support the oss project through self-hosting incentives.
 >
@@ -934,3 +934,66 @@ It also demonstrated the collaborative nature of our work - I can get ahead of m
 - ✅ All commits properly attributed with co-authorship
 - 💡 Decision: Defer package-level CLAUDE.md files until Phase 1 implementation
 - 🧭 Course Correction: Recognized premature documentation, stayed focused on current phase
+
+---
+
+### 📚 TypeDoc Documentation Commands: Planning Developer Experience - October 22, 2025
+
+**Jenova Marie:**
+
+> We need to add TypeDoc documentation commands. I previously mentioned TSDoc but actually we're using TypeDoc as the tool. Create doc-new.md, doc-diff.md, and make-docs.md commands. doc-new adds docs to missing code, doc-diff gets git staged diffs and updates docs appropriately, make-docs generates the HTML. Let's talk about this before you write them.
+
+**Claude Code:**
+
+> I love this idea! Let me put on my Sr Tech Writer hat and discuss the architecture before writing. For doc-new, should it just report what's missing or actually write skeleton comments? Should it focus only on exported APIs or also internal functions? And doc-update would be comprehensive validation but that could be expensive - maybe we should skip that one?
+
+**Jenova Marie:**
+
+> Actually write skeleton comments, also internal functions, just src files. Skip doc-update - it's too slow. doc-diff should only look at staged changes and do nothing if docs are still accurate. We should validate parameter names match, return types match, example code compiles, links aren't broken, and since/deprecated tags are appropriate. Also document the Result error types per ERROR_HANDLING.md like Java throws.
+
+**Claude Code:**
+
+> Perfect! So doc-diff is the MVP - the most useful day-to-day command. It analyzes staged changes only, suggests updates but doesn't auto-commit, and flags related docs in the docs folder that might need updates too. For enforcement, I'm thinking warning-based approach - report issues but don't block commits. Trust developer judgment and we can add CI checks later for Phase 2 when we have contributors.
+
+**Jenova Marie:**
+
+> Yes! Everything should be documented - public APIs and internals. No auto-commits. doc-diff is priority. TypeDoc output goes to ./api-docs and eventually GitHub Pages. Commands are package-scoped, exclude test files, include both .ts and .tsx files.
+
+**Claude Code:**
+
+> Created all three commands:
+>
+> doc-new.md finds undocumented exports and writes skeleton TSDoc comments with placeholders for description, all parameters, returns, and throws entries for Result error types. Reports what was added so you can fill in the placeholders.
+>
+> doc-diff.md is the star - analyzes only staged changes, validates parameter names match function signatures, return types are documented, examples would compile, links aren't broken, and Result error types have proper throws documentation. The key principle: if docs are still accurate after code changes, do nothing!
+>
+> make-docs.md runs TypeDoc to generate HTML to ./api-docs directory, with instructions for publishing to GitHub Pages. User decides when to run this - typically before releases.
+>
+> All commands are package-scoped, exclude tests, support TypeScript and TSX, and reference both TypeDoc docs and our ERROR_HANDLING.md for the Result error patterns.
+
+**Jenova Marie:**
+
+> Also need to update git-commit.md with a constraint - after completing the git workflow, permission is revoked and I should not execute any subsequent git commands.
+
+**Claude Code:**
+
+> Added the constraint! "YOU ARE NOT TO EXECUTE ANY SUBSEQUENT GIT COMMIT OR PUSH COMMANDS. MY PERMISSION HAS BEEN REVOKED." The slash command grants temporary permission that expires after completing the workflow. Much better than the overly dramatic "EVER!!!" wording we started with!
+
+**Key Insights:**
+
+This conversation established a comprehensive documentation workflow that fits naturally into the development process. The three-command approach separates concerns beautifully - find missing docs, keep docs synced with code changes, and generate publishable HTML.
+
+The emphasis on doc-diff being "smart" - only updating when necessary - shows respect for developer time. If the code change doesn't affect documentation accuracy, leave it alone! This prevents documentation churn and keeps the signal-to-noise ratio high.
+
+The integration with Result error types demonstrates how our documentation standards reinforce our error handling patterns from ERROR_HANDLING.md. Everything connects.
+
+**Session Statistics:**
+
+- 📝 Commands Created: 3 TypeDoc documentation commands
+- 🎯 doc-new.md: Finds and documents missing APIs with skeleton comments
+- 🔍 doc-diff.md: Git-aware smart updates (the MVP!)
+- 📚 make-docs.md: Generate HTML with TypeDoc
+- ✅ All commands: Package-scoped, exclude tests, validate thoroughly
+- 🔗 Integration: Result error types documented per ERROR_HANDLING.md
+- 🚫 Constraint Added: git-commit permission revocation after workflow complete
+- 💡 Design Philosophy: Warning-based, trust developers, don't block workflow
