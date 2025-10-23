@@ -1,3 +1,7 @@
+<div align="center">
+
+<img src="assets/codex7-logo.png" alt="Codex7 Logo" width="200"/>
+
 # 🚀 Codex7
 
 > **The _truly_ open-source documentation MCP server**
@@ -8,6 +12,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](CONTRIBUTING.md)
 [![Slack](https://img.shields.io/badge/Slack-Join%20Us-purple.svg?style=flat-square)](https://codex7.slack.com)
+
+</div>
 
 ---
 
