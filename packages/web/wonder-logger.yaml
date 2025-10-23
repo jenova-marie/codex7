@@ -1,0 +1,61 @@
+# 🎨 Codex7 Web Dashboard - Wonder Logger Configuration
+
+service:
+  name: ${SERVICE_NAME:-codex7-web}
+  version: ${SERVICE_VERSION:-0.1.0-alpha}
+  environment: ${NODE_ENV:-development}
+
+logger:
+  enabled: true
+  level: ${LOG_LEVEL:-info}
+
+  # Redact sensitive fields from logs
+  redact:
+    - password
+    - token
+    - apiKey
+    - 'user.email'
+    - 'user.password'
+
+  # Log transports
+  transports:
+    # Console output (pretty in dev, JSON in prod)
+    - type: console
+      pretty: ${LOG_PRETTY:-true}
+      level: ${LOG_LEVEL:-info}
+
+    # Memory transport (for runtime inspection)
+    - type: memory
+      name: ${SERVICE_NAME:-codex7-web}
+      maxSize: ${MEMORY_LOG_MAX_SIZE:-5000}
+      level: debug
+
+  # Enable trace context injection
+  plugins:
+    traceContext: true
+
+otel:
+  # Minimal telemetry for frontend dev server
+  enabled: ${OTEL_ENABLED:-false}
+
+  # Distributed tracing
+  tracing:
+    enabled: ${OTEL_TRACING_ENABLED:-false}
+    exporter: ${OTEL_TRACE_EXPORTER:-otlp}
+    endpoint: ${OTEL_TRACES_ENDPOINT:-http://localhost:4318/v1/traces}
+    sampleRate: ${OTEL_TRACE_SAMPLE_RATE:-0.1}
+
+  # Metrics collection
+  metrics:
+    enabled: ${OTEL_METRICS_ENABLED:-false}
+    exportIntervalMillis: ${OTEL_METRICS_INTERVAL:-60000}
+
+    exporters:
+      # Prometheus scrape endpoint
+      - type: prometheus
+        port: ${PROMETHEUS_PORT:-9468}
+
+  # Automatic instrumentation
+  instrumentation:
+    auto: false
+    http: false

@@ -1,0 +1,73 @@
+# 🚀 Codex7 Root - Wonder Logger Configuration
+# This is a shared default configuration for development
+# Individual services override this with their own wonder-logger.yaml
+
+service:
+  name: ${SERVICE_NAME:-codex7}
+  version: ${SERVICE_VERSION:-0.1.0-alpha}
+  environment: ${NODE_ENV:-development}
+
+logger:
+  enabled: true
+  level: ${LOG_LEVEL:-debug}
+
+  # Redact sensitive fields from logs
+  redact:
+    - password
+    - token
+    - apiKey
+    - 'user.email'
+    - 'user.password'
+    - 'req.headers.authorization'
+    - 'req.headers.cookie'
+    - 'database.password'
+    - 'connectionString'
+    - 'openai.apiKey'
+    - 'anthropic.apiKey'
+    - 'github.token'
+
+  # Log transports
+  transports:
+    # Console output (pretty in dev)
+    - type: console
+      pretty: ${LOG_PRETTY:-true}
+      level: ${LOG_LEVEL:-debug}
+
+    # Memory transport (for runtime inspection)
+    - type: memory
+      name: ${SERVICE_NAME:-codex7}
+      maxSize: ${MEMORY_LOG_MAX_SIZE:-10000}
+      level: debug
+
+  # Enable trace context injection
+  plugins:
+    traceContext: true
+
+otel:
+  enabled: ${OTEL_ENABLED:-false}
+
+  # Distributed tracing
+  tracing:
+    enabled: ${OTEL_TRACING_ENABLED:-false}
+    exporter: ${OTEL_TRACE_EXPORTER:-otlp}
+    endpoint: ${OTEL_TRACES_ENDPOINT:-http://localhost:4318/v1/traces}
+    sampleRate: ${OTEL_TRACE_SAMPLE_RATE:-1.0}
+
+  # Metrics collection
+  metrics:
+    enabled: ${OTEL_METRICS_ENABLED:-false}
+    exportIntervalMillis: ${OTEL_METRICS_INTERVAL:-60000}
+
+    exporters:
+      # Prometheus scrape endpoint
+      - type: prometheus
+        port: ${PROMETHEUS_PORT:-9469}
+
+      # OTLP push to Prometheus
+      - type: otlp
+        endpoint: ${OTEL_METRICS_ENDPOINT:-http://localhost:4318/v1/metrics}
+
+  # Automatic instrumentation
+  instrumentation:
+    auto: true
+    http: true
