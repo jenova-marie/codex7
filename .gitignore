@@ -1,0 +1,177 @@
+# 🚀 Codex7 .gitignore
+# Comprehensive ignore patterns for the monorepo
+
+# ============================================
+# 📦 Dependencies
+# ============================================
+node_modules/
+.pnp
+.pnp.js
+.yarn/install-state.gz
+
+# ============================================
+# 🔨 Build Outputs
+# ============================================
+dist/
+build/
+out/
+*.tsbuildinfo
+.turbo/
+
+# ============================================
+# 🧪 Testing
+# ============================================
+coverage/
+.nyc_output/
+*.lcov
+.vitest/
+/test-results/
+/playwright-report/
+/playwright/.cache/
+
+# ============================================
+# 🔐 Environment & Secrets
+# ============================================
+.env
+.env.local
+.env.*.local
+.env.production
+.env.development
+.env.test
+*.env
+!.env.example
+
+# ============================================
+# 🗄️ Database
+# ============================================
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+/data/
+postgres_data/
+/backups/*.sql
+
+# ============================================
+# 📝 Logs
+# ============================================
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# ============================================
+# 🐳 Docker
+# ============================================
+.docker/
+docker-compose.override.yml
+
+# ============================================
+# 💾 Cache & Temporary Files
+# ============================================
+.cache/
+.parcel-cache/
+.vite/
+.next/
+.nuxt/
+.eslintcache
+.stylelintcache
+tmp/
+temp/
+*.tmp
+*.swp
+*.swo
+*~
+
+# ============================================
+# 🎨 IDE / Editor
+# ============================================
+
+# VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# JetBrains
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Other
+.project
+.settings/
+
+# ============================================
+# 🖥️ Operating System
+# ============================================
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Linux
+.directory
+
+# ============================================
+# 🔑 Keys & Certificates
+# ============================================
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+certs/
+ssl/
+
+# ============================================
+# 📦 Package Manager
+# ============================================
+package-lock.json
+yarn.lock
+
+# Keep pnpm-lock.yaml for reproducible builds
+# pnpm-lock.yaml
+
+# ============================================
+# 🚀 Deployment
+# ============================================
+.terraform/
+*.tfstate
+*.tfstate.*
+.serverless/
+
+# ============================================
+# 📚 Documentation Build
+# ============================================
+/docs/.vitepress/dist/
+/docs/.vitepress/cache/
+
+# ============================================
+# 🧹 Misc
+# ============================================
+.todo
+.notes
+TODO.md
+NOTES.md
+scratch/
+experiments/
+*.backup
+*.bak
