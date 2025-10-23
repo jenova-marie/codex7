@@ -1,0 +1,150 @@
+# 🏗️ Codex7 Architecture Discussion
+
+> **Collaborative architecture refinement workspace**
+>
+> This document captures the ongoing architectural discussion between teams to refine and validate the Codex7 database design.
+
+---
+
+## 📋 Discussion Metadata
+
+**Participants:**
+- **team-codex7** (Proposer) - Defending current DATABASE_DESIGN.md
+- **team-codex7-storage** (Challenger) - Sr. Storage Architect perspective
+
+**Document Location:** `/Users/jenova/projects/jenova-marie/codex7/DISCUSSION.md`
+
+**Related Documents:**
+- Primary Design: `docs/DATABASE_DESIGN.md`
+- Architecture Questions: `QUESTIONS.md`
+- Implementation Plan: `PLAN.md`
+
+**Status:** 🟡 Active Discussion - Awaiting Storage Team Initial Review
+
+---
+
+## 🎯 Discussion Objectives
+
+1. **Validate** the proposed PostgreSQL + pgvector architecture
+2. **Identify** overlooked issues or edge cases
+3. **Explore** alternative implementation approaches
+4. **Optimize** for performance, scalability, and maintainability
+5. **Reach consensus** on final architecture before implementation
+
+---
+
+## 📊 Current Proposed Architecture (Summary)
+
+### Core Design
+- **Database:** PostgreSQL 16 + pgvector
+- **Hardware:** AWS EC2 t3.medium (4GB RAM, 50GB SSD)
+- **Embedding Model:** OpenAI text-embedding-3-small (1536 dims)
+- **Vector Index:** IVFFlat with 100 lists (cosine similarity)
+- **Chunking:** Hybrid structural (markdown headers, 512 token max)
+- **Schema:** Unified 3-table design (libraries → versions → documents)
+
+### Key Decisions
+1. **Unified schema** - Single `documents` table for all source types (GitHub, web, PDF)
+2. **IVFFlat over HNSW** - Better for <1M vectors, lower memory, faster builds
+3. **512 token chunks** - Balance between context and precision
+4. **SHA-256 deduplication** - Reuse embeddings for identical content
+5. **No LlamaIndex** - Custom pipeline for MVP, full control
+
+---
+
+## 💬 Discussion Thread
+
+### Round 1: Initial Storage Team Review
+
+**Status:** ⏳ Awaiting team-codex7-storage analysis
+
+**Instructions to Storage Team:**
+- Read `docs/DATABASE_DESIGN.md` thoroughly as a Sr. Storage Architect
+- Use sequential thinking to analyze the architecture rationale
+- Identify overlooked areas, potential issues, or better alternatives
+- Think deeply about:
+  - Schema design (normalized vs denormalized trade-offs)
+  - Index strategy (IVFFlat vs HNSW vs alternatives)
+  - Query performance patterns
+  - Scaling challenges (100k → 1M documents)
+  - Storage efficiency
+  - Operational complexity
+- Propose questions and alternative approaches
+- Update this document with your findings
+
+**Expected Deliverables:**
+1. List of questions/concerns about current design
+2. Alternative approaches (if any) with trade-off analysis
+3. Identified risks or edge cases we missed
+4. Recommendations for improvements
+
+---
+
+## 📝 Proposed Changes
+
+*This section will be populated as teams propose modifications to the architecture.*
+
+### Proposal Template
+
+```markdown
+### Proposal #X: [Title]
+
+**Proposed by:** [Team Name]
+**Date:** [YYYY-MM-DD]
+
+**Current Design:**
+[What the current design does]
+
+**Proposed Change:**
+[What should change and why]
+
+**Trade-offs:**
+- ✅ Benefits: ...
+- ⚠️ Concerns: ...
+- ❌ Drawbacks: ...
+
+**Decision:** [Accepted | Rejected | Modified | Pending]
+**Rationale:** [Why this decision was made]
+```
+
+---
+
+## 🔍 Open Questions
+
+*Questions raised during discussion that need resolution.*
+
+1. [Questions will be added here as they arise]
+
+---
+
+## ✅ Resolved Decisions
+
+*Architectural decisions that have been debated and resolved.*
+
+1. [Resolved items will be moved here]
+
+---
+
+## 📚 Research & References
+
+*Supporting research, benchmarks, or external references cited during discussion.*
+
+- [Will be populated during discussion]
+
+---
+
+## 🎯 Next Steps
+
+1. ⏳ **team-codex7-storage** - Review DATABASE_DESIGN.md and provide initial analysis
+2. ⏳ **Both teams** - Engage in structured debate on identified issues
+3. ⏳ **Both teams** - Update DISCUSSION.md collaboratively with proposals
+4. ⏳ **Reach consensus** - Finalize architecture decisions
+5. ⏳ **Present to user** - Get final approval before implementation
+
+---
+
+**Last Updated:** 2025-10-23 (Discussion initiated)
+
+**Made with 💜 by the Codex7 team**
+
+*"Great architecture comes from vigorous debate, not groupthink"* ✨

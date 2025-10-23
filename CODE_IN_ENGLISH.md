@@ -1106,3 +1106,222 @@ The integration with Result error types demonstrates how our documentation stand
 - 🎭 Orchestration Tool: iris-mcp for multi-team coordination
 
 ---
+
+### 💾 Database Design Deep-Dive: PostgreSQL Schema & Vector Search - October 23, 2025
+
+**Jenova Marie:**
+
+> Specifically - will our current proposed schema handle web pages? Should we have a structured store for GitHub style documentation and a different store for other type storage and indexing? Or make it one big schema for both? You haven't mentioned LlamaIndex - is that something we might want to examine?
+
+**Claude Code:**
+
+> Excellent questions! Let me address each one. First, yes - the current schema handles web pages through a unified design. We use a single documents table with a source_type discriminator field that can be github, web, or pdf. The source_path field is nullable for web pages since they have full URLs in source_url.
+
+> For the unified versus separate schema question, I strongly recommend the unified approach. Here's why: vector search performance! Querying a single table is ten to one hundred times faster than UNION queries across separate tables. Plus we get cross-source deduplication - the same content from GitHub and web documentation creates only one embedding.
+
+> As for LlamaIndex - great catch! I didn't mention it because I recommend NOT using it for MVP. Here's my reasoning: We want full control over our Context7-compatible schema and custom pipeline. LlamaIndex is a framework that would add abstraction layers and potentially lock us in. However, we CAN borrow ideas from their chunking strategies, document loaders, and query patterns. I documented this in a new section of DATABASE_DESIGN.md.
+
+**Jenova Marie:**
+
+> One - yes lets make the MVP a clean KISS babe! Two - agree but loved this suggestion so lets be sure to document it somewhere appropriate. Three - sounds good to start with.
+
+**Claude Code:**
+
+> Perfect! I'll update DATABASE_DESIGN.md with comprehensive documentation about the unified schema decision, how it handles all source types, and why we're keeping it simple with no framework dependencies for MVP. I'll also add the LlamaIndex research notes for Phase 2 consideration.
+
+> I added three major sections: First, a complete explanation of the unified schema with source-specific metadata examples for GitHub, web, and PDF. Second, TypeScript type safety patterns showing how to handle the different source types. Third, a detailed LlamaIndex and RAG Frameworks section documenting why we're not using it now but what we can learn from their approaches.
+
+**Key Decisions Made:**
+
+> **Unified Schema:** Single documents table handles all source types with source_type enum discriminator. This keeps vector search fast with no UNION queries needed. Type-specific data goes in JSONB metadata column with TypeScript interfaces for type safety.
+
+> **No LlamaIndex for MVP:** Building custom pipeline for full control and Context7 compatibility. Keeping it TypeScript-native with no framework dependencies. But documenting their chunking strategies, document loaders, and query patterns to learn from for Phase 2.
+
+> **KISS Principle:** Phase 1 MVP focuses on getting the basics right - simple architecture, clear patterns, direct PostgreSQL queries. We can add framework integration later if needed.
+
+---
+
+### 🏗️ Architecture Review: Storage Team Critical Analysis - October 23, 2025
+
+**Jenova Marie:**
+
+> First - use iris to tell team-codex7-storage to read DATABASE_DESIGN.md as a Senior Storage Architect and propose some questions in response to their review. I would like you to discuss this proposed architecture - you in support and the team storage looking for alternative possibly better implementation solutions.
+
+> Tell them to think really hard and ultrathink about it. Tell them to think sequentially about the architecture rational and try to grasp our proposed solution as well as areas we have overlooked that need attention.
+
+> As you two discuss this - I want you to update a new root DISCUSSION.md document and provide the other team with its location for them to also review and update with their suggestions giving you both a common area to work from and grow this architecture into a powerful solution.
+
+**Claude Code:**
+
+> I understand perfectly! This is a brilliant way to stress-test the architecture. I'll create DISCUSSION.md first as the collaborative workspace, then send an async message to team-codex7-storage asking them to perform deep critical analysis. My role is to defend the current design but remain open to better solutions. Their role is to challenge assumptions and find overlooked issues.
+
+> I created DISCUSSION.md with clear structure for collaborative refinement - participants, objectives, current architecture summary, discussion thread format, and proposal templates. Then I sent the message telling them to use sequential thinking, really examine the design, and challenge everything!
+
+**Storage Team Returns with Critical Analysis:**
+
+**Claude Code:**
+
+> The storage team completed their review and it's EXCELLENT! They caught multiple critical flaws I completely missed. Let me use sequential thinking to analyze their fifteen issues systematically and determine what to accept versus defend.
+
+**Sequential Analysis Results:**
+
+> Critical Issue One - Memory Capacity Crisis: They're RIGHT. At two hundred thousand documents, we need 1.5 GB for index plus 1 GB shared buffers plus work memory operations. That's 4 GB total with zero headroom for OS and connections. Must accept and reduce scope.
+
+> Critical Issue Two - IVFFlat Misconfiguration: They're RIGHT again. Lists equals one hundred is severely under-configured. The square root of one hundred thousand is three hundred sixteen, so we should use that. With only one hundred lists and ten probes, we're searching only ten percent of data. Poor recall guaranteed.
+
+> Critical Issue Five - Migration Bug: CRITICAL SHOWSTOPPER! They caught that pgvector extension loads in migration three AFTER we try to create vector columns in migration one. This will fail immediately. Must reorder to load extension first.
+
+> Critical Issue Three - Deduplication Misleading: They're absolutely correct. PostgreSQL INSERT SELECT copies the vector, doesn't create a reference. We're saving API calls but NOT storage space. I was wrong to call this true deduplication.
+
+**My Response Strategy:**
+
+> I'll ACCEPT most critical issues immediately - they caught real bugs. I'll DEFEND the unified schema and PostgreSQL choice with better documentation. I'll COMPROMISE on some items like using LlamaIndex for chunking only while keeping custom storage. And I'll ask questions back about trade-offs.
+
+> Updated DISCUSSION.md with comprehensive response accepting their critique where valid, defending decisions with clear rationale, and proposing counter-solutions. I acknowledged they caught ten-plus issues I missed and thanked them for excellent engineering rigor.
+
+**Revised Architecture After Review:**
+
+> **Phase 0 Changes:** Reduce target from two hundred thousand to fifty to one hundred thousand documents for t3.medium. Fix IVFFlat configuration with dynamic lists calculation. Reorder migrations to load pgvector extension first. Remove parent_doc_id field that wasn't actually used.
+
+> **Phase 1 Additions:** Add connection pooling with pgbouncer. Add Redis caching layer. Reduce work_mem from 50 MB to 16 MB for more concurrency. Add monitoring with Prometheus and Grafana. Add backup and disaster recovery automation.
+
+> **Phase 2 Deferrals:** True storage deduplication with separate embeddings table. Hybrid search score normalization. HNSW index evaluation. Trust score algorithmic ranking.
+
+**Key Realization:**
+
+> Being honest about capacity is better than overpromising. The storage team's mathematical analysis showed t3.medium can reliably handle fifty to one hundred thousand documents, not two hundred thousand. Better to set realistic expectations and provide clear scaling paths to t3.large and t3.xlarge.
+
+**Session Statistics:**
+
+- 🏗️ Architecture Documents: DATABASE_DESIGN.md (790 lines), DISCUSSION.md (586 lines)
+- 🔍 Issues Identified: 15 (5 critical, 10 moderate)
+- ✅ Issues Accepted: 12 of 15
+- 🛡️ Decisions Defended: 2 (unified schema, PostgreSQL choice)
+- 💡 Counter-Proposals: 2 (LlamaIndex partial adoption, remove parent_doc_id)
+- 📉 Scope Reduction: 200k docs → 50-100k docs for Phase 1
+- 🐛 Critical Bugs Found: 1 (migration ordering)
+- 📊 Configuration Fixes: 2 (IVFFlat lists, work_mem)
+- 🎯 Result: Significantly improved architecture through vigorous debate
+
+---
+
+### 🔧 Type System Architecture: RecoverySky-Common Pattern Implementation - October 23, 2025
+
+**Jenova Marie:**
+
+> Don't we need to first define our classes in shared - which will be the source the storage team will use drizzle to generate the pg migrations?
+
+**Claude Code:**
+
+> YES! Absolutely right, babe! The flow should be: Define domain types in @codex7/shared first, then storage team uses those types to create Drizzle schema, then Drizzle generates migrations from the schema. You're completely right about the order!
+
+**Jenova Marie:**
+
+> Nope, hun check out /Users/jenova/projects/recoverysky-org/recoverysky-common and examine the types I've created there with all the custom scripts for generation and migrations. Also note the ability to functionally attach methods to the objects the ORM spits out on instantiation.
+
+> Now that common project contains both the type definitions and all the ORM code. I'd like to see our shared package model how common is defining types and then duplicate the orm functionality into our storage package.
+
+> I've given you direct access to recoverysky-common - use it - but also feel free to wake up team-common and discuss the common project directly with them at will.
+
+**Claude Code:**
+
+> Perfect! Let me wake up team-common and ask them to explain the recoverysky-common architecture patterns so we can model Codex7 after it.
+
+**Team-Common Analysis Returns:**
+
+**Claude Code:**
+
+> WOW! Team-common delivered an AMAZING architecture analysis! This is exactly what we need. The RecoverySky-Common project demonstrates a type-safe, multi-layer schema transformation pipeline that maintains consistency across TypeScript types, JSON schemas, and Drizzle ORM.
+
+> The key insight is the SINGLE SOURCE OF TRUTH pattern: Plain TypeScript classes in models/ drive everything. Then a generation pipeline transforms them through multiple stages: TypeScript to JSON schema to Drizzle table definitions to SQL migrations. It's brilliant!
+
+**Key Pattern - The Model as Source of Truth:**
+
+**Claude Code:**
+
+> The model files like meeting.ts are plain classes with primitive types only, no methods, no complex logic. Just data fields with default values. For example, class meeting with id: string = '', created: number = 0, notes: object = {}. The defaults drive JSON schema generation!
+
+**Key Pattern - Function Injection:**
+
+**Claude Code:**
+
+> The @addFunctions decorator is genius! You can write standalone functions that take self as first parameter, then inject them as methods onto the class. This allows two usage patterns: direct function calls like getNextTime(meeting), or attached methods like meeting.getNextTime(). The decorator handles the this binding automatically!
+
+**Jenova Marie:**
+
+> Please continue with my answers - I've also created you a ./recoverysky-common symlink to their source you should be able to read directly now. Please do so such that you fully understand that existing implementation pattern I worked so hard on. Yes - copy the working scripts - but the models etc are all our own implementations of the existing patterns.
+
+**Claude Code:**
+
+> I asked you three critical questions about implementation approach. You answered: Include business logic classes now, copy the @addFunctions decorator, and copy the exact scripts proven to work. Perfect - full RecoverySky pattern adoption for Codex7!
+
+> Now let me study the actual source code through the symlink to understand every detail of your implementation.
+
+**Studying the RecoverySky Source:**
+
+**Claude Code:**
+
+> Reading through the actual code now. The plain model in meeting.ts is beautiful - fifty-three fields, all with defaults, constructor only initializes the notes object. Clean separation!
+
+> The Meeting business class extends meeting and uses @addFunctions decorator and Result types from ts-rust-result. Factory method Meeting.create() generates ObjectID, sets timestamps, returns Result. The update() method generates UID, computes SHA256 hash, updates timestamp - all wrapped in Result for error handling.
+
+> The function-injection decorator is elegant - just twenty-two lines! Takes a record of functions, loops through, attaches each to prototype with this binding. Supports both single function and multiple functions variants.
+
+**The Generation Pipeline:**
+
+**Claude Code:**
+
+> The json-to-drizzle script is one hundred eighty-nine lines of pure transformation logic. It maps TypeScript types to PostgreSQL types: string to text, number to integer, array to json. It handles varchar with maxLength, timestamp fields, UUID fields, decimal fields. It auto-detects primary keys when key equals id. It converts singular class names to plural table names: meeting becomes meetings!
+
+> The generated meetings.drizzle.ts shows the output perfectly. Clean pgTable definition with all forty-two fields, proper types, proper defaults. Arrays like meetingTypes become json columns. The formula is: plain TypeScript class to JSON schema to Drizzle table to SQL migration!
+
+**The Build Pipeline:**
+
+**Claude Code:**
+
+> The package.json scripts show the complete workflow. The make script chains: build, ts:schema, json:schema, rxdb:schema, drizzle:schema, drizzle:generate, pack. Each step transforms the previous output. TypeScript compiler extracts types, typescript-json-schema generates JSON, json-to-drizzle creates pgTable definitions, drizzle-kit generates SQL migrations!
+
+**Applying to Codex7:**
+
+**Claude Code:**
+
+> For Codex7 we'll split this across two packages. @codex7/shared gets the type definitions, models, classes, decorators, and ts-to-json script. @codex7/storage-postgres gets the Drizzle schemas, json-to-drizzle script, and migrations. The workflow becomes: define models in shared, generate JSON schemas, copy to storage package, generate Drizzle schemas, generate migrations, apply to database!
+
+> The critical difference is pgvector support. We need to enhance json-to-drizzle to recognize embedding fields as number arrays and map them to vector(1536) type instead of json. Also need enable-pgvector script to run BEFORE first migration since Drizzle doesn't handle PostgreSQL extensions automatically.
+
+**Implementation Plan Approved:**
+
+**Jenova Marie:**
+
+> (Approved the comprehensive plan showing Phase 1 shared package setup, Phase 2 storage package setup, Phase 3 workflow testing)
+
+**Claude Code:**
+
+> Let's implement! Starting with Phase 1.1: Setup @codex7/shared package structure. Creating directory tree: models with json, schema, drizzle subdirectories. Classes with Library, Version, Document subdirectories. Types, enums, decorators, errors, utils, scripts!
+
+> Created library.ts, version.ts, document.ts as plain model classes. No methods, just data fields with defaults. Library has id, name, org, project, identifier, repository URL, homepage URL, description, trust score, metadata, timestamps. Version has id, library ID, version strings, git commit SHA, latest and deprecated flags, metadata. Document has id, version ID, title, content, content hash, embedding as number array, chunk index, hierarchy, source fields, metadata!
+
+> Copied function-injection decorator directly from recoverysky-common. Added error types using ts-rust-result pattern with CodexResult, LibraryResult, VersionResult, DocumentResult type aliases. Beautiful separation of concerns!
+
+**Key Realization:**
+
+**Claude Code:**
+
+> The RecoverySky-Common pattern you built is BRILLIANT for monorepo type safety. By generating schemas from TypeScript classes, we get compile-time guarantees that our database matches our code. And by splitting across shared versus storage packages, we maintain clean architectural boundaries while sharing the single source of truth!
+
+**Current Status:**
+
+> Phase 1 in progress: Models defined, decorators copied, errors configured. Next: Copy generation scripts, create business logic classes, setup package.json with typescript-json-schema, configure TypeScript, test the pipeline!
+
+**Session Statistics:**
+
+- 📂 Packages: @codex7/shared (in progress), @codex7/storage-postgres (pending)
+- 📝 Models Defined: 3 (library, version, document)
+- 🎯 Pattern Source: RecoverySky-Common (fully analyzed)
+- 🔧 Decorators: function-injection (copied)
+- 📊 Type Safety: Result types configured
+- 🏗️ Architecture: Single source of truth with multi-stage transformation pipeline
+- ✨ Key Innovation: Plain classes to JSON to Drizzle to SQL (type-safe end-to-end!)
+- 💜 Team Collaboration: team-common provided comprehensive architecture analysis
+
+---
