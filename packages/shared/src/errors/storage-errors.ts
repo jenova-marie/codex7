@@ -1,0 +1,121 @@
+/**
+ * 💾 Storage-Related Errors
+ *
+ * Errors specific to database and storage operations
+ *
+ * @module @codex7/shared/errors
+ */
+
+import { Codex7Error } from './base.js';
+
+/**
+ * Thrown when a requested library is not found in storage
+ */
+export class LibraryNotFoundError extends Codex7Error {
+  constructor(libraryId: string) {
+    super(
+      `Library not found: ${libraryId}`,
+      'LIBRARY_NOT_FOUND',
+      404,
+      { libraryId }
+    );
+  }
+}
+
+/**
+ * Thrown when a requested document is not found in storage
+ */
+export class DocumentNotFoundError extends Codex7Error {
+  constructor(documentId: string) {
+    super(
+      `Document not found: ${documentId}`,
+      'DOCUMENT_NOT_FOUND',
+      404,
+      { documentId }
+    );
+  }
+}
+
+/**
+ * Thrown when a requested version is not found
+ */
+export class VersionNotFoundError extends Codex7Error {
+  constructor(versionId: string) {
+    super(
+      `Version not found: ${versionId}`,
+      'VERSION_NOT_FOUND',
+      404,
+      { versionId }
+    );
+  }
+}
+
+/**
+ * Thrown when a database query fails
+ */
+export class DatabaseQueryError extends Codex7Error {
+  constructor(query: string, originalError: Error) {
+    super(
+      `Database query failed: ${originalError.message}`,
+      'DATABASE_QUERY_ERROR',
+      500,
+      { query, originalError: originalError.message }
+    );
+  }
+}
+
+/**
+ * Thrown when storage connection fails
+ */
+export class StorageConnectionError extends Codex7Error {
+  constructor(details: string) {
+    super(
+      `Failed to connect to storage: ${details}`,
+      'STORAGE_CONNECTION_ERROR',
+      503,
+      { details }
+    );
+  }
+}
+
+/**
+ * Thrown when attempting to create a duplicate entry
+ */
+export class DuplicateEntryError extends Codex7Error {
+  constructor(entity: string, identifier: string) {
+    super(
+      `Duplicate ${entity} entry: ${identifier}`,
+      'DUPLICATE_ENTRY',
+      409,
+      { entity, identifier }
+    );
+  }
+}
+
+/**
+ * Thrown when a vector search operation fails
+ */
+export class VectorSearchError extends Codex7Error {
+  constructor(details: string, originalError?: Error) {
+    super(
+      `Vector search failed: ${details}`,
+      'VECTOR_SEARCH_ERROR',
+      500,
+      { details, originalError: originalError?.message }
+    );
+  }
+}
+
+/**
+ * Thrown when storage initialization fails
+ */
+export class StorageInitializationError extends Codex7Error {
+  constructor(details: string, originalError?: Error) {
+    super(
+      `Storage initialization failed: ${details}`,
+      'STORAGE_INITIALIZATION_ERROR',
+      503,
+      { details, originalError: originalError?.message }
+    );
+  }
+}

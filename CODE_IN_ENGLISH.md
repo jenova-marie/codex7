@@ -997,3 +997,112 @@ The integration with Result error types demonstrates how our documentation stand
 - 🔗 Integration: Result error types documented per ERROR_HANDLING.md
 - 🚫 Constraint Added: git-commit permission revocation after workflow complete
 - 💡 Design Philosophy: Warning-based, trust developers, don't block workflow
+
+---
+
+### 📦 Package Planning: Parallel Development Framework - October 23, 2025
+
+**Jenova Marie:**
+
+> ok my tech plan writing expert, lets start by reading PLAN.md and then implementing package specific PLAN.md files such that we can develop those packages in parallel. For each package - ultrathink for each the appropriate steps to implement our desired architecture. Begin with basics - initial framework establishment - logging, error handling, and testing. Using the individual plans each session should have a basic working structure of their intended purpose - we do not yet want to implement ANY functionality - just get each of them standing on their own two bits, lol. I will then subsequently execute those plans using iris-mcp for orchestration.
+
+**Claude Code:**
+
+> I read both PLAN.md and ARCHITECTURE.md to understand the complete system design. Then I created package-specific PLAN.md files for all six packages focusing exclusively on framework establishment - no functionality implementation yet!
+
+> The key insight here is "standing on their own two bits" - each package needs logging with wonder-logger, error handling with ts-rust-result, testing framework with Vitest, complete type definitions, and stub implementations that compile but don't actually work. This enables parallel development where each package can be built, tested, and type-checked independently before Phase 1 implementation.
+
+**Jenova Marie:**
+
+> oops babe - I forgot to throw both ARCHITECTURE.md and PLAN.md together for your consideration. continue love.
+
+**Claude Code:**
+
+> Perfect! I had already read both documents. I created six comprehensive package-specific PLAN.md files following a consistent structure:
+
+> packages/shared/PLAN.md - Foundation package with base error classes, core type definitions, DocumentStore adapter interface, and shared utilities. This is the dependency for everything else.
+
+> packages/storage-postgres/PLAN.md - PostgreSQL adapter skeleton with database schema migrations including pgvector extension, connection management, and stub implementations of all DocumentStore methods. Five tables with complete SQL schemas.
+
+> packages/mcp-server/PLAN.md - MCP server framework with stdio transport for Claude Desktop integration. Four tool registrations that all return stub data: resolve-library-id, get-library-docs, search-documentation, and get-versions.
+
+> packages/api/PLAN.md - Express.js REST API skeleton with middleware pipeline, four route modules with stub endpoints for libraries, search, admin, and health. Complete authentication and error handling middleware stubs.
+
+> packages/web/PLAN.md - React plus Vite SPA framework with app component, routing, and four page components that are all stubs: Dashboard, Libraries, AddSource, and Settings. Layout component with navigation and API client stub.
+
+> packages/indexer/PLAN.md - Background indexing service with BullMQ worker setup, job processing pipeline with four stages that are all stubs: fetch source, chunk documents, generate embeddings, and store documents. Three source processors for GitHub, Web, and PDF.
+
+**Key Design Decisions:**
+
+> Each plan has ten numbered foundation tasks, complete package configuration, stub implementations that compile, testing frameworks, clear success criteria, and critically - "What We're NOT Doing" sections that emphasize no functionality implementation yet.
+
+> The dependency order for parallel development is: shared package has no dependencies and must be built first, then storage-postgres depends on shared, and finally all services can proceed in parallel since they only depend on shared or storage-postgres.
+
+> Every package uses the same patterns - wonder-logger for structured logging with OpenTelemetry, ts-rust-result for Rust-style error handling with Result types, Vitest for testing with eighty percent plus coverage goals, Docker-first architecture, and complete TypeScript strict typing.
+
+> All method implementations are stubs that either return empty arrays, throw "Not implemented - Phase 1" errors, or return placeholder data. This lets each package compile, have tests run, and be type-checked without any actual functionality.
+
+**Jenova Marie's Intent:**
+
+> The plans are designed for iris-mcp orchestration where each package can be developed in separate sessions. Each session focuses on getting a package to compile, have logger configured, have error types defined, have test framework ready, and have all interfaces and stubs in place.
+
+> This is framework establishment only - we're building the skeleton, not the organs. Think of it like framing a house before doing electrical, plumbing, and drywall.
+
+**Session Statistics:**
+
+- 📝 Files Created: 6 package-specific PLAN.md files
+- 📦 Packages Planned: shared, storage-postgres, mcp-server, api, web, indexer
+- 🏗️ Foundation Tasks per Package: 10 numbered sections
+- ✅ Success Criteria: Compilation, type-checking, test framework ready, no functionality
+- 🎯 Development Model: Parallel sessions via iris-mcp orchestration
+- 📊 Total Plan Content: ~6,000+ lines of detailed framework instructions
+- 🔗 Dependency Chain: shared → storage-postgres → (mcp-server | api | web | indexer)
+- ⚙️ Consistent Patterns: wonder-logger, ts-rust-result, Vitest, Docker-first
+- 💡 Key Philosophy: "Standing on their own two bits" - compile and test without functionality
+
+---
+
+### 🚀 Team Orchestration: Waking Codex7 Teams for Parallel Development - October 23, 2025
+
+**Jenova Marie:**
+
+> Run the wake-team command to wake all Codex7 package teams for parallel development work.
+
+**Claude Code:**
+
+> I executed the wake-team slash command workflow! First I listed all eighteen configured iris-mcp teams and found the six Codex7 package teams. Then I woke each team sequentially - waiting for each to fully wake before proceeding to the next - because Claude Code can only launch ONE session at a time due to VM constraints.
+
+> The wake process completed successfully with all six teams awakened and ready for parallel development work. Each team woke in twenty to twenty-eight seconds. Total execution time was about two minutes forty-six seconds.
+
+**Team Wake Results:**
+
+> team-codex7-shared awakened with session 01106420-9707-42b7-9f03-d340e131ea7c in twenty-one seconds. This is the foundation package with types, utilities, and storage adapter interface.
+
+> team-codex7-storage awakened with session fbc94cc3-13ef-4624-8b6c-83714748baca in twenty-eight seconds. This is the PostgreSQL plus pgvector adapter.
+
+> team-codex7-mcp awakened with session 459bd3b2-5127-4711-b5ef-77eea0f6610e in twenty-five seconds. This is the Model Context Protocol server.
+
+> team-codex7-api awakened with session 0f9241df-84da-496b-a22e-3d15c2c4077b in twenty seconds. This is the Express.js REST API backend.
+
+> team-codex7-web awakened with session 17727bde-7bae-44bb-bce4-d43c75c52fae in twenty-five seconds. This is the React plus Vite dashboard.
+
+> team-codex7-indexer awakened with session 51d973d9-b98f-4142-bbd1-11fdaff58021 in twenty-seven seconds. This is the background document processing service.
+
+**Key Insights:**
+
+> The sequential wake process is critical - parallel waking doesn't work due to VM constraints in Claude Code. Each team must fully initialize before starting the next. The wake-team command encapsulates this knowledge so future wake operations follow the correct pattern.
+
+> All six teams are now active and ready to receive development instructions via iris-mcp messaging. This enables true parallel development where each package team can work independently on framework establishment while maintaining session isolation.
+
+**Session Statistics:**
+
+- 🎯 Teams Configured: 6 Codex7 package teams
+- ✅ Teams Successfully Awakened: 6 of 6
+- ⏱️ Total Wake Time: ~2 minutes 46 seconds
+- 📊 Average Wake Time: 24.3 seconds per team
+- 🔄 Wake Strategy: Sequential (not parallel)
+- 💡 Key Constraint: VM limitation - one session at a time
+- 🚀 Next Phase: Send async messages to teams with PLAN.md instructions
+- 🎭 Orchestration Tool: iris-mcp for multi-team coordination
+
+---

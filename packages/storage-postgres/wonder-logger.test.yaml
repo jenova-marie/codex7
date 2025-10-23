@@ -1,0 +1,44 @@
+# 💾 Codex7 PostgreSQL Storage - Wonder Logger Test Configuration
+
+service:
+  name: codex7-storage-postgres-test
+  version: 0.1.0-alpha
+  environment: test
+
+logger:
+  enabled: true
+  level: debug
+
+  # Redact sensitive fields from logs
+  redact:
+    - password
+    - token
+    - 'database.password'
+
+  # Log transports - use memory for tests
+  transports:
+    # Memory transport only for tests
+    - type: memory
+      name: codex7-storage-postgres-test
+      maxSize: 10000
+      level: debug
+
+  # Enable trace context injection
+  plugins:
+    traceContext: true
+
+otel:
+  enabled: false
+
+  # Distributed tracing
+  tracing:
+    enabled: false
+
+  # Metrics collection
+  metrics:
+    enabled: false
+
+  # Automatic instrumentation
+  instrumentation:
+    auto: false
+    http: false

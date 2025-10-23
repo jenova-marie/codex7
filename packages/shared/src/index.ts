@@ -15,5 +15,8 @@ export * from './storage/index.js';
 // Export utilities
 export * from './utils/index.js';
 
+// Export errors
+export * from './errors/index.js';
+
 // Export constants
 export * from './constants.js';

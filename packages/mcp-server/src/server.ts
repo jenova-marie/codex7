@@ -1,0 +1,112 @@
+/**
+ * 📡 Codex7 MCP Server
+ *
+ * Implements Model Context Protocol for Claude Desktop integration.
+ * STUB: Registers tools but handlers return placeholder data (Phase 0).
+ */
+
+import { Server } from '@modelcontextprotocol/sdk/server/index.js';
+import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+import { logger } from './utils/logger.js';
+import { registerTools } from './tools/index.js';
+
+/**
+ * MCP Server configuration
+ */
+export interface MCPServerConfig {
+  /** Service name for identification */
+  name: string;
+  /** Service version */
+  version: string;
+  /** Storage adapter (will be used in Phase 1) */
+  storageAdapter?: unknown;
+}
+
+/**
+ * Codex7 MCP Server
+ *
+ * Provides Model Context Protocol tools for documentation search and retrieval.
+ *
+ * **Phase 0 Implementation:**
+ * - ✅ Registers tools with proper schemas
+ * - ✅ Returns stub data for all tools
+ * - ❌ Does not connect to storage
+ * - ❌ Does not perform real searches
+ *
+ * @example
+ * ```typescript
+ * const server = new Codex7MCPServer({
+ *   name: 'codex7-mcp-server',
+ *   version: '0.1.0'
+ * });
+ * await server.start();
+ * ```
+ */
+export class Codex7MCPServer {
+  private server: Server;
+
+  constructor(config: MCPServerConfig) {
+
+    // Initialize MCP SDK server
+    this.server = new Server(
+      {
+        name: config.name,
+        version: config.version,
+      },
+      {
+        capabilities: {
+          tools: {}, // We provide tools
+        },
+      }
+    );
+
+    logger.info({ name: config.name, version: config.version }, '📡 MCP Server created');
+  }
+
+  /**
+   * Register all MCP tools
+   *
+   * STUB: Registers tools with stub handlers that return placeholder data
+   */
+  registerTools(): void {
+    logger.info('🔧 Registering MCP tools...');
+
+    // Register tools from tools/ directory
+    registerTools(this.server);
+
+    logger.info('✅ MCP tools registered (STUBS)');
+  }
+
+  /**
+   * Start the MCP server with stdio transport
+   *
+   * Registers tools and connects to stdio for Claude Desktop communication.
+   */
+  async start(): Promise<void> {
+    logger.info('🚀 Starting MCP server...');
+
+    // Register tools
+    this.registerTools();
+
+    // Setup stdio transport
+    const transport = new StdioServerTransport();
+
+    // Connect server to transport
+    await this.server.connect(transport);
+
+    logger.info('✅ MCP server running on stdio');
+  }
+
+  /**
+   * Gracefully shutdown the server
+   *
+   * Closes connections and cleans up resources.
+   */
+  async shutdown(): Promise<void> {
+    logger.info('🛑 Shutting down MCP server...');
+
+    await this.server.close();
+
+    logger.info('✅ MCP server stopped');
+  }
+}

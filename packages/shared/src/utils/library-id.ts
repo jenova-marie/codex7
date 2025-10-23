@@ -4,7 +4,7 @@
  * Functions for parsing and formatting library identifiers
  */
 
-import { Result, Ok, Err } from '@jenova-marie/ts-rust-result';
+import { Result, ok, err } from '@jenova-marie/ts-rust-result';
 import type { LibraryId } from '../types/library.js';
 import { PATTERNS } from '../constants.js';
 
@@ -17,32 +17,32 @@ import { PATTERNS } from '../constants.js';
  * @example
  * ```typescript
  * parseLibraryId('/vercel/next.js')
- * // => Ok({ org: 'vercel', project: 'next.js', version: undefined })
+ * // => ok({ org: 'vercel', project: 'next.js', version: undefined })
  *
  * parseLibraryId('/vercel/next.js/v14.0.0')
- * // => Ok({ org: 'vercel', project: 'next.js', version: 'v14.0.0' })
+ * // => ok({ org: 'vercel', project: 'next.js', version: 'v14.0.0' })
  * ```
  */
 export function parseLibraryId(id: string): Result<LibraryId, Error> {
   if (!id || typeof id !== 'string') {
-    return Err(new Error('Library ID must be a non-empty string'));
+    return err(new Error('Library ID must be a non-empty string'));
   }
 
   if (!PATTERNS.LIBRARY_ID.test(id)) {
-    return Err(new Error(`Invalid library ID format: ${id}. Expected format: /org/project or /org/project/version`));
+    return err(new Error(`Invalid library ID format: ${id}. Expected format: /org/project or /org/project/version`));
   }
 
   const parts = id.split('/').filter(Boolean);
 
   if (parts.length < 2 || parts.length > 3) {
-    return Err(new Error(`Invalid library ID: ${id}`));
+    return err(new Error(`Invalid library ID: ${id}`));
   }
 
   const [org, project, version] = parts;
 
-  return Ok({
-    org,
-    project,
+  return ok({
+    org: org!,
+    project: project!,
     version,
   });
 }
@@ -77,18 +77,18 @@ export function formatLibraryId(components: LibraryId): string {
  * @example
  * ```typescript
  * extractLibraryIdFromGitHub('https://github.com/vercel/next.js')
- * // => Ok('/vercel/next.js')
+ * // => ok('/vercel/next.js')
  * ```
  */
 export function extractLibraryIdFromGitHub(url: string): Result<string, Error> {
   const match = PATTERNS.GITHUB_REPO.exec(url);
 
   if (!match) {
-    return Err(new Error(`Invalid GitHub URL: ${url}`));
+    return err(new Error(`Invalid GitHub URL: ${url}`));
   }
 
   const [, org, repo] = match;
-  return Ok(`/${org}/${repo}`);
+  return ok(`/${org}/${repo}`);
 }
 
 /**
@@ -110,9 +110,9 @@ export function isValidLibraryId(id: string): boolean {
 export function normalizeLibraryId(id: string): Result<string, Error> {
   const result = parseLibraryId(id);
 
-  if (result.isErr()) {
+  if (result.ok === false) {
     return result as Result<string, Error>;
   }
 
-  return Ok(formatLibraryId(result.unwrap()));
+  return ok(formatLibraryId(result.value));
 }

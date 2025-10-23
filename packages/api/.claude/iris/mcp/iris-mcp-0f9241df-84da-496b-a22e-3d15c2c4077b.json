@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "iris-0f9241df-84da-496b-a22e-3d15c2c4077b": {
+      "type": "http",
+      "url": "http://localhost:1615/mcp/0f9241df-84da-496b-a22e-3d15c2c4077b"
+    }
+  }
+}

@@ -1,7 +1,7 @@
 {
   "name": "@codex7/api",
   "version": "0.1.0-alpha",
-  "description": "\ud83c\udf10 REST API service for Codex7",
+  "description": "🌐 REST API service for Codex7",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -24,6 +24,7 @@
     "express-rate-limit": "^7.1.5",
     "helmet": "^7.1.0",
     "jsonwebtoken": "^9.0.2",
+    "pino": "^10.1.0",
     "rxjs": "^7.8.1",
     "zod": "^3.22.4"
   },

@@ -1,69 +1,40 @@
 # 💾 Codex7 PostgreSQL Storage - Wonder Logger Configuration
 
 service:
-  name: ${SERVICE_NAME:-codex7-storage-postgres}
-  version: ${SERVICE_VERSION:-0.1.0-alpha}
-  environment: ${NODE_ENV:-development}
+  name: codex7-storage-postgres
+  version: 0.1.0-alpha
+  environment: development
 
 logger:
   enabled: true
-  level: ${LOG_LEVEL:-info}
-
-  # Redact sensitive fields from logs
+  level: info
   redact:
     - password
     - token
-    - 'database.password'
-    - 'connectionString'
-    - 'PGPASSWORD'
-
-  # Log transports
   transports:
-    # Console output (pretty in dev, JSON in prod)
     - type: console
-      pretty: ${LOG_PRETTY:-false}
-      level: ${LOG_LEVEL:-info}
-
-    # OpenTelemetry (send to Loki)
-    - type: otel
-      endpoint: ${OTEL_LOGS_ENDPOINT:-http://localhost:4318/v1/logs}
-      level: ${LOG_LEVEL:-info}
-
-    # Memory transport (for runtime inspection and testing)
+      pretty: false
+      level: info
     - type: memory
-      name: ${SERVICE_NAME:-codex7-storage-postgres}
-      maxSize: ${MEMORY_LOG_MAX_SIZE:-10000}
+      name: codex7-storage-postgres
+      maxSize: 10000
       level: debug
-
-  # Enable trace context injection
   plugins:
-    traceContext: true
+    traceContext: false
 
 otel:
-  enabled: ${OTEL_ENABLED:-true}
-
-  # Distributed tracing
+  enabled: false
   tracing:
-    enabled: ${OTEL_TRACING_ENABLED:-true}
-    exporter: ${OTEL_TRACE_EXPORTER:-otlp}
-    endpoint: ${OTEL_TRACES_ENDPOINT:-http://localhost:4318/v1/traces}
-    sampleRate: ${OTEL_TRACE_SAMPLE_RATE:-1.0}
-
-  # Metrics collection
+    enabled: false
+    exporter: otlp
+    endpoint: http://localhost:4318/v1/traces
+    sampleRate: 1.0
   metrics:
-    enabled: ${OTEL_METRICS_ENABLED:-true}
-    exportIntervalMillis: ${OTEL_METRICS_INTERVAL:-60000}
-
+    enabled: false
+    exportIntervalMillis: 60000
     exporters:
-      # Prometheus scrape endpoint
       - type: prometheus
-        port: ${PROMETHEUS_PORT:-9467}
-
-      # OTLP push to Prometheus
-      - type: otlp
-        endpoint: ${OTEL_METRICS_ENDPOINT:-http://localhost:4318/v1/metrics}
-
-  # Automatic instrumentation
+        port: 9467
   instrumentation:
-    auto: true
-    http: true
+    auto: false
+    http: false

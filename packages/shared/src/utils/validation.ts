@@ -2,7 +2,7 @@
  * ✅ Validation Utilities
  */
 
-import { Result, Ok, Err } from '@jenova-marie/ts-rust-result';
+import { Result, ok, err } from '@jenova-marie/ts-rust-result';
 import { PATTERNS } from '../constants.js';
 
 /**
@@ -14,9 +14,9 @@ import { PATTERNS } from '../constants.js';
 export function validateUrl(url: string): Result<URL, Error> {
   try {
     const parsed = new URL(url);
-    return Ok(parsed);
+    return ok(parsed);
   } catch (error) {
-    return Err(new Error(`Invalid URL: ${url}`));
+    return err(new Error(`Invalid URL: ${url}`));
   }
 }
 
@@ -28,20 +28,20 @@ export function validateUrl(url: string): Result<URL, Error> {
  */
 export function validateGitHubUrl(url: string): Result<boolean, Error> {
   const urlResult = validateUrl(url);
-  if (urlResult.isErr()) {
+  if (urlResult.ok === false) {
     return urlResult as Result<boolean, Error>;
   }
 
-  const parsed = urlResult.unwrap();
+  const parsed = urlResult.value;
   if (parsed.hostname !== 'github.com') {
-    return Err(new Error('URL must be from github.com'));
+    return err(new Error('URL must be from github.com'));
   }
 
   if (!PATTERNS.GITHUB_REPO.test(url)) {
-    return Err(new Error('Invalid GitHub repository URL format'));
+    return err(new Error('Invalid GitHub repository URL format'));
   }
 
-  return Ok(true);
+  return ok(true);
 }
 
 /**
@@ -52,10 +52,10 @@ export function validateGitHubUrl(url: string): Result<boolean, Error> {
  */
 export function validateSemver(version: string): Result<boolean, Error> {
   if (!PATTERNS.SEMVER.test(version)) {
-    return Err(new Error(`Invalid semantic version: ${version}`));
+    return err(new Error(`Invalid semantic version: ${version}`));
   }
 
-  return Ok(true);
+  return ok(true);
 }
 
 /**
@@ -72,10 +72,10 @@ export function validateRange(
   max: number
 ): Result<boolean, Error> {
   if (value < min || value > max) {
-    return Err(new Error(`Value ${value} is outside range [${min}, ${max}]`));
+    return err(new Error(`Value ${value} is outside range [${min}, ${max}]`));
   }
 
-  return Ok(true);
+  return ok(true);
 }
 
 /**
@@ -87,10 +87,10 @@ export function validateRange(
  */
 export function validateNonEmpty(value: string, fieldName: string = 'Value'): Result<boolean, Error> {
   if (!value || value.trim().length === 0) {
-    return Err(new Error(`${fieldName} cannot be empty`));
+    return err(new Error(`${fieldName} cannot be empty`));
   }
 
-  return Ok(true);
+  return ok(true);
 }
 
 /**
@@ -103,10 +103,10 @@ export function validateEmail(email: string): Result<boolean, Error> {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   if (!emailRegex.test(email)) {
-    return Err(new Error('Invalid email format'));
+    return err(new Error('Invalid email format'));
   }
 
-  return Ok(true);
+  return ok(true);
 }
 
 /**
@@ -123,8 +123,8 @@ export function validateRequiredFields<T extends Record<string, unknown>>(
   const missing = requiredFields.filter((field) => !(field in obj) || obj[field] === undefined);
 
   if (missing.length > 0) {
-    return Err(new Error(`Missing required fields: ${missing.join(', ')}`));
+    return err(new Error(`Missing required fields: ${missing.join(', ')}`));
   }
 
-  return Ok(true);
+  return ok(true);
 }

@@ -66,7 +66,7 @@ export function extractCodeBlocks(markdown: string): Array<{ language: string; c
   let match;
   while ((match = codeBlockRegex.exec(markdown)) !== null) {
     const [, language = '', code] = match;
-    blocks.push({ language, code: code.trim() });
+    blocks.push({ language, code: code?.trim() || '' });
   }
 
   return blocks;

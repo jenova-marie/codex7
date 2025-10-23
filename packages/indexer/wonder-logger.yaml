@@ -22,53 +22,42 @@ logger:
   transports:
     # Console output (pretty in dev, JSON in prod)
     - type: console
-      pretty: ${LOG_PRETTY:-false}
-      level: ${LOG_LEVEL:-info}
-
-    # File logging (useful for long-running indexing jobs)
-    - type: file
-      dir: ${LOG_DIR:-./logs}
-      fileName: ${LOG_FILE_NAME:-indexer.log}
-      level: ${LOG_LEVEL:-info}
-
-    # OpenTelemetry (send to Loki)
-    - type: otel
-      endpoint: ${OTEL_LOGS_ENDPOINT:-http://localhost:4318/v1/logs}
-      level: ${LOG_LEVEL:-info}
+      pretty: false
+      level: info
 
     # Memory transport (for runtime inspection and testing)
     - type: memory
-      name: ${SERVICE_NAME:-codex7-indexer}
-      maxSize: ${MEMORY_LOG_MAX_SIZE:-10000}
+      name: codex7-indexer
+      maxSize: 10000
       level: debug
 
   # Enable trace context injection
   plugins:
-    traceContext: true
+    traceContext: false
 
 otel:
-  enabled: ${OTEL_ENABLED:-true}
+  enabled: false
 
   # Distributed tracing
   tracing:
-    enabled: ${OTEL_TRACING_ENABLED:-true}
-    exporter: ${OTEL_TRACE_EXPORTER:-otlp}
-    endpoint: ${OTEL_TRACES_ENDPOINT:-http://localhost:4318/v1/traces}
-    sampleRate: ${OTEL_TRACE_SAMPLE_RATE:-1.0}
+    enabled: false
+    exporter: otlp
+    endpoint: http://localhost:4318/v1/traces
+    sampleRate: 1.0
 
   # Metrics collection
   metrics:
-    enabled: ${OTEL_METRICS_ENABLED:-true}
-    exportIntervalMillis: ${OTEL_METRICS_INTERVAL:-60000}
+    enabled: false
+    exportIntervalMillis: 60000
 
     exporters:
       # Prometheus scrape endpoint
       - type: prometheus
-        port: ${PROMETHEUS_PORT:-9466}
+        port: 9466
 
       # OTLP push to Prometheus
       - type: otlp
-        endpoint: ${OTEL_METRICS_ENDPOINT:-http://localhost:4318/v1/metrics}
+        endpoint: http://localhost:4318/v1/metrics
 
   # Automatic instrumentation
   instrumentation:

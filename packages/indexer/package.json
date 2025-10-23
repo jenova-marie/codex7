@@ -18,6 +18,7 @@
   },
   "dependencies": {
     "@codex7/shared": "workspace:*",
+    "@codex7/storage-postgres": "workspace:*",
     "@jenova-marie/ts-rust-result": "^2.2.4",
     "@jenova-marie/wonder-logger": "^1.0.12",
     "bullmq": "^5.1.9",
@@ -31,6 +32,8 @@
   "devDependencies": {
     "@types/marked": "^6.0.0",
     "@types/node": "^20.11.16",
+    "@vitest/coverage-v8": "^1.2.2",
+    "pino": "^10.1.0",
     "tsx": "^4.7.0",
     "typescript": "^5.3.3",
     "vitest": "^1.2.2"

@@ -1,10 +1,12 @@
 # 🔍 doc-diff - Git-Aware Smart Documentation Updates
 
-Intelligently update TSDoc comments based on staged git changes.
+Intelligently update TSDoc comments based on staged git changes within the current package.
 
 ## Purpose
 
-Analyzes staged code changes and updates TSDoc documentation to match. Only modifies docs when code changes require it - if docs are still accurate, does nothing.
+Analyzes staged code changes **in the current package only** and updates TSDoc documentation to match. Only modifies docs when code changes require it - if docs are still accurate, does nothing.
+
+**🎯 Package Isolation**: This command is designed for monorepo parallel development with iris-mcp. Each package team analyzes only their own changes using `git diff --staged -- .` to scope analysis to the current working directory.
 
 ## When to Use
 
@@ -16,10 +18,12 @@ Analyzes staged code changes and updates TSDoc documentation to match. Only modi
 
 ## Scope
 
-- **Target**: Current package only (run from package directory)
-- **Changes**: **Staged** changes only (`git diff --staged`)
-- **Files**: `src/**/*.ts` and `src/**/*.tsx`
+- **Target**: Current package directory only (automatically determined from PWD)
+- **Changes**: **Staged** changes only (`git diff --staged -- .`)
+- **Files**: `src/**/*.ts` and `src/**/*.tsx` within current package
 - **Excludes**: Test files (`**/__tests__/**`, `**/*.test.ts`, `**/*.test.tsx`)
+
+**Package Isolation**: Each package analyzes only changes within its own directory tree. The command uses `git diff --staged -- .` to limit analysis to files in the current working directory and subdirectories.
 
 ## What Triggers Updates
 
@@ -46,14 +50,35 @@ Analyzes staged code changes and updates TSDoc documentation to match. Only modi
 
 ## Workflow
 
-### Step 1: Get Staged Changes
+### Step 1: Determine Current Package and Get Staged Changes
+
+First, identify the current package from PWD:
 
 ```bash
-git diff --staged --name-only | grep "^src/" | grep -v "test"
+# Get current working directory
+pwd
+# Example: /Users/jenova/projects/jenova-marie/codex7/packages/mcp-server
+
+# Extract package name for reporting
+basename $(pwd)
+# Example: mcp-server
 ```
 
+Then get staged changes for THIS package only:
+
+```bash
+# Only analyze staged changes in current directory and subdirectories
+git diff --staged --name-only -- . | grep "^src/" | grep -v "test"
+```
+
+This ensures:
+- ✅ Only files in current package are analyzed
+- ✅ Changes in other packages are ignored
+- ✅ Each team works independently
+- ✅ No cross-package interference
+
 Identify:
-- Which files changed
+- Which files changed within this package
 - What functions/classes were modified
 - What specifically changed (params, returns, body)
 
@@ -186,21 +211,23 @@ Show what was updated and why:
 
 ```
 🔍 Documentation Updates for Staged Changes
+📦 Package: mcp-server
 
-src/storage/adapter.ts:
-  getLibrary()
+src/tools/resolve-library-id.ts:
+  resolveLibraryId()
     ✅ Added @param options - Query options
-    ✅ Updated description to mention filters
+    ✅ Updated description to mention ranking
 
-src/utils/library-id.ts:
-  parseLibraryId()
+src/tools/get-library-docs.ts:
+  getLibraryDocs()
     ✅ Fixed @example to handle Result properly
     ⚠️ Review description - logic changed significantly
 
-src/errors/factories.ts:
+src/utils/helpers.ts:
   ✅ All docs are accurate - no updates needed
 
 Summary:
+  Package: mcp-server
   Files analyzed: 3
   Functions checked: 8
   Docs updated: 2
@@ -334,25 +361,27 @@ Add missing @throws:
 
 ### Updates Made
 ```
+📦 Package: storage-postgres
 ✅ Documentation updated for 3 functions
 
 Modified files:
-  src/storage/adapter.ts
-  src/utils/library-id.ts
+  src/adapter.ts
+  src/migrations/001_initial.ts
 
 Review changes:
-  git diff src/
+  git diff -- .
 
 Commit suggestion:
-  📝 docs: update TSDoc comments to match code changes
+  📝 docs(storage-postgres): update TSDoc comments to match code changes
 ```
 
 ### No Updates Needed
 ```
+📦 Package: mcp-server
 ✅ All documentation is accurate!
 
 Analyzed staged changes in:
-  - src/storage/adapter.ts (2 functions)
+  - src/tools/resolve-library-id.ts (2 functions)
   - src/utils/helpers.ts (1 function)
 
 No doc updates required - changes were implementation-only.
@@ -360,9 +389,10 @@ No doc updates required - changes were implementation-only.
 
 ### Review Required
 ```
+📦 Package: indexer
 ⚠️ Please review these manually:
 
-src/indexer/processor.ts:
+src/processor.ts:
   processDocument()
     Logic changed significantly
     Current description might be outdated
@@ -404,30 +434,61 @@ Manual review needed:
 
 ## Package-Specific Usage
 
+The command automatically detects the current package from PWD and only analyzes changes within that package:
+
 ```bash
-# From package directory
+# Example: Working in mcp-server package
 cd packages/mcp-server
+
+# Stage some changes
 git add src/tools/resolve-library-id.ts
+
+# Run doc-diff - only analyzes mcp-server package changes
 /doc-diff
 
-# Reviews only staged changes in current package
+# Output will show:
+# 📦 Analyzing package: mcp-server
+# 🔍 Staged changes in this package: 1 file
+#   - src/tools/resolve-library-id.ts
 ```
+
+**Cross-package changes are ignored:**
+
+```bash
+# Even if other packages have staged changes
+cd packages/api
+git add src/routes/libraries.ts
+
+cd packages/mcp-server
+# This only sees mcp-server changes, ignores api changes
+/doc-diff
+
+# Output:
+# 📦 Analyzing package: mcp-server
+# ✅ No staged changes in this package
+```
+
+**Each team works in isolation** - perfect for parallel development with iris-mcp!
 
 ## Related Documentation Updates
 
-If code changes affect content in `../../docs/`, report it:
+If code changes within this package affect content in root-level `docs/`, report it:
 
 ```
 ⚠️ Related documentation might need updates:
 
-Code changes in src/storage/adapter.ts affect:
+📦 Current package: storage-postgres
+
+Code changes in src/adapter.ts affect:
   ../../docs/ARCHITECTURE.md (mentions storage adapter interface)
 
-Code changes in src/errors/factories.ts affect:
-  ../../docs/ERROR_HANDLING.md (documents error factory patterns)
+Code changes in src/migrations/ affect:
+  ../../docs/SELF_HOSTING.md (documents database setup)
 
 Review these files manually to ensure consistency.
 ```
+
+**Note**: Only report docs affected by THIS package's changes, not other packages.
 
 ## Troubleshooting
 
@@ -440,13 +501,40 @@ Review these files manually to ensure consistency.
 **Issue**: Can't extract Result error types
 - **Solution**: Check that error union type is explicitly defined
 
+**Issue**: Shows changes from other packages
+- **Solution**: Ensure using `git diff --staged -- .` not `git diff --staged` (note the `-- .` at end!)
+
+**Issue**: No changes found but I staged files
+- **Solution**: Check you're in the correct package directory with `pwd`
+
+## Integration with iris-mcp
+
+This command is designed for parallel development with iris-mcp orchestration:
+
+**Each package team:**
+1. Works in their package directory (e.g., `packages/mcp-server`)
+2. Makes code changes
+3. Stages changes: `git add src/`
+4. Runs `/doc-diff` - only sees THEIR changes
+5. Updates docs as needed
+6. Commits with `/git-commit`
+
+**Benefits:**
+- ✅ Teams don't interfere with each other
+- ✅ Each team maintains their own docs
+- ✅ No cross-package conflicts
+- ✅ Fast analysis (only current package)
+- ✅ Clear ownership and responsibility
+
 ## References
 
 - **TypeDoc**: https://typedoc.org/
 - **ERROR_HANDLING.md**: `../../docs/ERROR_HANDLING.md`
-- **Git Diff**: `git diff --staged`
+- **Git Diff**: `git diff --staged -- .` (package-scoped!)
 - **Codex7 Style**: `../../CLAUDE.md`
 
 ---
 
 **Remember**: Only update docs when code changes require it. If docs are accurate, leave them alone! 💜
+
+**Package Isolation**: Each package analyzes only its own changes. Perfect for iris-mcp parallel development! 🎯
