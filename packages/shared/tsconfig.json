@@ -1,11 +1,31 @@
 {
-  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "./dist",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
     "rootDir": "./src",
-    "composite": true,
-    "declarationMap": true
+    "outDir": "lib",
+    "target": "ES2021",
+    "lib": ["ES2021"],
+    "strict": true,
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "noImplicitAny": false,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "declaration": true,
+    "emitDeclarationOnly": false,
+    "baseUrl": "./src",
+    "paths": {
+      "@/errors/*": ["errors/*"],
+      "@/errors": ["errors"],
+      "@/models/*": ["models/*"],
+      "@/models": ["models"],
+      "@/classes/*": ["classes/*"],
+      "@/classes": ["classes"],
+      "@/decorators/*": ["decorators/*"],
+      "@/decorators": ["decorators"]
+    }
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "test/**/*", "**/__tests__/**/*", "**/*.test.ts"]
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "lib", "src/models/json", "src/models/drizzle"]
 }

@@ -1,45 +1,59 @@
 {
   "name": "@codex7/shared",
-  "version": "0.1.0-alpha",
-  "description": "\ud83d\udd27 Shared types, utilities, and interfaces for Codex7",
+  "version": "0.1.0",
   "type": "module",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "description": "Shared types, models, and utilities for Codex7 documentation MCP server",
+  "license": "MIT",
+  "author": "Jenova Marie <jenova-marie@pm.me>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jenova-marie/codex7.git",
+    "directory": "packages/shared"
+  },
+  "keywords": [
+    "codex7",
+    "mcp",
+    "documentation",
+    "types",
+    "models"
+  ],
+  "files": [
+    "lib"
+  ],
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
-    },
-    "./types": {
-      "types": "./dist/types/index.d.ts",
-      "import": "./dist/types/index.js"
-    },
-    "./storage": {
-      "types": "./dist/storage/index.d.ts",
-      "import": "./dist/storage/index.js"
-    },
-    "./utils": {
-      "types": "./dist/utils/index.d.ts",
-      "import": "./dist/utils/index.js"
+      "import": "./lib/index.js",
+      "types": "./lib/index.d.ts"
     }
   },
   "scripts": {
-    "dev": "tsc --watch",
-    "build": "tsc",
-    "clean": "rm -rf dist *.tsbuildinfo",
+    "build": "tsc && tsc --project tsconfig.models.json && tsx src/scripts/generate-index-dts.ts",
+    "json:schema": "tsx src/scripts/ts-to-json.ts src/models src/models/json",
+    "make": "pnpm build && pnpm json:schema && pnpm pack",
     "type-check": "tsc --noEmit",
-    "test": "vitest",
-    "test:watch": "vitest --watch",
-    "test:coverage": "vitest --coverage"
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "clean": "rm -rf lib dist *.tgz",
+    "dev": "tsc --watch"
   },
   "dependencies": {
     "@jenova-marie/ts-rust-result": "^2.2.4",
-    "@jenova-marie/wonder-logger": "^1.0.12"
+    "bson": "^6.10.2",
+    "bson-objectid": "^2.0.4"
   },
   "devDependencies": {
-    "@types/node": "^20.10.0",
-    "@vitest/coverage-v8": "^1.2.2",
-    "typescript": "^5.3.3",
-    "vitest": "^1.2.2"
+    "@types/node": "^22.10.5",
+    "@vitest/coverage-v8": "^2.1.8",
+    "tsx": "^4.20.6",
+    "typescript": "^5.7.3",
+    "typescript-json-schema": "^0.65.1",
+    "vitest": "^2.1.8"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=8.0.0"
   }
 }

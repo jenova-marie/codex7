@@ -1,0 +1,108 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "definitions": {
+    "Record<string,any>": {
+      "additionalProperties": false,
+      "type": "object"
+    }
+  },
+  "description": "Document Model\n\nRepresents a chunk of documentation with vector embedding\n\nThis is a plain data model with primitive types only.\nBusiness logic belongs in classes/Document/Document.ts",
+  "properties": {
+    "chunkIndex": {
+      "default": 0,
+      "type": "number"
+    },
+    "codeLanguage": {
+      "default": "",
+      "type": "string"
+    },
+    "content": {
+      "default": "",
+      "type": "string"
+    },
+    "contentHash": {
+      "default": "",
+      "type": "string"
+    },
+    "embedding": {
+      "default": [],
+      "items": {
+        "type": "number"
+      },
+      "type": "array"
+    },
+    "hasCode": {
+      "default": false,
+      "type": "boolean"
+    },
+    "hierarchy": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "id": {
+      "default": "",
+      "type": "string"
+    },
+    "indexed": {
+      "default": 0,
+      "type": "number"
+    },
+    "language": {
+      "default": "en",
+      "type": "string"
+    },
+    "metadata": {
+      "$ref": "#/definitions/Record<string,any>"
+    },
+    "sourcePath": {
+      "default": "",
+      "type": "string"
+    },
+    "sourceType": {
+      "default": "github",
+      "type": "string"
+    },
+    "sourceUrl": {
+      "default": "",
+      "type": "string"
+    },
+    "title": {
+      "default": "",
+      "type": "string"
+    },
+    "updated": {
+      "default": 0,
+      "type": "number"
+    },
+    "versionId": {
+      "default": "",
+      "type": "string"
+    }
+  },
+  "required": [
+    "chunkIndex",
+    "codeLanguage",
+    "content",
+    "contentHash",
+    "embedding",
+    "hasCode",
+    "hierarchy",
+    "id",
+    "indexed",
+    "language",
+    "metadata",
+    "sourcePath",
+    "sourceType",
+    "sourceUrl",
+    "title",
+    "updated",
+    "versionId"
+  ],
+  "type": "object",
+  "version": 0,
+  "primaryKey": "id"
+}

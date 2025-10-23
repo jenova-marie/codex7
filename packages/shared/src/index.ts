@@ -1,22 +1,21 @@
-/**
- * 🚀 Codex7 Shared Package
- *
- * Shared types, utilities, and interfaces for the Codex7 monorepo
- *
- * @module @codex7/shared
- */
+// Models (plain data classes)
+export { library } from './models/library';
+export { version } from './models/version';
+export { document } from './models/document';
 
-// Export all types
-export * from './types/index.js';
+// Business logic classes
+export { Library } from './classes/Library/Library';
+export { Version } from './classes/Version/Version';
+export { Document } from './classes/Document/Document';
 
-// Export storage interfaces
-export * from './storage/index.js';
+// Decorators
+export { addFunction, addFunctions } from './decorators/function-injection';
 
-// Export utilities
-export * from './utils/index.js';
+// Error types and Result patterns
+export type { CodexError } from './errors/types';
+export type { CodexResult, LibraryResult, VersionResult, DocumentResult } from './errors/results';
+export { ok, err } from './errors/results';
 
-// Export errors
-export * from './errors/index.js';
-
-// Export constants
-export * from './constants.js';
+// Scripts (for build pipeline)
+export { convertTsFilesToSchemas } from './scripts/ts-to-json';
+export { generateIndexFile } from './scripts/generate-index-dts';
