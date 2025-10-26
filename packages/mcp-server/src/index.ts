@@ -33,6 +33,7 @@
 
 import { Codex7MCPServer } from './server.js';
 import { logger } from './utils/logger.js';
+import { PostgresAdapter, type PostgresConfig } from '@codex7/storage-postgres';
 
 // Export public API
 export { Codex7MCPServer, type MCPServerConfig } from './server.js';
@@ -46,9 +47,26 @@ export { registerTools } from './tools/index.js';
 async function main(): Promise<void> {
   logger.info('🚀 Starting Codex7 MCP Server...');
 
+  // Create storage adapter
+  const databaseUrl = process.env.DATABASE_URL;
+  if (!databaseUrl) {
+    throw new Error('DATABASE_URL environment variable is required');
+  }
+
+  const dbConfig: PostgresConfig = {
+    connectionString: databaseUrl,
+    host: '', // Not needed when using connectionString
+    port: 0,  // Not needed when using connectionString
+    database: '',
+    user: '',
+    password: '',
+  };
+  const storageAdapter = new PostgresAdapter(dbConfig);
+
   const server = new Codex7MCPServer({
     name: 'codex7-mcp-server',
     version: '0.1.0-alpha',
+    storageAdapter,
   });
 
   // Graceful shutdown handlers

@@ -26,6 +26,7 @@
 
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+import type { StorageAdapter } from '@codex7/shared';
 import { logger } from './utils/logger.js';
 import { registerTools } from './tools/index.js';
 
@@ -37,8 +38,8 @@ export interface MCPServerConfig {
   name: string;
   /** Service version */
   version: string;
-  /** Storage adapter (will be used in Phase 1) */
-  storageAdapter?: unknown;
+  /** Storage adapter for database operations */
+  storageAdapter: StorageAdapter;
 }
 
 /**
@@ -63,8 +64,10 @@ export interface MCPServerConfig {
  */
 export class Codex7MCPServer {
   private server: Server;
+  private storageAdapter: StorageAdapter;
 
   constructor(config: MCPServerConfig) {
+    this.storageAdapter = config.storageAdapter;
 
     // Initialize MCP SDK server
     this.server = new Server(
@@ -85,15 +88,15 @@ export class Codex7MCPServer {
   /**
    * Register all MCP tools
    *
-   * STUB: Registers tools with stub handlers that return placeholder data
+   * Registers tools with real storage integration
    */
   registerTools(): void {
     logger.info('🔧 Registering MCP tools...');
 
-    // Register tools from tools/ directory
-    registerTools(this.server);
+    // Register tools from tools/ directory with storage adapter
+    registerTools(this.server, this.storageAdapter);
 
-    logger.info('✅ MCP tools registered (STUBS)');
+    logger.info('✅ MCP tools registered');
   }
 
   /**
