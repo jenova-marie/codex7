@@ -20,10 +20,11 @@
 /**
  * ✨ Embedding Generator
  *
- * Generates vector embeddings for document chunks.
- * Phase 0: STUB - Returns chunks with empty embeddings.
+ * Generates vector embeddings for document chunks using OpenAI's API.
+ * Uses text-embedding-3-small model with intelligent batching and retry logic.
  */
 
+import OpenAI from 'openai';
 import { logger } from '../utils/logger.js';
 import type { DocumentChunk } from './chunker.js';
 
@@ -35,20 +36,164 @@ export interface EmbeddedDocument extends DocumentChunk {
 }
 
 /**
+ * Configuration for embedding generation
+ */
+export interface EmbeddingConfig {
+  apiKey?: string;
+  model?: 'text-embedding-3-small' | 'text-embedding-3-large' | 'text-embedding-ada-002';
+  batchSize?: number;
+  maxRetries?: number;
+  retryDelay?: number;
+}
+
+/**
+ * Default configuration
+ */
+const DEFAULT_CONFIG: Required<EmbeddingConfig> = {
+  apiKey: process.env.OPENAI_API_KEY || '',
+  model: 'text-embedding-3-small', // 1536 dimensions, $0.02/1M tokens
+  batchSize: 100, // Balance between API efficiency and memory
+  maxRetries: 3,
+  retryDelay: 1000, // ms
+};
+
+/**
+ * Sleep utility for retry delays
+ */
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+/**
  * Generate embeddings for document chunks
  *
- * STUB: Returns chunks with empty embeddings
+ * - Batches chunks for API efficiency (up to 100 per request)
+ * - Uses text-embedding-3-small (1536 dimensions)
+ * - Handles rate limits with exponential backoff
+ * - Retries failed requests up to 3 times
  */
-export async function generateEmbeddings(chunks: DocumentChunk[]): Promise<EmbeddedDocument[]> {
-  logger.info({ count: chunks.length }, '✨ Generating embeddings (STUB)');
+export async function generateEmbeddings(
+  chunks: DocumentChunk[],
+  config: EmbeddingConfig = {},
+): Promise<EmbeddedDocument[]> {
+  const cfg = { ...DEFAULT_CONFIG, ...config };
 
-  // TODO Phase 1: Call OpenAI embeddings API
-  // - Batch chunks for efficiency
-  // - Handle rate limits
-  // - Retry on failure
+  if (!cfg.apiKey) {
+    logger.error('❌ OPENAI_API_KEY not set in environment');
+    throw new Error('OPENAI_API_KEY environment variable is required');
+  }
 
-  return chunks.map((chunk) => ({
-    ...chunk,
-    embedding: [], // Placeholder
-  }));
+  logger.info(
+    {
+      count: chunks.length,
+      model: cfg.model,
+      batchSize: cfg.batchSize,
+    },
+    '✨ Generating embeddings with OpenAI API',
+  );
+
+  const openai = new OpenAI({ apiKey: cfg.apiKey });
+  const results: EmbeddedDocument[] = [];
+
+  // Process chunks in batches
+  for (let i = 0; i < chunks.length; i += cfg.batchSize) {
+    const batch = chunks.slice(i, i + cfg.batchSize);
+    const batchNum = Math.floor(i / cfg.batchSize) + 1;
+    const totalBatches = Math.ceil(chunks.length / cfg.batchSize);
+
+    logger.info(
+      {
+        batchNum,
+        totalBatches,
+        batchSize: batch.length,
+      },
+      `📦 Processing batch ${batchNum}/${totalBatches}`,
+    );
+
+    // Extract text content for embedding
+    const texts = batch.map((chunk) => chunk.content);
+
+    // Generate embeddings with retry logic
+    let attempt = 0;
+    let embeddings: number[][] | null = null;
+
+    while (attempt < cfg.maxRetries && !embeddings) {
+      try {
+        const response = await openai.embeddings.create({
+          model: cfg.model,
+          input: texts,
+          encoding_format: 'float',
+        });
+
+        embeddings = response.data.map((item) => item.embedding);
+
+        logger.info(
+          {
+            batchNum,
+            embeddingsGenerated: embeddings.length,
+            dimensions: embeddings[0]?.length || 0,
+          },
+          '✅ Batch embeddings generated',
+        );
+      } catch (error) {
+        attempt++;
+
+        if (attempt >= cfg.maxRetries) {
+          logger.error(
+            {
+              error,
+              batchNum,
+              attempt,
+            },
+            '❌ Failed to generate embeddings after max retries',
+          );
+          throw error;
+        }
+
+        // Exponential backoff
+        const delay = cfg.retryDelay * Math.pow(2, attempt - 1);
+
+        logger.warn(
+          {
+            error,
+            batchNum,
+            attempt,
+            nextRetryIn: delay,
+          },
+          '⚠️  Embedding generation failed, retrying...',
+        );
+
+        await sleep(delay);
+      }
+    }
+
+    if (!embeddings) {
+      throw new Error('Failed to generate embeddings');
+    }
+
+    // Combine chunks with their embeddings
+    for (let j = 0; j < batch.length; j++) {
+      const chunk = batch[j];
+      const embedding = embeddings[j];
+
+      if (!chunk || !embedding) {
+        logger.warn({ index: j, batchNum }, '⚠️  Missing chunk or embedding in batch');
+        continue;
+      }
+
+      results.push({
+        ...chunk,
+        embedding,
+      });
+    }
+  }
+
+  logger.info(
+    {
+      totalChunks: chunks.length,
+      embeddingsGenerated: results.length,
+      model: cfg.model,
+    },
+    '✅ All embeddings generated successfully',
+  );
+
+  return results;
 }
