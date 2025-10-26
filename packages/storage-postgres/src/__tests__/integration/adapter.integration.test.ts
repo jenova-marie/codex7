@@ -195,6 +195,9 @@ describe.skipIf(!TEST_DATABASE_URL)('PostgresAdapter Integration Tests', () => {
       version.id = 'test-version-1';
 
       const result = await adapter.createVersion(version);
+      if (!result.ok) {
+        console.error('❌ createVersion failed:', result.error);
+      }
       expect(result.ok).toBe(true);
     });
   });
@@ -219,6 +222,9 @@ describe.skipIf(!TEST_DATABASE_URL)('PostgresAdapter Integration Tests', () => {
       document.id = 'test-doc-1';
 
       const result = await adapter.indexDocument(document);
+      if (!result.ok) {
+        console.error('❌ indexDocument failed:', result.error);
+      }
       expect(result.ok).toBe(true);
     });
   });
@@ -305,7 +311,11 @@ describe.skipIf(!TEST_DATABASE_URL)('PostgresAdapter Integration Tests', () => {
       const result = await adapter.vectorSearch({
         embedding: queryEmbedding,
         k: 10,
+        filter: { version: 'test-version-vector' },
       });
+      if (!result.ok) {
+        console.error('❌ vectorSearch failed:', result.error);
+      }
       expect(result.ok).toBe(true);
       expect(result.value).toBeDefined();
       expect(result.value!.length).toBeGreaterThan(0);
@@ -320,6 +330,7 @@ describe.skipIf(!TEST_DATABASE_URL)('PostgresAdapter Integration Tests', () => {
       const result = await adapter.vectorSearch({
         embedding: queryEmbedding,
         k: 3,
+        filter: { version: 'test-version-vector' },
       });
       expect(result.ok).toBe(true);
       expect(result.value!.length).toBe(3);

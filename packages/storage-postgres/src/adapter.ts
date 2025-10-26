@@ -8,7 +8,7 @@
  */
 
 import { ok as tsOk, err as tsErr, type Result } from '@jenova-marie/ts-rust-result';
-import { eq, desc, sql, and, or, ilike } from 'drizzle-orm';
+import { eq, desc, sql, and, or, ilike, cosineDistance, gt } from 'drizzle-orm';
 import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import ObjectID from 'bson-objectid';
 
@@ -795,11 +795,15 @@ export class PostgresAdapter implements StorageAdapter {
         title: fullDocument.title,
         content: fullDocument.content,
         contentHash: fullDocument.contentHash,
-        embedding: fullDocument.embedding.length > 0 ? fullDocument.embedding : null,
+        embedding: fullDocument.embedding && fullDocument.embedding.length > 0 ? fullDocument.embedding : null,
         chunkIndex: fullDocument.chunkIndex ?? 0,
         hierarchy: fullDocument.hierarchy || [],
         hasCode: fullDocument.hasCode ?? false,
         codeLanguage: fullDocument.codeLanguage ?? '',
+        sourcePath: fullDocument.sourcePath || '',
+        sourceUrl: fullDocument.sourceUrl || '',
+        sourceType: fullDocument.sourceType || 'github',
+        language: fullDocument.language || 'en',
         indexed: fullDocument.indexed,
         updated: fullDocument.updated,
         metadata: JSON.stringify(fullDocument.metadata || {}),
@@ -848,11 +852,15 @@ export class PostgresAdapter implements StorageAdapter {
           title: fullDoc.title,
           content: fullDoc.content,
           contentHash: fullDoc.contentHash,
-          embedding: fullDoc.embedding.length > 0 ? fullDoc.embedding : null,
+          embedding: fullDoc.embedding && fullDoc.embedding.length > 0 ? fullDoc.embedding : null,
           chunkIndex: fullDoc.chunkIndex ?? 0,
           hierarchy: fullDoc.hierarchy || [],
           hasCode: fullDoc.hasCode ?? false,
           codeLanguage: fullDoc.codeLanguage ?? '',
+          sourcePath: fullDoc.sourcePath || '',
+          sourceUrl: fullDoc.sourceUrl || '',
+          sourceType: fullDoc.sourceType || 'github',
+          language: fullDoc.language || 'en',
           indexed: fullDoc.indexed,
           updated: fullDoc.updated,
           metadata: JSON.stringify(fullDoc.metadata || {}),
@@ -1008,84 +1016,77 @@ export class PostgresAdapter implements StorageAdapter {
       const limit = params.k ?? 10;
       const threshold = params.threshold ?? 0.0;
 
-      // Build filter conditions
-      const conditions: any[] = [];
+      // Calculate similarity using cosineDistance (1 - distance gives similarity score)
+      const similarity = sql<number>`1 - (${cosineDistance(documents.embedding, params.embedding)})`;
 
-      if (params.filter?.library) {
-        // Need to join with versions and libraries tables to filter by library identifier
-        // For now, we'll filter by versionId if provided
-      }
+      // Build the query using Drizzle's query builder
+      let query = this.db
+        .select({
+          id: documents.id,
+          versionId: documents.versionId,
+          title: documents.title,
+          content: documents.content,
+          contentHash: documents.contentHash,
+          embedding: documents.embedding,
+          chunkIndex: documents.chunkIndex,
+          hierarchy: documents.hierarchy,
+          hasCode: documents.hasCode,
+          codeLanguage: documents.codeLanguage,
+          indexed: documents.indexed,
+          updated: documents.updated,
+          metadata: documents.metadata,
+          similarity,
+        })
+        .from(documents)
+        .$dynamic();
 
+      // Add filters if provided
       if (params.filter?.version) {
-        conditions.push(eq(documents.versionId, params.filter.version));
+        query = query.where(eq(documents.versionId, params.filter.version));
       }
 
-      // Convert embedding array to pgvector format
-      const embeddingStr = `[${params.embedding.join(',')}]`;
+      // Add threshold filter if provided
+      if (threshold > 0) {
+        query = query.where(gt(similarity, threshold));
+      }
 
-      // Use pgvector cosine similarity search
-      // Note: This uses the <=> operator for cosine distance (lower is better)
-      const results = await this.db.execute(sql`
-        SELECT
-          d.id,
-          d.version_id as "versionId",
-          d.title,
-          d.content,
-          d.content_hash as "contentHash",
-          d.embedding,
-          d.chunk_index as "chunkIndex",
-          d.hierarchy,
-          d.has_code as "hasCode",
-          d.code_language as "codeLanguage",
-          d.indexed,
-          d.updated,
-          d.metadata,
-          1 - (d.embedding <=> ${embeddingStr}::vector) as score
-        FROM documents d
-        ${conditions.length > 0 ? sql`WHERE ${sql.join(conditions, sql` AND `)}` : sql``}
-        ORDER BY d.embedding <=> ${embeddingStr}::vector
-        LIMIT ${limit};
-      `);
+      // Execute query with ordering and limit
+      const results = await query
+        .orderBy(desc(similarity))
+        .limit(limit);
 
       const searchResults: SearchResult[] = [];
 
-      if (Array.isArray(results)) {
-        for (const row of results) {
-          const score = Number((row as any).score);
+      for (const row of results) {
+        const score = Number(row.similarity);
 
-          if (score < threshold) {
-            continue;
-          }
-
-          // Get version and library info
-          const versionId = (row as any).versionId;
-          const versionResult = await this.getVersion(versionId);
-          if (!versionResult.ok || !versionResult.value) {
-            continue;
-          }
-
-          const libraryResult = await this.getLibrary(versionResult.value.libraryId);
-          if (!libraryResult.ok || !libraryResult.value) {
-            continue;
-          }
-
-          searchResults.push({
-            document: {
-              id: (row as any).id,
-              title: (row as any).title,
-              content: (row as any).content,
-              metadata: typeof (row as any).metadata === 'string'
-                ? JSON.parse((row as any).metadata)
-                : (row as any).metadata,
-            },
-            library: {
-              name: libraryResult.value.name,
-              identifier: libraryResult.value.identifier,
-              version: versionResult.value.versionString,
-            },
-            score,
-          });
+        // Get version and library info
+        const versionResult = await this.getVersion(row.versionId);
+        if (!versionResult.ok || !versionResult.value) {
+          continue;
         }
+
+        const libraryResult = await this.getLibrary(versionResult.value.libraryId);
+        if (!libraryResult.ok || !libraryResult.value) {
+          continue;
+        }
+
+        searchResults.push({
+          document: {
+            id: row.id,
+            title: row.title,
+            content: row.content,
+            metadata: typeof row.metadata === 'string'
+              ? JSON.parse(row.metadata)
+              : row.metadata,
+          },
+          library: {
+            name: libraryResult.value.name,
+            identifier: libraryResult.value.identifier,
+            version: versionResult.value.versionString,
+          },
+          score,
+        });
       }
 
       logger.info({ count: searchResults.length }, '✅ Vector search completed');
