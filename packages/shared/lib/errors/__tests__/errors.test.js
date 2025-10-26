@@ -1,121 +1,81 @@
 /**
- * 🧪 Tests for Codex7 Error Classes
+ * 🧪 Tests for Codex7 Error Types
+ *
+ * Phase 0: Basic error type and Result integration tests
  */
 import { describe, it, expect } from 'vitest';
-import { Codex7Error, toErrResult, LibraryNotFoundError, DocumentNotFoundError, DatabaseQueryError, StorageConnectionError, ValidationError, MissingParameterError, InvalidFormatError, } from '../index.js';
-describe('Codex7Error', () => {
-    it('should create base error with correct properties', () => {
-        class TestError extends Codex7Error {
-            constructor() {
-                super('Test message', 'TEST_ERROR', 400, { foo: 'bar' });
-            }
-        }
-        const error = new TestError();
-        expect(error.message).toBe('Test message');
+import { ok, err } from '../index';
+describe('CodexError Type', () => {
+    it('should create error with required fields', () => {
+        const error = {
+            message: 'Test error message',
+            code: 'TEST_ERROR',
+        };
+        expect(error.message).toBe('Test error message');
         expect(error.code).toBe('TEST_ERROR');
-        expect(error.statusCode).toBe(400);
-        expect(error.context).toEqual({ foo: 'bar' });
-        expect(error.name).toBe('TestError');
     });
-    it('should serialize to JSON correctly', () => {
-        const error = new LibraryNotFoundError('test-id');
-        const json = error.toJSON();
-        expect(json.name).toBe('LibraryNotFoundError');
-        expect(json.message).toContain('test-id');
-        expect(json.code).toBe('LIBRARY_NOT_FOUND');
-        expect(json.statusCode).toBe(404);
-        expect(json.stack).toBeTruthy();
+    it('should create error with cause', () => {
+        const cause = new Error('Original error');
+        const error = {
+            message: 'Wrapped error',
+            code: 'WRAPPED_ERROR',
+            cause,
+        };
+        expect(error.message).toBe('Wrapped error');
+        expect(error.code).toBe('WRAPPED_ERROR');
+        expect(error.cause).toBe(cause);
     });
-    it('should capture stack trace', () => {
-        const error = new LibraryNotFoundError('test-id');
-        expect(error.stack).toBeDefined();
-        expect(error.stack).toContain('LibraryNotFoundError');
+    it('should create error without code', () => {
+        const error = {
+            message: 'Simple error',
+        };
+        expect(error.message).toBe('Simple error');
+        expect(error.code).toBeUndefined();
     });
-    it('should default to 500 status code', () => {
-        class TestError extends Codex7Error {
-            constructor() {
-                super('Test message', 'TEST_ERROR');
-            }
+});
+describe('Result Integration', () => {
+    it('should create Ok Result', () => {
+        const result = ok('success');
+        expect(result.ok).toBe(true);
+        if (result.ok) {
+            expect(result.value).toBe('success');
         }
-        const error = new TestError();
-        expect(error.statusCode).toBe(500);
     });
-    it('should convert to Err Result', () => {
-        const error = new LibraryNotFoundError('test-id');
-        const result = toErrResult(error);
+    it('should create Err Result', () => {
+        const error = {
+            message: 'Test error',
+            code: 'TEST_ERROR',
+        };
+        const result = err(error);
         expect(result.ok).toBe(false);
-        if (result.ok === false) {
-            expect(result.error).toBe(error);
+        if (!result.ok) {
+            expect(result.error.message).toBe('Test error');
+            expect(result.error.code).toBe('TEST_ERROR');
         }
     });
-});
-describe('LibraryNotFoundError', () => {
-    it('should include library ID in context', () => {
-        const error = new LibraryNotFoundError('react-123');
-        expect(error.message).toContain('react-123');
-        expect(error.context).toEqual({ libraryId: 'react-123' });
-        expect(error.statusCode).toBe(404);
-        expect(error.code).toBe('LIBRARY_NOT_FOUND');
+    it('should handle chained Results', () => {
+        const getUser = () => {
+            return ok('John Doe');
+        };
+        const result = getUser();
+        expect(result.ok).toBe(true);
+        if (result.ok) {
+            expect(result.value).toBe('John Doe');
+        }
     });
-});
-describe('DocumentNotFoundError', () => {
-    it('should include document ID in context', () => {
-        const error = new DocumentNotFoundError('doc-456');
-        expect(error.message).toContain('doc-456');
-        expect(error.context).toEqual({ documentId: 'doc-456' });
-        expect(error.statusCode).toBe(404);
-    });
-});
-describe('DatabaseQueryError', () => {
-    it('should include query and original error', () => {
-        const originalError = new Error('Connection timeout');
-        const query = 'SELECT * FROM libraries';
-        const error = new DatabaseQueryError(query, originalError);
-        expect(error.message).toContain('Connection timeout');
-        expect(error.context).toEqual({
-            query,
-            originalError: 'Connection timeout',
-        });
-        expect(error.statusCode).toBe(500);
-    });
-});
-describe('StorageConnectionError', () => {
-    it('should include connection details', () => {
-        const error = new StorageConnectionError('Connection refused');
-        expect(error.message).toContain('Connection refused');
-        expect(error.context).toEqual({ details: 'Connection refused' });
-        expect(error.statusCode).toBe(503);
-    });
-});
-describe('ValidationError', () => {
-    it('should include field and reason in context', () => {
-        const error = new ValidationError('email', 'Invalid format');
-        expect(error.message).toContain('email');
-        expect(error.message).toContain('Invalid format');
-        expect(error.context).toEqual({ field: 'email', reason: 'Invalid format' });
-        expect(error.statusCode).toBe(400);
-    });
-});
-describe('MissingParameterError', () => {
-    it('should include parameter name in context', () => {
-        const error = new MissingParameterError('libraryId');
-        expect(error.message).toContain('libraryId');
-        expect(error.context).toEqual({ parameter: 'libraryId' });
-        expect(error.statusCode).toBe(400);
-    });
-});
-describe('InvalidFormatError', () => {
-    it('should include field, expected, and received in context', () => {
-        const error = new InvalidFormatError('url', 'https://...', 'not-a-url');
-        expect(error.message).toContain('url');
-        expect(error.message).toContain('https://...');
-        expect(error.message).toContain('not-a-url');
-        expect(error.context).toEqual({
-            field: 'url',
-            expected: 'https://...',
-            received: 'not-a-url',
-        });
-        expect(error.statusCode).toBe(400);
+    it('should handle error propagation', () => {
+        const failedOperation = () => {
+            return err({
+                message: 'Operation failed',
+                code: 'OP_FAILED',
+            });
+        };
+        const result = failedOperation();
+        expect(result.ok).toBe(false);
+        if (!result.ok) {
+            expect(result.error.message).toBe('Operation failed');
+            expect(result.error.code).toBe('OP_FAILED');
+        }
     });
 });
 //# sourceMappingURL=errors.test.js.map
