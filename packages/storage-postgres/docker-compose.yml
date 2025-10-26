@@ -1,0 +1,132 @@
+# 🐳 Docker Compose for PostgreSQL + pgvector
+#
+# Development and integration testing environment for storage-postgres
+#
+# Usage:
+#   docker compose up -d           # Start in background
+#   docker compose down            # Stop and remove containers
+#   docker compose down -v         # Stop and remove containers + volumes (fresh start)
+#   docker compose logs -f         # Follow logs
+#   docker compose ps              # Check status
+
+services:
+  # PostgreSQL 16 with pgvector extension
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: codex7-postgres-dev
+    restart: unless-stopped
+
+    # Port mapping
+    ports:
+      - "5432:5432"
+
+    # Environment variables
+    environment:
+      POSTGRES_DB: codex7_dev
+      POSTGRES_USER: codex7
+      POSTGRES_PASSWORD: codex7_dev_password
+      # Enable pgvector extension on startup
+      POSTGRES_INITDB_ARGS: "-E UTF8"
+
+    # Persist data
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      # Optional: Custom initialization scripts
+      # - ./init-scripts:/docker-entrypoint-initdb.d
+
+    # Health check
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U codex7 -d codex7_dev"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+    # Resource limits (adjust as needed)
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2G
+        reservations:
+          cpus: '1'
+          memory: 512M
+
+    # Networks
+    networks:
+      - codex7
+
+  # PostgreSQL for testing (separate database, ephemeral)
+  postgres-test:
+    image: pgvector/pgvector:pg16
+    container_name: codex7-postgres-test
+    restart: unless-stopped
+
+    # Different port to avoid conflicts
+    ports:
+      - "5433:5432"
+
+    environment:
+      POSTGRES_DB: codex7_test
+      POSTGRES_USER: codex7_test
+      POSTGRES_PASSWORD: codex7_test_password
+      POSTGRES_INITDB_ARGS: "-E UTF8"
+
+    # No volume = data is ephemeral (fresh DB each restart)
+    # This is intentional for integration tests
+    tmpfs:
+      - /var/lib/postgresql/data
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U codex7_test -d codex7_test"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+
+    networks:
+      - codex7
+
+  # pgAdmin (optional - web UI for database management)
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: codex7-pgadmin
+    restart: unless-stopped
+
+    ports:
+      - "5050:80"
+
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@codex7.local
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: 'False'
+
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+    networks:
+      - codex7
+
+    profiles:
+      - tools  # Only start with: docker compose --profile tools up
+
+# Volumes for data persistence
+volumes:
+  postgres_data:
+    name: codex7_postgres_data
+    driver: local
+
+  pgadmin_data:
+    name: codex7_pgadmin_data
+    driver: local
+
+# Network for services to communicate
+networks:
+  codex7:
+    name: codex7_network
+    driver: bridge
