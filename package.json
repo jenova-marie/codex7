@@ -16,7 +16,7 @@
     "microservices"
   ],
   "author": "Jenova Marie <jenova@jenova-marie.dev>",
-  "license": "MIT",
+  "license": "AGPL-3.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/jenova-marie/codex7.git"
