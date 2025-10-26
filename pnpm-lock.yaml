@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@jenova-marie/ts-rust-result':
-        specifier: ^2.2.4
-        version: 2.2.4(zod@3.25.76)
+        specifier: file:../ts-rust-result/jenova-marie-ts-rust-result-2.2.10.tgz
+        version: file:../ts-rust-result/jenova-marie-ts-rust-result-2.2.10.tgz(zod@3.25.76)
       '@jenova-marie/wonder-logger':
         specifier: ^1.0.12
         version: 1.0.12(@opentelemetry/core@2.2.0)
@@ -52,8 +52,8 @@ importers:
         specifier: workspace:*
         version: link:../shared
       '@jenova-marie/ts-rust-result':
-        specifier: ^2.2.4
-        version: 2.2.4(zod@3.25.76)
+        specifier: file:../../../ts-rust-result/jenova-marie-ts-rust-result-2.2.10.tgz
+        version: file:../ts-rust-result/jenova-marie-ts-rust-result-2.2.10.tgz(zod@3.25.76)
       '@jenova-marie/wonder-logger':
         specifier: ^1.0.12
         version: 1.0.12(@opentelemetry/core@2.2.0)
@@ -119,8 +119,8 @@ importers:
         specifier: workspace:*
         version: link:../storage-postgres
       '@jenova-marie/ts-rust-result':
-        specifier: ^2.2.4
-        version: 2.2.4(zod@3.25.76)
+        specifier: file:../../../ts-rust-result/jenova-marie-ts-rust-result-2.2.10.tgz
+        version: file:../ts-rust-result/jenova-marie-ts-rust-result-2.2.10.tgz(zod@3.25.76)
       '@jenova-marie/wonder-logger':
         specifier: ^1.0.12
         version: 1.0.12(@opentelemetry/core@2.2.0)
@@ -174,8 +174,8 @@ importers:
         specifier: workspace:*
         version: link:../shared
       '@jenova-marie/ts-rust-result':
-        specifier: ^2.2.4
-        version: 2.2.4(zod@3.25.76)
+        specifier: file:../../../ts-rust-result/jenova-marie-ts-rust-result-2.2.10.tgz
+        version: file:../ts-rust-result/jenova-marie-ts-rust-result-2.2.10.tgz(zod@3.25.76)
       '@jenova-marie/wonder-logger':
         specifier: ^1.0.12
         version: 1.0.12(@opentelemetry/core@2.2.0)
@@ -202,8 +202,8 @@ importers:
   packages/shared:
     dependencies:
       '@jenova-marie/ts-rust-result':
-        specifier: ^2.2.4
-        version: 2.2.4(zod@3.25.76)
+        specifier: file:../../../ts-rust-result/jenova-marie-ts-rust-result-2.2.10.tgz
+        version: file:../ts-rust-result/jenova-marie-ts-rust-result-2.2.10.tgz(zod@3.25.76)
       bson:
         specifier: ^6.10.2
         version: 6.10.4
@@ -236,11 +236,14 @@ importers:
         specifier: workspace:*
         version: link:../shared
       '@jenova-marie/ts-rust-result':
-        specifier: ^2.2.4
-        version: 2.2.4(zod@3.25.76)
+        specifier: file:../../../ts-rust-result/jenova-marie-ts-rust-result-2.2.10.tgz
+        version: file:../ts-rust-result/jenova-marie-ts-rust-result-2.2.10.tgz(zod@3.25.76)
       '@jenova-marie/wonder-logger':
         specifier: ^1.0.12
         version: 1.0.12(@opentelemetry/core@2.2.0)
+      bson-objectid:
+        specifier: ^2.0.4
+        version: 2.0.4
       drizzle-orm:
         specifier: ^0.44.6
         version: 0.44.6(@opentelemetry/api@1.9.0)(postgres@3.4.7)
@@ -279,8 +282,8 @@ importers:
         specifier: workspace:*
         version: link:../shared
       '@jenova-marie/ts-rust-result':
-        specifier: ^2.2.4
-        version: 2.2.4(zod@3.25.76)
+        specifier: file:../../../ts-rust-result/jenova-marie-ts-rust-result-2.2.10.tgz
+        version: file:../ts-rust-result/jenova-marie-ts-rust-result-2.2.10.tgz(zod@3.25.76)
       '@jenova-marie/wonder-logger':
         specifier: ^1.0.12
         version: 1.0.12(@opentelemetry/core@2.2.0)
@@ -310,8 +313,8 @@ importers:
         specifier: workspace:*
         version: link:../shared
       '@jenova-marie/ts-rust-result':
-        specifier: ^2.2.4
-        version: 2.2.4(zod@3.25.76)
+        specifier: file:../../../ts-rust-result/jenova-marie-ts-rust-result-2.2.10.tgz
+        version: file:../ts-rust-result/jenova-marie-ts-rust-result-2.2.10.tgz(zod@3.25.76)
       '@jenova-marie/wonder-logger':
         specifier: ^1.0.12
         version: 1.0.12(@opentelemetry/core@2.2.0)
@@ -344,8 +347,8 @@ importers:
         specifier: workspace:*
         version: link:../shared
       '@jenova-marie/ts-rust-result':
-        specifier: ^2.2.4
-        version: 2.2.4(zod@3.25.76)
+        specifier: file:../../../ts-rust-result/jenova-marie-ts-rust-result-2.2.10.tgz
+        version: file:../ts-rust-result/jenova-marie-ts-rust-result-2.2.10.tgz(zod@3.25.76)
       '@jenova-marie/wonder-logger':
         specifier: ^1.0.12
         version: 1.0.12(@opentelemetry/core@2.2.0)
@@ -1446,18 +1449,6 @@ packages:
     resolution: {integrity: sha512-ZXRY4jNvVgSVQ8DL3LTcakaAtXwTVUxE81hslsyD2AtoXW/wVob10HkOJ1X/pAlcI7D+2YoZKg5do8G/w6RYgA==}
     engines: {node: '>=8'}
     dev: true
-
-  /@jenova-marie/ts-rust-result@2.2.4(zod@3.25.76):
-    resolution: {integrity: sha512-Blnbd1y+L0Wm8yeV+yS9J3qGG26QHQE3+S0+Rzl0Zx4xE9J17IsE+aotZYrSc66koONDiRu8RsF5g95HW3Xlbg==}
-    engines: {node: '>=18'}
-    peerDependencies:
-      zod: ^3.0.0
-    peerDependenciesMeta:
-      zod:
-        optional: true
-    dependencies:
-      zod: 3.25.76
-    dev: false
 
   /@jenova-marie/wonder-logger@1.0.12(@opentelemetry/core@2.2.0):
     resolution: {integrity: sha512-2hzGR/bHEzLbmsGHBFlNaX/DPiZ9Qy1kzjXf/j/f7+cHyCwiUDo0EF2JH8/UlUqftD+pCKgSTTc3/RyF44a8sg==}
@@ -8815,4 +8806,20 @@ packages:
 
   /zod@4.1.12:
     resolution: {integrity: sha512-JInaHOamG8pt5+Ey8kGmdcAcg3OL9reK8ltczgHTAwNhMys/6ThXHityHxVV2p3fkw/c+MAvBHFVYHFZDmjMCQ==}
+    dev: false
+
+  file:../ts-rust-result/jenova-marie-ts-rust-result-2.2.10.tgz(zod@3.25.76):
+    resolution: {integrity: sha512-s/0cHrUqsIdrHQ088pdbI72j8A53QmYyvn8IlQvWEVhlUjcmX1N3w1m6exLYsUCQmyINEPOAs0c+Sr7mrtPJZw==, tarball: file:../ts-rust-result/jenova-marie-ts-rust-result-2.2.10.tgz}
+    id: file:../ts-rust-result/jenova-marie-ts-rust-result-2.2.10.tgz
+    name: '@jenova-marie/ts-rust-result'
+    version: 2.2.10
+    engines: {node: '>=18'}
+    requiresBuild: true
+    peerDependencies:
+      zod: ^3.0.0
+    peerDependenciesMeta:
+      zod:
+        optional: true
+    dependencies:
+      zod: 3.25.76
     dev: false

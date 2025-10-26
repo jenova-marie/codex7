@@ -1,7 +1,7 @@
 {
   "name": "@codex7/storage-postgres",
   "version": "0.1.0-alpha",
-  "description": "\ud83d\udcbe PostgreSQL + pgvector storage adapter for Codex7",
+  "description": "💾 PostgreSQL + pgvector storage adapter for Codex7",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -14,7 +14,7 @@
     "drizzle:generate": "drizzle-kit generate",
     "drizzle:push": "drizzle-kit push",
     "drizzle:studio": "drizzle-kit studio",
-    "migrate": "tsx src/scripts/run-migrations.ts",
+    "migrate": "tsc && node dist/scripts/run-migrations.js",
     "migrate:fresh": "docker compose -f ../../deployments/docker/docker-compose.yml down -v && docker compose -f ../../deployments/docker/docker-compose.yml up -d && sleep 3 && pnpm migrate",
     "db:reset": "pnpm migrate:fresh",
     "make": "pnpm drizzle:schema && pnpm drizzle:generate",
@@ -25,11 +25,12 @@
   },
   "dependencies": {
     "@codex7/shared": "workspace:*",
-    "@jenova-marie/ts-rust-result": "^2.2.4",
+    "@jenova-marie/ts-rust-result": "file:../../../ts-rust-result/jenova-marie-ts-rust-result-2.2.10.tgz",
     "@jenova-marie/wonder-logger": "^1.0.12",
+    "bson-objectid": "^2.0.4",
     "drizzle-orm": "^0.44.6",
-    "postgres": "^3.4.5",
     "pgvector": "^0.2.0",
+    "postgres": "^3.4.5",
     "rxjs": "^7.8.1"
   },
   "devDependencies": {
