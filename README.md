@@ -9,7 +9,7 @@
 > Built with 💜 by the community, for the community
 
 [![Build Status](https://img.shields.io/github/actions/workflow/status/jenova-marie/codex7/ci.yml?branch=main&style=flat-square)](https://github.com/jenova-marie/codex7/actions)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
+[![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg?style=flat-square)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](CONTRIBUTING.md)
 [![Slack](https://img.shields.io/badge/Slack-Join%20Us-purple.svg?style=flat-square)](https://codex7.slack.com)
 
@@ -42,7 +42,7 @@ Context7 markets itself as open-source but only provides a thin API wrapper (~43
 - ❌ Data retention policies
 - ❌ Rate limiting beyond "you'll get 429 errors"
 
-**This is open-source washing.** The MIT license on their client is meaningless when you can't run the system without their proprietary backend at `https://context7.com/api`.
+**This is open-source washing.** Their permissive license on the client is meaningless when you can't run the system without their proprietary backend at `https://context7.com/api`.
 
 Codex7 is the **real open-source alternative** - transparent, self-hostable, and community-driven.
 
@@ -337,9 +337,29 @@ Found a security issue? Please report it responsibly to **security@codex7.dev** 
 
 ## 📄 License
 
-**MIT License** - see [LICENSE](LICENSE) file for details.
+**AGPL v3 License** - see [LICENSE](LICENSE) file for details.
 
-Unlike context7, our license actually means something because you can run the entire system! 😉
+Codex7 is licensed under the GNU Affero General Public License v3 (AGPL v3) to ensure it remains truly open source while preventing proprietary derivatives.
+
+### What This Means for You
+
+✅ **Use it freely** - Deploy in your organization, modify as needed
+✅ **Build on top** - Create proprietary products using the API
+✅ **Self-host privately** - No obligation to share your deployment
+⚠️ **Share improvements** - If you modify and offer as SaaS, share your changes
+
+### Why AGPL v3?
+
+Unlike permissive licenses (MIT, Apache) that allow companies to create proprietary forks, **AGPL v3 ensures improvements flow back to the community**. This is especially important for network services - the "SaaS loophole" is closed.
+
+**Need proprietary use?** We offer [commercial licensing](COMMERCIAL.md) for:
+- Embedding in proprietary products
+- SaaS deployments without source sharing
+- Enterprise features and support
+
+See [COMMERCIAL.md](COMMERCIAL.md) for details on our dual-licensing model.
+
+**Unlike context7**, our license actually means something because you can run the entire system! 🚀
 
 ---
 

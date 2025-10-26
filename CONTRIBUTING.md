@@ -22,6 +22,56 @@ There are many ways to contribute to Codex7:
 
 ---
 
+## ✍️ Contributor License Agreement (CLA)
+
+**Important:** Before we can accept your first contribution, you'll need to sign our Contributor License Agreement (CLA).
+
+### Why a CLA?
+
+Codex7 uses **dual licensing**:
+- **AGPL v3** - Community Edition (free, open source)
+- **Commercial License** - Enterprise Edition (paid, proprietary use)
+
+The CLA allows us to:
+- ✅ Keep the Community Edition fully open source under AGPL v3
+- ✅ Offer commercial licenses to enterprises
+- ✅ Ensure all contributors retain credit and copyright
+- ✅ Build a sustainable business without compromising open source
+
+**You retain ownership!** This is NOT a copyright assignment. You're just giving us permission to use your contribution in both editions.
+
+### How to Sign
+
+**Option 1: Automated (Recommended)**
+
+When you submit your first pull request, our CLA bot will comment with a link to sign electronically via GitHub OAuth. It takes 30 seconds!
+
+**Option 2: Manual Email**
+
+Email cla@codex7.dev with:
+```
+Subject: Codex7 CLA Signature
+
+I, [Your Full Name], hereby agree to the Codex7 CLA v1.0.
+GitHub: @yourname
+Email: your@email.com
+Date: YYYY-MM-DD
+
+/s/ Your Name
+```
+
+### Corporate Contributors
+
+If contributing on behalf of your employer, we need a Corporate CLA. Email cla@codex7.dev for the template.
+
+### Full CLA Text
+
+Read the complete Contributor License Agreement: [CLA.md](CLA.md)
+
+**Questions?** Ask in [GitHub Discussions](https://github.com/jenova-marie/codex7/discussions) or Slack!
+
+---
+
 ## 🚀 Getting Started
 
 ### 📋 Prerequisites

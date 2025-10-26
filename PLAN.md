@@ -145,7 +145,9 @@ codex7/
 ├── 📄 QUESTIONS.md                 # Architecture decisions
 ├── 📄 CONTRIBUTING.md              # Community contribution guide
 ├── 📄 CODE_OF_CONDUCT.md           # Community standards
-├── 📄 LICENSE                      # MIT License
+├── 📄 LICENSE                      # AGPL v3 License
+├── 📄 LICENSE.COMMERCIAL           # Commercial License
+├── 📄 CLA.md                       # Contributor License Agreement
 ├── 📄 SECURITY.md                  # Security policy & reporting
 ├── 📄 pnpm-workspace.yaml          # pnpm monorepo config
 ├── 📄 package.json                 # Root package.json
@@ -1235,7 +1237,13 @@ throughout the project.
 
 ## 📄 License
 
-MIT License - see [LICENSE](LICENSE)
+AGPL v3 License - see [LICENSE](LICENSE)
+
+Codex7 uses dual licensing:
+- **Community Edition**: AGPL v3 (free, open source, copyleft)
+- **Enterprise Edition**: Commercial License (see [LICENSE.COMMERCIAL](LICENSE.COMMERCIAL))
+
+See [COMMERCIAL.md](COMMERCIAL.md) for details on our licensing strategy.
 ```
 
 #### 2. 🚀 GETTING_STARTED.md
