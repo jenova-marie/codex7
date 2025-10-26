@@ -98,6 +98,70 @@ codex7/
 5. 🎨 **Beautiful code** - ESLint + Prettier configured
 6. 💜 **Community-focused** - Clear, welcoming, emoji-rich!
 7. 🔍 **Search-first implementation** - Research existing solutions before building from scratch
+8. 📦 **ESM modules** - All packages use ES modules (see below)
+
+### ESM Module Requirements
+
+**CRITICAL**: All Codex7 packages are **ESM-only** (`"type": "module"` in package.json).
+
+This means:
+- ✅ **All imports MUST include `.js` extensions** - Even in TypeScript files!
+  ```typescript
+  // ✅ Correct
+  import { Library } from './classes/Library.js';
+  import type { StorageAdapter } from './storage/adapter.js';
+
+  // ❌ Wrong - will fail at runtime
+  import { Library } from './classes/Library';
+  import type { StorageAdapter } from './storage/adapter';
+  ```
+
+- ✅ **Use `module: "NodeNext"` and `moduleResolution: "NodeNext"` in tsconfig.json**
+  ```json
+  {
+    "compilerOptions": {
+      "module": "NodeNext",
+      "moduleResolution": "NodeNext"
+    }
+  }
+  ```
+
+- ✅ **No CommonJS** - No `require()`, no `module.exports`
+  ```typescript
+  // ✅ Correct
+  export { MyClass };
+  import { MyClass } from './my-class.js';
+
+  // ❌ Wrong
+  module.exports = { MyClass };
+  const { MyClass } = require('./my-class');
+  ```
+
+- ✅ **Node.js imports need extensions too**
+  ```typescript
+  // ✅ Correct
+  import { readFile } from 'node:fs/promises';
+
+  // ⚠️  Works but prefer node: protocol
+  import { readFile } from 'fs/promises';
+  ```
+
+**Why ESM?**
+- Modern Node.js standard (20+)
+- Better tree-shaking
+- Native top-level await
+- Future-proof
+- Required by many modern tools
+
+**All packages using ESM:**
+- `@codex7/shared` ✅
+- `@codex7/mcp-server` ✅
+- `@codex7/api` ✅
+- `@codex7/web` ✅
+- `@codex7/indexer` ✅
+- `@codex7/storage-postgres` ✅
+- `@codex7/storage-sqlite` ✅
+- `@codex7/storage-qdrant` ✅
 
 ### 🔍 Search-First Implementation Philosophy
 
