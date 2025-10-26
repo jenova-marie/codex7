@@ -223,10 +223,13 @@ export class PostgresAdapter implements StorageAdapter {
         org: fullLibrary.org,
         project: fullLibrary.project,
         identifier: fullLibrary.identifier,
+        description: fullLibrary.description || '',
+        repositoryUrl: fullLibrary.repositoryUrl || '',
+        homepageUrl: fullLibrary.homepageUrl || '',
         created: fullLibrary.created,
         updated: fullLibrary.updated,
         metadata: JSON.stringify(fullLibrary.metadata || {}),
-        trustScore: (fullLibrary.metadata as any)?.trustScore ?? 5,
+        trustScore: fullLibrary.trustScore ?? 5,
       });
 
       // Convert to Library class instance
