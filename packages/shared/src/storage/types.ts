@@ -27,6 +27,11 @@
 export type StorageBackend = 'postgres' | 'sqlite' | 'qdrant';
 
 /**
+ * Migration strategy
+ */
+export type MigrationStrategy = 'auto' | 'manual' | 'none';
+
+/**
  * Storage configuration
  */
 export interface StorageConfig {
@@ -35,6 +40,9 @@ export interface StorageConfig {
 
   /** Connection string or URL */
   connectionUrl: string;
+
+  /** Migration strategy - auto runs migrations on initialize, manual requires explicit call, none skips migrations */
+  migrationStrategy?: MigrationStrategy;
 
   /** Connection pool configuration */
   pool?: {
