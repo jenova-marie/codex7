@@ -23,6 +23,10 @@ describe.skipIf(!TEST_DATABASE_URL)('PostgresAdapter Integration Tests', () => {
   let config: PostgresConfig;
   let storageConfig: StorageConfig;
 
+  // Generate unique test ID prefix for this test run
+  const testRunId = Date.now().toString();
+  const uniqueId = (suffix: string) => `test-${testRunId}-${suffix}`;
+
   // Parse connection string for config
   const url = new URL(TEST_DATABASE_URL);
   config = {
@@ -34,8 +38,8 @@ describe.skipIf(!TEST_DATABASE_URL)('PostgresAdapter Integration Tests', () => {
   };
 
   storageConfig = {
-    type: 'postgres' as const,
-    dbName: config.database,
+    backend: 'postgres' as const,
+    connectionUrl: TEST_DATABASE_URL,
     migrationStrategy: 'auto',
   };
 
@@ -92,7 +96,7 @@ describe.skipIf(!TEST_DATABASE_URL)('PostgresAdapter Integration Tests', () => {
 
       expect(libraryResult.ok).toBe(true);
       const library = libraryResult.value!;
-      library.id = 'test-lib-1'; // Override ID for testing
+      library.id = uniqueId('lib-1'); // Override ID for testing
 
       const result = await adapter.createLibrary(library);
       if (!result.ok) {
@@ -102,6 +106,7 @@ describe.skipIf(!TEST_DATABASE_URL)('PostgresAdapter Integration Tests', () => {
     });
 
     it('should get a library by id', async () => {
+      const libId = uniqueId('lib-2');
       const libraryResult = Library.create({
         name: 'Test Library 2',
         org: 'test-org',
@@ -115,11 +120,11 @@ describe.skipIf(!TEST_DATABASE_URL)('PostgresAdapter Integration Tests', () => {
 
       expect(libraryResult.ok).toBe(true);
       const library = libraryResult.value!;
-      library.id = 'test-lib-2'; // Override ID for testing
+      library.id = libId; // Override ID for testing
 
       await adapter.createLibrary(library);
 
-      const result = await adapter.getLibrary('test-lib-2');
+      const result = await adapter.getLibrary(libId);
       expect(result.ok).toBe(true);
       expect(result.value).toBeDefined();
       expect(result.value?.name).toBe('Test Library 2');
@@ -139,7 +144,7 @@ describe.skipIf(!TEST_DATABASE_URL)('PostgresAdapter Integration Tests', () => {
       });
       expect(reactResult.ok).toBe(true);
       const reactLib = reactResult.value!;
-      reactLib.id = 'test-lib-search-1';
+      reactLib.id = uniqueId('lib-search-1');
       await adapter.createLibrary(reactLib);
 
       const vueResult = Library.create({
@@ -154,7 +159,7 @@ describe.skipIf(!TEST_DATABASE_URL)('PostgresAdapter Integration Tests', () => {
       });
       expect(vueResult.ok).toBe(true);
       const vueLib = vueResult.value!;
-      vueLib.id = 'test-lib-search-2';
+      vueLib.id = uniqueId('lib-search-2');
       await adapter.createLibrary(vueLib);
 
       const result = await adapter.searchLibraries('react');
@@ -167,6 +172,7 @@ describe.skipIf(!TEST_DATABASE_URL)('PostgresAdapter Integration Tests', () => {
   describe('Version CRUD Operations', () => {
     it('should create a version', async () => {
       // First create a library
+      const libId = uniqueId('lib-version');
       const libraryResult = Library.create({
         name: 'Library with Version',
         org: 'test',
@@ -179,11 +185,11 @@ describe.skipIf(!TEST_DATABASE_URL)('PostgresAdapter Integration Tests', () => {
       });
       expect(libraryResult.ok).toBe(true);
       const library = libraryResult.value!;
-      library.id = 'test-lib-version';
+      library.id = libId;
       await adapter.createLibrary(library);
 
       const versionResult = Version.create({
-        libraryId: 'test-lib-version',
+        libraryId: libId,
         versionString: '1.0.0',
         isLatest: true,
         releaseDate: Date.now(),
@@ -192,7 +198,7 @@ describe.skipIf(!TEST_DATABASE_URL)('PostgresAdapter Integration Tests', () => {
       });
       expect(versionResult.ok).toBe(true);
       const version = versionResult.value!;
-      version.id = 'test-version-1';
+      version.id = uniqueId('version-1');
 
       const result = await adapter.createVersion(version);
       if (!result.ok) {
@@ -204,8 +210,39 @@ describe.skipIf(!TEST_DATABASE_URL)('PostgresAdapter Integration Tests', () => {
 
   describe('Document CRUD Operations', () => {
     it('should create a document', async () => {
+      // First create a library and version
+      const libId = uniqueId('lib-doc');
+      const libraryResult = Library.create({
+        name: 'Library for Document',
+        org: 'test',
+        project: 'doc-test',
+        description: 'Test',
+        repositoryUrl: 'https://github.com/test/doc-test',
+        homepageUrl: 'https://test.com',
+        trustScore: 5,
+        metadata: {},
+      });
+      expect(libraryResult.ok).toBe(true);
+      const library = libraryResult.value!;
+      library.id = libId;
+      await adapter.createLibrary(library);
+
+      const versionId = uniqueId('version-doc');
+      const versionResult = Version.create({
+        libraryId: libId,
+        versionString: '1.0.0',
+        isLatest: true,
+        releaseDate: Date.now(),
+        gitCommitSha: 'abc123',
+        metadata: {},
+      });
+      expect(versionResult.ok).toBe(true);
+      const version = versionResult.value!;
+      version.id = versionId;
+      await adapter.createVersion(version);
+
       const documentResult = Document.create({
-        versionId: 'test-version-1',
+        versionId,
         title: 'Test Document',
         content: 'This is a test document with some content.',
         sourcePath: '/docs/test.md',
@@ -219,7 +256,7 @@ describe.skipIf(!TEST_DATABASE_URL)('PostgresAdapter Integration Tests', () => {
 
       expect(documentResult.ok).toBe(true);
       const document = documentResult.value!;
-      document.id = 'test-doc-1';
+      document.id = uniqueId('doc-1');
 
       const result = await adapter.indexDocument(document);
       if (!result.ok) {
@@ -230,8 +267,14 @@ describe.skipIf(!TEST_DATABASE_URL)('PostgresAdapter Integration Tests', () => {
   });
 
   describe('Vector Search with pgvector', () => {
+    let vectorLibId: string;
+    let vectorVersionId: string;
+
     beforeEach(async () => {
       // Create library and version first
+      vectorLibId = uniqueId('lib-vector');
+      vectorVersionId = uniqueId('version-vector');
+
       const libraryResult = Library.create({
         name: 'Vector Test Library',
         org: 'test',
@@ -244,11 +287,11 @@ describe.skipIf(!TEST_DATABASE_URL)('PostgresAdapter Integration Tests', () => {
       });
       expect(libraryResult.ok).toBe(true);
       const library = libraryResult.value!;
-      library.id = 'test-lib-vector';
+      library.id = vectorLibId;
       await adapter.createLibrary(library);
 
       const versionResult = Version.create({
-        libraryId: 'test-lib-vector',
+        libraryId: vectorLibId,
         versionString: '1.0.0',
         isLatest: true,
         releaseDate: Date.now(),
@@ -257,26 +300,26 @@ describe.skipIf(!TEST_DATABASE_URL)('PostgresAdapter Integration Tests', () => {
       });
       expect(versionResult.ok).toBe(true);
       const version = versionResult.value!;
-      version.id = 'test-version-vector';
+      version.id = vectorVersionId;
       version.documentCount = 3;
       await adapter.createVersion(version);
 
       // Create documents with dummy embeddings (1536 dimensions)
       const docs = [
         {
-          id: 'test-doc-vector-1',
+          id: uniqueId('doc-vector-1'),
           title: 'Getting Started',
           content: 'How to get started with the library',
           embedding: new Array(1536).fill(0).map((_, i) => (i % 10) / 10),
         },
         {
-          id: 'test-doc-vector-2',
+          id: uniqueId('doc-vector-2'),
           title: 'API Reference',
           content: 'Complete API documentation',
           embedding: new Array(1536).fill(0).map((_, i) => ((i + 5) % 10) / 10),
         },
         {
-          id: 'test-doc-vector-3',
+          id: uniqueId('doc-vector-3'),
           title: 'Examples',
           content: 'Code examples and tutorials',
           embedding: new Array(1536).fill(0).map((_, i) => ((i + 7) % 10) / 10),
@@ -285,7 +328,7 @@ describe.skipIf(!TEST_DATABASE_URL)('PostgresAdapter Integration Tests', () => {
 
       for (const docData of docs) {
         const docResult = Document.create({
-          versionId: 'test-version-vector',
+          versionId: vectorVersionId,
           title: docData.title,
           content: docData.content,
           sourcePath: `/docs/${docData.id}.md`,
@@ -311,7 +354,7 @@ describe.skipIf(!TEST_DATABASE_URL)('PostgresAdapter Integration Tests', () => {
       const result = await adapter.vectorSearch({
         embedding: queryEmbedding,
         k: 10,
-        filter: { version: 'test-version-vector' },
+        filter: { version: vectorVersionId },
       });
       if (!result.ok) {
         console.error('❌ vectorSearch failed:', result.error);
@@ -320,8 +363,8 @@ describe.skipIf(!TEST_DATABASE_URL)('PostgresAdapter Integration Tests', () => {
       expect(result.value).toBeDefined();
       expect(result.value!.length).toBeGreaterThan(0);
 
-      // The most similar document should be doc 1
-      expect(result.value![0].document.id).toBe('test-doc-vector-1');
+      // The most similar document should be the one with the closest embedding (Getting Started)
+      expect(result.value![0].document.title).toBe('Getting Started');
     });
 
     it('should return results ordered by similarity', async () => {
@@ -330,13 +373,13 @@ describe.skipIf(!TEST_DATABASE_URL)('PostgresAdapter Integration Tests', () => {
       const result = await adapter.vectorSearch({
         embedding: queryEmbedding,
         k: 3,
-        filter: { version: 'test-version-vector' },
+        filter: { version: vectorVersionId },
       });
       expect(result.ok).toBe(true);
       expect(result.value!.length).toBe(3);
 
-      // Results should be ordered by similarity (doc 1, then doc 2, then doc 3)
-      expect(result.value![0].document.id).toBe('test-doc-vector-1');
+      // Results should be ordered by similarity (Getting Started should be first)
+      expect(result.value![0].document.title).toBe('Getting Started');
     });
 
     it('should limit results correctly', async () => {
@@ -352,10 +395,47 @@ describe.skipIf(!TEST_DATABASE_URL)('PostgresAdapter Integration Tests', () => {
   });
 
   describe('IndexingJob Operations', () => {
+    let jobLibId: string;
+    let jobVersionId: string;
+
+    beforeEach(async () => {
+      // Create library and version for job tests
+      jobLibId = uniqueId('lib-job');
+      jobVersionId = uniqueId('version-job');
+
+      const libraryResult = Library.create({
+        name: 'Job Test Library',
+        org: 'test',
+        project: 'job-test',
+        description: 'Test',
+        repositoryUrl: 'https://github.com/test/job-test',
+        homepageUrl: 'https://test.com',
+        trustScore: 5,
+        metadata: {},
+      });
+      expect(libraryResult.ok).toBe(true);
+      const library = libraryResult.value!;
+      library.id = jobLibId;
+      await adapter.createLibrary(library);
+
+      const versionResult = Version.create({
+        libraryId: jobLibId,
+        versionString: '1.0.0',
+        isLatest: true,
+        releaseDate: Date.now(),
+        gitCommitSha: 'abc123',
+        metadata: {},
+      });
+      expect(versionResult.ok).toBe(true);
+      const version = versionResult.value!;
+      version.id = jobVersionId;
+      await adapter.createVersion(version);
+    });
+
     it('should create an indexing job', async () => {
       const result = await adapter.createIndexingJob({
-        libraryId: 'test-lib-1',
-        versionId: 'test-version-1',
+        libraryId: jobLibId,
+        versionId: jobVersionId,
         status: 'pending',
         metadata: {},
       });
@@ -368,8 +448,8 @@ describe.skipIf(!TEST_DATABASE_URL)('PostgresAdapter Integration Tests', () => {
 
     it('should get an indexing job', async () => {
       const createResult = await adapter.createIndexingJob({
-        libraryId: 'test-lib-1',
-        versionId: 'test-version-1',
+        libraryId: jobLibId,
+        versionId: jobVersionId,
         status: 'pending',
         metadata: {},
       });
@@ -384,8 +464,8 @@ describe.skipIf(!TEST_DATABASE_URL)('PostgresAdapter Integration Tests', () => {
 
     it('should update an indexing job', async () => {
       const createResult = await adapter.createIndexingJob({
-        libraryId: 'test-lib-1',
-        versionId: 'test-version-1',
+        libraryId: jobLibId,
+        versionId: jobVersionId,
         status: 'pending',
         metadata: {},
       });
