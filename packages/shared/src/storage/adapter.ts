@@ -1,4 +1,23 @@
 /**
+ * Codex7 - Shared Types, Models, and Utilities
+ *
+ * Copyright (C) 2025 Jenova Marie and Codex7 Contributors
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+/**
  * 🔌 Storage Adapter Interface
  *
  * Abstract interface that all storage adapters must implement.
@@ -6,9 +25,9 @@
  */
 
 import type { Result } from '@jenova-marie/ts-rust-result';
-import type { Document, Library, LibraryVersion, IndexingJob } from '../types/index.js';
+import type { Library, Version, Document } from '../classes/index.js';
 import type { SearchOptions, SearchResult, VectorSearchParams } from '../types/search.js';
-import type { StorageConfig, StorageStats, MigrationInfo } from './types.js';
+import type { StorageConfig, StorageStats, MigrationInfo, IndexingJob } from './types.js';
 
 /**
  * 📦 Main storage adapter interface
@@ -49,7 +68,7 @@ export interface StorageAdapter {
   /**
    * Create a new library
    */
-  createLibrary(library: Omit<Library, 'id' | 'createdAt' | 'updatedAt'>): Promise<Result<Library, Error>>;
+  createLibrary(library: Omit<Library, 'id' | 'created' | 'updated'>): Promise<Result<Library, Error>>;
 
   /**
    * Get library by ID
@@ -88,27 +107,27 @@ export interface StorageAdapter {
   /**
    * Create a new version
    */
-  createVersion(version: Omit<LibraryVersion, 'id' | 'createdAt'>): Promise<Result<LibraryVersion, Error>>;
+  createVersion(version: Omit<Version, 'id' | 'indexed' | 'updated'>): Promise<Result<Version, Error>>;
 
   /**
    * Get version by ID
    */
-  getVersion(id: string): Promise<Result<LibraryVersion | null, Error>>;
+  getVersion(id: string): Promise<Result<Version | null, Error>>;
 
   /**
    * List versions for a library
    */
-  listVersions(libraryId: string): Promise<Result<LibraryVersion[], Error>>;
+  listVersions(libraryId: string): Promise<Result<Version[], Error>>;
 
   /**
    * Get latest version for a library
    */
-  getLatestVersion(libraryId: string): Promise<Result<LibraryVersion | null, Error>>;
+  getLatestVersion(libraryId: string): Promise<Result<Version | null, Error>>;
 
   /**
    * Update version
    */
-  updateVersion(id: string, updates: Partial<LibraryVersion>): Promise<Result<LibraryVersion, Error>>;
+  updateVersion(id: string, updates: Partial<Version>): Promise<Result<Version, Error>>;
 
   /**
    * Delete version (and all associated documents)
@@ -122,12 +141,12 @@ export interface StorageAdapter {
   /**
    * Index a document with its embedding
    */
-  indexDocument(document: Omit<Document, 'id' | 'indexedAt' | 'updatedAt'>): Promise<Result<Document, Error>>;
+  indexDocument(document: Omit<Document, 'id' | 'indexed' | 'updated'>): Promise<Result<Document, Error>>;
 
   /**
    * Batch index multiple documents
    */
-  indexDocuments(documents: Array<Omit<Document, 'id' | 'indexedAt' | 'updatedAt'>>): Promise<Result<Document[], Error>>;
+  indexDocuments(documents: Array<Omit<Document, 'id' | 'indexed' | 'updated'>>): Promise<Result<Document[], Error>>;
 
   /**
    * Get document by ID

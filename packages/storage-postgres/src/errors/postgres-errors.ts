@@ -1,4 +1,23 @@
 /**
+ * Codex7 - PostgreSQL Storage Adapter
+ *
+ * Copyright (C) 2025 Jenova Marie and Codex7 Contributors
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+/**
  * 🐘 PostgreSQL Storage Adapter Errors
  *
  * Domain-specific error types for the PostgreSQL storage adapter
@@ -14,7 +33,8 @@ export type PostgresError =
   | PostgresQueryError
   | PgVectorNotInstalledError
   | MigrationError
-  | NotImplementedError;
+  | NotImplementedError
+  | StorageErrorType;
 
 // ===== Error Interfaces =====
 
@@ -68,6 +88,17 @@ export interface NotImplementedError extends DomainError {
   context: {
     method: string;
     phase: string;
+  };
+}
+
+/**
+ * General storage operation error
+ */
+export interface StorageErrorType extends DomainError {
+  kind: 'StorageError';
+  context: {
+    operation: string;
+    details?: string;
   };
 }
 
@@ -149,4 +180,14 @@ export function notImplemented(
     .withMessage(`Not implemented: ${method} - Coming in ${phase}`)
     .withContext({ method, phase })
     .build() as NotImplementedError;
+}
+
+/**
+ * Create a general storage error
+ */
+export class StorageError extends Error {
+  constructor(public operation: string, public details: string) {
+    super(`Storage operation failed: ${operation} - ${details}`);
+    this.name = 'StorageError';
+  }
 }

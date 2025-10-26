@@ -1,0 +1,312 @@
+import { ok, err, type Result } from '@jenova-marie/ts-rust-result';
+import ObjectID from 'bson-objectid';
+import { createHash } from 'crypto';
+
+/**
+ * Document metadata stored in database
+ */
+export interface DocumentMetadata {
+  /** Section hierarchy (e.g., ['Getting Started', 'Installation']) */
+  hierarchy?: string[];
+  /** Header level (1-6) */
+  headerLevel?: number;
+  /** Tags or keywords */
+  tags?: string[];
+  /** Additional custom metadata */
+  [key: string]: unknown;
+}
+
+/**
+ * Input for creating a new document
+ */
+export interface CreateDocumentInput {
+  versionId: string;
+  title: string;
+  content: string;
+  chunkIndex?: number;
+  hierarchy?: string[];
+  sourceUrl?: string;
+  sourceType?: string;
+  sourcePath?: string;
+  language?: string;
+  metadata?: DocumentMetadata;
+}
+
+/**
+ * Document domain entity
+ * Represents a chunk of documentation with vector embedding
+ */
+export class Document {
+  /** Unique identifier (BSON ObjectId hex string) */
+  id: string = '';
+
+  /** Parent version ID */
+  versionId: string = '';
+
+  /** Document title/heading */
+  title: string = '';
+
+  /** Text content */
+  content: string = '';
+
+  /** Content hash (SHA-256) for deduplication */
+  contentHash: string = '';
+
+  /** Vector embedding (1536 dimensions for OpenAI text-embedding-3-small) */
+  embedding: number[] = [];
+
+  /** Position in parent document */
+  chunkIndex: number = 0;
+
+  /** Section hierarchy (e.g., ['API', 'Components', 'Button']) */
+  hierarchy: string[] = [];
+
+  /** Source URL */
+  sourceUrl: string = '';
+
+  /** Source type (e.g., 'github', 'npm', 'website') */
+  sourceType: string = 'github';
+
+  /** Source file path */
+  sourcePath: string = '';
+
+  /** Language code (e.g., 'en', 'es') */
+  language: string = 'en';
+
+  /** Whether this chunk contains code */
+  hasCode: boolean = false;
+
+  /** Programming language (if code block) */
+  codeLanguage: string = '';
+
+  /** Additional metadata */
+  metadata: DocumentMetadata = {};
+
+  /** Indexing timestamp (Unix ms) */
+  indexed: number = 0;
+
+  /** Last update timestamp (Unix ms) */
+  updated: number = 0;
+
+  /**
+   * Check if document data is stale (not updated in 14 days)
+   */
+  isStale(): boolean {
+    const fourteenDaysMs = 14 * 24 * 60 * 60 * 1000;
+    return Date.now() - this.updated > fourteenDaysMs;
+  }
+
+  /**
+   * Check if document has vector embedding
+   */
+  hasEmbedding(): boolean {
+    return this.embedding.length === 1536;
+  }
+
+  /**
+   * Check if document is ready for vector search
+   */
+  isReadyForSearch(): boolean {
+    return this.hasEmbedding() && !this.isStale();
+  }
+
+  /**
+   * Generate SHA-256 hash of document content
+   */
+  generateContentHash(): string {
+    return createHash('sha256').update(this.content).digest('hex');
+  }
+
+  /**
+   * Detect if content contains code blocks
+   */
+  detectCode(): { hasCode: boolean; language?: string } {
+    // Simple markdown code block detection
+    const codeBlockRegex = /```(\w+)?\n/;
+    const match = this.content.match(codeBlockRegex);
+
+    if (match) {
+      return {
+        hasCode: true,
+        language: match[1] || 'unknown',
+      };
+    }
+
+    return { hasCode: false };
+  }
+
+  /**
+   * Validate document has minimum required fields
+   */
+  validate(): Result<boolean, Error> {
+    if (!this.versionId) {
+      return err(new Error('Document must be associated with a version'));
+    }
+
+    if (!this.title) {
+      return err(new Error('Document must have a title'));
+    }
+
+    if (!this.content) {
+      return err(new Error('Document must have content'));
+    }
+
+    if (this.embedding.length > 0 && this.embedding.length !== 1536) {
+      return err(new Error('Document embedding must be 1536 dimensions'));
+    }
+
+    return ok(true);
+  }
+
+  /**
+   * Create a new Document instance with defaults
+   */
+  static create(data: CreateDocumentInput): Result<Document, Error> {
+    try {
+      const doc = new Document();
+      const objectId = new ObjectID();
+      doc.id = objectId.toHexString();
+
+      const now = Date.now();
+      doc.indexed = now;
+      doc.updated = now;
+
+      // Set required fields
+      doc.versionId = data.versionId;
+      doc.title = data.title;
+      doc.content = data.content;
+      doc.contentHash = doc.generateContentHash();
+
+      // Set optional fields
+      doc.chunkIndex = data.chunkIndex ?? 0;
+      doc.hierarchy = data.hierarchy || [];
+      doc.sourceUrl = data.sourceUrl || '';
+      doc.sourceType = data.sourceType || 'github';
+      doc.sourcePath = data.sourcePath || '';
+      doc.language = data.language || 'en';
+      doc.metadata = data.metadata || {};
+
+      // Auto-detect code
+      const codeDetection = doc.detectCode();
+      doc.hasCode = codeDetection.hasCode;
+      doc.codeLanguage = codeDetection.language || '';
+
+      // Validate before returning
+      const validation = doc.validate();
+      if (!validation.ok) {
+        return err(validation.error);
+      }
+
+      return ok(doc);
+    } catch (e) {
+      return err(new Error(`Failed to create Document: ${e instanceof Error ? e.message : String(e)}`));
+    }
+  }
+
+  /**
+   * Update document fields and refresh timestamp
+   */
+  update(data: Partial<Omit<Document, 'id' | 'indexed'>>): Result<Document, Error> {
+    try {
+      Object.assign(this, data);
+      this.updated = Date.now();
+
+      // Regenerate hash if content changed
+      if (data.content) {
+        this.contentHash = this.generateContentHash();
+        const codeDetection = this.detectCode();
+        this.hasCode = codeDetection.hasCode;
+        this.codeLanguage = codeDetection.language || '';
+      }
+
+      // Re-validate after update
+      const validation = this.validate();
+      if (!validation.ok) {
+        return err(validation.error);
+      }
+
+      return ok(this);
+    } catch (e) {
+      return err(new Error(`Failed to update Document: ${e instanceof Error ? e.message : String(e)}`));
+    }
+  }
+
+  /**
+   * Attach vector embedding to document
+   */
+  attachEmbedding(embedding: number[]): Result<Document, Error> {
+    if (embedding.length !== 1536) {
+      return err(new Error('Embedding must be 1536 dimensions (OpenAI text-embedding-3-small)'));
+    }
+
+    this.embedding = embedding;
+    this.updated = Date.now();
+    return ok(this);
+  }
+
+  /**
+   * Calculate cosine similarity with another document's embedding
+   * Returns value between -1 and 1 (higher is more similar)
+   */
+  cosineSimilarity(other: Document): number {
+    if (!this.hasEmbedding() || !other.hasEmbedding()) {
+      return 0;
+    }
+
+    let dotProduct = 0;
+    let normA = 0;
+    let normB = 0;
+
+    for (let i = 0; i < 1536; i++) {
+      dotProduct += this.embedding[i] * other.embedding[i];
+      normA += this.embedding[i] * this.embedding[i];
+      normB += other.embedding[i] * other.embedding[i];
+    }
+
+    return dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
+  }
+
+  /**
+   * Convert to plain object (for JSON serialization, DB storage)
+   */
+  toJSON(): Record<string, unknown> {
+    return {
+      id: this.id,
+      versionId: this.versionId,
+      title: this.title,
+      content: this.content,
+      contentHash: this.contentHash,
+      embedding: this.embedding,
+      chunkIndex: this.chunkIndex,
+      hierarchy: this.hierarchy,
+      sourceUrl: this.sourceUrl,
+      sourceType: this.sourceType,
+      sourcePath: this.sourcePath,
+      language: this.language,
+      hasCode: this.hasCode,
+      codeLanguage: this.codeLanguage,
+      metadata: this.metadata,
+      indexed: this.indexed,
+      updated: this.updated,
+    };
+  }
+
+  /**
+   * Create instance from plain object (from DB, JSON)
+   */
+  static fromJSON(data: Record<string, unknown>): Result<Document, Error> {
+    try {
+      const doc = new Document();
+      Object.assign(doc, data);
+
+      const validation = doc.validate();
+      if (!validation.ok) {
+        return err(validation.error);
+      }
+
+      return ok(doc);
+    } catch (e) {
+      return err(new Error(`Failed to deserialize Document: ${e instanceof Error ? e.message : String(e)}`));
+    }
+  }
+}

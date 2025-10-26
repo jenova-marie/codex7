@@ -8,37 +8,44 @@
  */
 
 import { ok as tsOk, err as tsErr, type Result } from '@jenova-marie/ts-rust-result';
+import { drizzle } from 'drizzle-orm/postgres-js';
+import { eq, desc, sql, and, or, ilike } from 'drizzle-orm';
+import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
+import ObjectID from 'bson-objectid';
+
+// Import entity classes (needed as values for .fromJSON() methods)
+import {
+  Library,
+  Version,
+  Document,
+} from '@codex7/shared';
+// Import type-only interfaces
 import type {
   StorageAdapter,
   StorageConfig,
   StorageStats,
   MigrationInfo,
-  Library,
-  LibraryVersion,
-  Document,
   IndexingJob,
   SearchOptions,
   SearchResult,
   VectorSearchParams,
 } from '@codex7/shared';
 import { PostgresConnection, type PostgresConfig } from './connection.js';
-import { notImplemented } from './errors/postgres-errors.js';
+import { libraries, versions, documents } from './drizzle/index.js';
+import { StorageError } from './errors/postgres-errors.js';
 import { logger } from './utils/logger.js';
-import { runMigrations } from './migrations/migration-runner.js';
+import { runMigrations } from './scripts/run-migrations.js';
 
 /**
  * PostgreSQL + pgvector implementation of StorageAdapter interface
- *
- * STUB: All methods return Ok with placeholder data or throw NotImplementedError.
- * Actual implementation comes in Phase 1.
  */
 export class PostgresAdapter implements StorageAdapter {
   private connection: PostgresConnection;
-  
+  private db!: PostgresJsDatabase;
 
   constructor(config: PostgresConfig) {
     this.connection = new PostgresConnection(config);
-    logger.info('🐘 PostgresAdapter created (STUB)');
+    logger.info('🐘 PostgresAdapter created');
   }
 
   // ========================================
@@ -173,28 +180,28 @@ export class PostgresAdapter implements StorageAdapter {
   // ========================================
 
   async createVersion(
-    version: Omit<LibraryVersion, 'id' | 'createdAt'>
-  ): Promise<Result<LibraryVersion, Error>> {
+    version: Omit<Version, 'id' | 'indexed' | 'updated'>
+  ): Promise<Result<Version, Error>> {
     logger.debug({ version }, '📌 createVersion called (STUB)');
     return tsErr(notImplemented('createVersion') as unknown as Error);
   }
 
-  async getVersion(id: string): Promise<Result<LibraryVersion | null, Error>> {
+  async getVersion(id: string): Promise<Result<Version | null, Error>> {
     logger.debug({ id }, '📌 getVersion called (STUB)');
     return tsErr(notImplemented('getVersion') as unknown as Error);
   }
 
-  async listVersions(libraryId: string): Promise<Result<LibraryVersion[], Error>> {
+  async listVersions(libraryId: string): Promise<Result<Version[], Error>> {
     logger.debug({ libraryId }, '📌 listVersions called (STUB)');
     return tsErr(notImplemented('listVersions') as unknown as Error);
   }
 
-  async getLatestVersion(libraryId: string): Promise<Result<LibraryVersion | null, Error>> {
+  async getLatestVersion(libraryId: string): Promise<Result<Version | null, Error>> {
     logger.debug({ libraryId }, '📌 getLatestVersion called (STUB)');
     return tsErr(notImplemented('getLatestVersion') as unknown as Error);
   }
 
-  async updateVersion(id: string, updates: Partial<LibraryVersion>): Promise<Result<LibraryVersion, Error>> {
+  async updateVersion(id: string, updates: Partial<Version>): Promise<Result<Version, Error>> {
     logger.debug({ id, updates }, '📌 updateVersion called (STUB)');
     return tsErr(notImplemented('updateVersion') as unknown as Error);
   }

@@ -1,3 +1,22 @@
+/**
+ * Codex7 - PostgreSQL Storage Adapter
+ *
+ * Copyright (C) 2025 Jenova Marie and Codex7 Contributors
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 // json-to-drizzle.ts
 // Convert JSON schemas to Drizzle ORM pgTable() definitions with pgvector support
 // Enhanced for Codex7 with vector embedding support
@@ -26,7 +45,7 @@ const toPluralTableName = (name: string): string => {
   return name.toLowerCase() + 's';
 };
 
-const getColumnDefinition = (key: string, prop: any, required: string[], tableName: string): string => {
+const getColumnDefinition = (key: string, prop: any, required: string[], _tableName: string): string => {
   let drizzleType = typeMap[prop.type] || 'text';
 
   // 🎯 SPECIAL HANDLING: pgvector for embedding arrays
@@ -35,7 +54,7 @@ const getColumnDefinition = (key: string, prop: any, required: string[], tableNa
     // OpenAI text-embedding-3-small uses 1536 dimensions
     const dimensions = 1536;
     const col = `vector('${key}', { dimensions: ${dimensions} })`;
-    const constraints: string[] = [];
+    // const constraints: string[] = []; // Reserved for future constraint handling
 
     // Don't mark as notNull if it's optional (embeddings are added after document creation)
     // Add default empty array? No - pgvector doesn't support defaults well
