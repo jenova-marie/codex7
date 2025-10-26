@@ -1,7 +1,7 @@
 {
   "name": "@codex7/mcp-server",
   "version": "0.1.0-alpha",
-  "description": "\ud83d\udce1 MCP server implementation for Codex7",
+  "description": "📡 MCP server implementation for Codex7",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@codex7/shared": "workspace:*",
+    "@codex7/storage-postgres": "workspace:0.1.0-alpha",
     "@jenova-marie/ts-rust-result": "file:../../../ts-rust-result/ts-rust-result.tgz",
     "@jenova-marie/wonder-logger": "^1.0.12",
     "@modelcontextprotocol/sdk": "^0.5.0",

@@ -176,6 +176,9 @@ importers:
       '@codex7/shared':
         specifier: workspace:*
         version: link:../shared
+      '@codex7/storage-postgres':
+        specifier: workspace:0.1.0-alpha
+        version: link:../storage-postgres
       '@jenova-marie/ts-rust-result':
         specifier: file:../../../ts-rust-result/ts-rust-result.tgz
         version: file:../ts-rust-result/ts-rust-result.tgz(zod@3.25.76)
