@@ -17,9 +17,22 @@ export default defineConfig({
       exclude: [
         'node_modules/',
         'dist/',
+        'lib/',
         '**/*.test.ts',
         '**/*.config.ts',
+        '**/scripts/**',
       ],
+      thresholds: {
+        lines: 60,
+        functions: 60,
+        branches: 60,
+        statements: 60,
+      },
+    },
+    server: {
+      deps: {
+        inline: ['bson-objectid'],
+      },
     },
   },
 });
