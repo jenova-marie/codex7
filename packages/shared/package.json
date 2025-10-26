@@ -40,7 +40,7 @@
     "dev": "tsc --watch"
   },
   "dependencies": {
-    "@jenova-marie/ts-rust-result": "file:../../../ts-rust-result/jenova-marie-ts-rust-result-2.2.10.tgz",
+    "@jenova-marie/ts-rust-result": "file:../../../ts-rust-result/ts-rust-result.tgz",
     "bson": "^6.10.2",
     "bson-objectid": "^2.0.4"
   },

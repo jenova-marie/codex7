@@ -19,7 +19,7 @@
   "dependencies": {
     "@codex7/shared": "workspace:*",
     "@codex7/storage-postgres": "workspace:*",
-    "@jenova-marie/ts-rust-result": "file:../../../ts-rust-result/jenova-marie-ts-rust-result-2.2.10.tgz",
+    "@jenova-marie/ts-rust-result": "file:../../../ts-rust-result/ts-rust-result.tgz",
     "@jenova-marie/wonder-logger": "^1.0.12",
     "bullmq": "^5.1.9",
     "ioredis": "^5.3.2",

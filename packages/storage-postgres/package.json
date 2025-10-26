@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "@codex7/shared": "workspace:*",
-    "@jenova-marie/ts-rust-result": "file:../../../ts-rust-result/jenova-marie-ts-rust-result-2.2.10.tgz",
+    "@jenova-marie/ts-rust-result": "file:../../../ts-rust-result/ts-rust-result.tgz",
     "@jenova-marie/wonder-logger": "^1.0.12",
     "bson-objectid": "^2.0.4",
     "drizzle-orm": "^0.44.6",

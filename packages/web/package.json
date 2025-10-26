@@ -21,7 +21,7 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.21.3",
     "@jenova-marie/wonder-logger": "^1.0.12",
-    "@jenova-marie/ts-rust-result": "file:../../../ts-rust-result/jenova-marie-ts-rust-result-2.2.10.tgz"
+    "@jenova-marie/ts-rust-result": "file:../../../ts-rust-result/ts-rust-result.tgz"
   },
   "devDependencies": {
     "@types/react": "^18.2.48",
