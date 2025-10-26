@@ -12,9 +12,9 @@
     "clean": "rm -rf dist *.tsbuildinfo",
     "type-check": "tsc --noEmit",
     "seed": "tsx src/scripts/seed.ts",
-    "test": "vitest",
-    "test:watch": "vitest --watch",
-    "test:coverage": "vitest --coverage"
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
     "@codex7/shared": "workspace:*",

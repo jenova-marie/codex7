@@ -11,9 +11,9 @@
     "start": "node dist/index.js",
     "clean": "rm -rf dist *.tsbuildinfo",
     "type-check": "tsc --noEmit",
-    "test": "vitest",
-    "test:watch": "vitest --watch",
-    "test:coverage": "vitest --coverage"
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
     "@codex7/shared": "workspace:*",
