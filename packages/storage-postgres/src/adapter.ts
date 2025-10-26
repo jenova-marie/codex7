@@ -30,8 +30,7 @@ import type {
   VectorSearchParams,
 } from '@codex7/shared';
 import { PostgresConnection, type PostgresConfig } from './connection.js';
-import { libraries, versions, documents } from './drizzle/index.js';
-import { StorageError } from './errors/postgres-errors.js';
+import { libraries, versions, documents, indexingJobs } from './drizzle/index.js';
 import { logger } from './utils/logger.js';
 import { runMigrations } from './scripts/run-migrations.js';
 
@@ -1204,41 +1203,176 @@ export class PostgresAdapter implements StorageAdapter {
   // 🔄 Indexing Job Operations
   // ========================================
 
-  // TODO Phase 1: Implement IndexingJob operations
-  // These require creating a Drizzle schema for indexing_jobs table
-  // For now, these are stubs that return NotImplementedError
-
   async createIndexingJob(
     job: Omit<IndexingJob, 'id' | 'startedAt'>
   ): Promise<Result<IndexingJob, Error>> {
-    logger.debug({ job }, '🔄 createIndexingJob called (STUB - Phase 1)');
-    return tsErr(new StorageError(
-      'IndexingJob operations not yet implemented - requires indexing_jobs table schema',
-      'NOT_IMPLEMENTED'
-    ));
+    logger.debug({ job }, '🔄 createIndexingJob called');
+
+    try {
+      // Generate new ID
+      const id = new ObjectID().toHexString();
+      const startedAt = Date.now();
+
+      // Create full job object
+      const fullJob = {
+        id,
+        ...job,
+        startedAt,
+      };
+
+      // Insert into database
+      await this.db.insert(indexingJobs).values({
+        id: fullJob.id,
+        libraryId: fullJob.libraryId,
+        versionId: fullJob.versionId,
+        status: fullJob.status,
+        totalDocuments: fullJob.totalDocuments,
+        processedDocuments: fullJob.processedDocuments,
+        failedDocuments: fullJob.failedDocuments,
+        error: fullJob.error,
+        startedAt: fullJob.startedAt,
+        completedAt: fullJob.completedAt,
+        metadata: JSON.stringify(fullJob.metadata || {}),
+      });
+
+      logger.info({ id, versionId: fullJob.versionId }, '✅ IndexingJob created');
+      return tsOk(fullJob as IndexingJob);
+    } catch (error) {
+      return tsErr(
+        error instanceof Error
+          ? error
+          : new Error(`Failed to create indexing job: ${String(error)}`)
+      );
+    }
   }
 
   async getIndexingJob(id: string): Promise<Result<IndexingJob | null, Error>> {
-    logger.debug({ id }, '🔄 getIndexingJob called (STUB - Phase 1)');
-    return tsErr(new StorageError(
-      'IndexingJob operations not yet implemented - requires indexing_jobs table schema',
-      'NOT_IMPLEMENTED'
-    ));
+    logger.debug({ id }, '🔄 getIndexingJob called');
+
+    try {
+      const result = await this.db
+        .select()
+        .from(indexingJobs)
+        .where(eq(indexingJobs.id, id))
+        .limit(1);
+
+      if (result.length === 0) {
+        return tsOk(null);
+      }
+
+      const row = result[0]!;
+      const jobData: IndexingJob = {
+        id: row.id,
+        libraryId: row.libraryId,
+        versionId: row.versionId,
+        status: row.status as IndexingJob['status'],
+        totalDocuments: row.totalDocuments ?? undefined,
+        processedDocuments: row.processedDocuments,
+        failedDocuments: row.failedDocuments,
+        error: row.error ?? undefined,
+        startedAt: row.startedAt,
+        completedAt: row.completedAt ?? undefined,
+        metadata: typeof row.metadata === 'string' ? JSON.parse(row.metadata) : row.metadata,
+      };
+
+      return tsOk(jobData);
+    } catch (error) {
+      return tsErr(
+        error instanceof Error
+          ? error
+          : new Error(`Failed to get indexing job: ${String(error)}`)
+      );
+    }
   }
 
   async updateIndexingJob(id: string, updates: Partial<IndexingJob>): Promise<Result<IndexingJob, Error>> {
-    logger.debug({ id, updates }, '🔄 updateIndexingJob called (STUB - Phase 1)');
-    return tsErr(new StorageError(
-      'IndexingJob operations not yet implemented - requires indexing_jobs table schema',
-      'NOT_IMPLEMENTED'
-    ));
+    logger.debug({ id, updates }, '🔄 updateIndexingJob called');
+
+    try {
+      // First check if job exists
+      const existingResult = await this.getIndexingJob(id);
+      if (!existingResult.ok) {
+        return existingResult;
+      }
+      if (!existingResult.value) {
+        return tsErr(new Error(`IndexingJob not found: ${id}`));
+      }
+
+      // Prepare update data
+      const updateData: any = {};
+
+      if (updates.status !== undefined) updateData.status = updates.status;
+      if (updates.totalDocuments !== undefined) updateData.totalDocuments = updates.totalDocuments;
+      if (updates.processedDocuments !== undefined) updateData.processedDocuments = updates.processedDocuments;
+      if (updates.failedDocuments !== undefined) updateData.failedDocuments = updates.failedDocuments;
+      if (updates.error !== undefined) updateData.error = updates.error;
+      if (updates.completedAt !== undefined) updateData.completedAt = updates.completedAt;
+      if (updates.metadata !== undefined) {
+        updateData.metadata = JSON.stringify(updates.metadata);
+      }
+
+      // Update in database
+      await this.db
+        .update(indexingJobs)
+        .set(updateData)
+        .where(eq(indexingJobs.id, id));
+
+      // Fetch and return updated job
+      const updatedResult = await this.getIndexingJob(id);
+      if (!updatedResult.ok || !updatedResult.value) {
+        return tsErr(new Error('Failed to fetch updated indexing job'));
+      }
+
+      logger.info({ id, status: updates.status }, '✅ IndexingJob updated');
+      return tsOk(updatedResult.value);
+    } catch (error) {
+      return tsErr(
+        error instanceof Error
+          ? error
+          : new Error(`Failed to update indexing job: ${String(error)}`)
+      );
+    }
   }
 
   async listIndexingJobs(options?: { limit?: number; offset?: number }): Promise<Result<IndexingJob[], Error>> {
-    logger.debug({ options }, '🔄 listIndexingJobs called (STUB - Phase 1)');
-    return tsErr(new StorageError(
-      'IndexingJob operations not yet implemented - requires indexing_jobs table schema',
-      'NOT_IMPLEMENTED'
-    ));
+    logger.debug({ options }, '🔄 listIndexingJobs called');
+
+    try {
+      const limit = options?.limit ?? 100;
+      const offset = options?.offset ?? 0;
+
+      const results = await this.db
+        .select()
+        .from(indexingJobs)
+        .orderBy(desc(indexingJobs.startedAt))
+        .limit(limit)
+        .offset(offset);
+
+      const jobList: IndexingJob[] = [];
+      for (const row of results) {
+        const jobData: IndexingJob = {
+          id: row.id,
+          libraryId: row.libraryId,
+          versionId: row.versionId,
+          status: row.status as IndexingJob['status'],
+          totalDocuments: row.totalDocuments ?? undefined,
+          processedDocuments: row.processedDocuments,
+          failedDocuments: row.failedDocuments,
+          error: row.error ?? undefined,
+          startedAt: row.startedAt,
+          completedAt: row.completedAt ?? undefined,
+          metadata: typeof row.metadata === 'string' ? JSON.parse(row.metadata) : row.metadata,
+        };
+        jobList.push(jobData);
+      }
+
+      return tsOk(jobList);
+    } catch (error) {
+      return tsErr(
+        error instanceof Error
+          ? error
+          : new Error(`Failed to list indexing jobs: ${String(error)}`)
+      );
+    }
   }
 }

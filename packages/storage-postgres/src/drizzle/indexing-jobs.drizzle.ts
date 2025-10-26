@@ -17,13 +17,23 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-/**
- * 📦 Drizzle Schema Exports
- *
- * Central export point for all Drizzle table definitions
- */
+import { pgTable, text, integer } from 'drizzle-orm/pg-core';
 
-export { libraries } from './libraries.drizzle.js';
-export { versions } from './versions.drizzle.js';
-export { documents } from './documents.drizzle.js';
-export { indexingJobs } from './indexing-jobs.drizzle.js';
+/**
+ * IndexingJob table schema
+ *
+ * Tracks document indexing jobs for library versions
+ */
+export const indexingJobs = pgTable('indexing_jobs', {
+  id: text('id').notNull().primaryKey().default(''),
+  libraryId: text('libraryId').notNull().default(''),
+  versionId: text('versionId').notNull().default(''),
+  status: text('status').notNull().default('pending'),
+  totalDocuments: integer('totalDocuments'),
+  processedDocuments: integer('processedDocuments').notNull().default(0),
+  failedDocuments: integer('failedDocuments').notNull().default(0),
+  error: text('error'),
+  startedAt: integer('startedAt').notNull().default(0),
+  completedAt: integer('completedAt'),
+  metadata: text('metadata').notNull().default('{}'),
+});
