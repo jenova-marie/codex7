@@ -163,6 +163,39 @@ DATABASE_URL=postgresql://postgres:postgres@localhost:5432/codex7
 
 ### Database Setup
 
+#### Option 1: Local Docker Compose (Recommended for Development)
+
+**We now have a local Docker Compose setup** in this package directory:
+
+```bash
+# Start both dev and test databases
+docker compose up -d
+
+# Check status
+docker compose ps
+
+# View logs
+docker compose logs -f postgres
+
+# Stop services
+docker compose down
+
+# Fresh start (⚠️ deletes all data)
+docker compose down -v && docker compose up -d
+```
+
+**Services included:**
+- 🐘 **postgres** - Dev database on port 5432
+- 🧪 **postgres-test** - Test database on port 5433 (ephemeral)
+- 🎨 **pgadmin** - Web UI on port 5050 (optional, use `--profile tools`)
+
+**Configuration:**
+- Dev DB: `codex7_dev` / `codex7` / `codex7_dev_password`
+- Test DB: `codex7_test` / `codex7_test` / `codex7_test_password`
+- See `.env.example` for complete configuration
+
+#### Option 2: Shared Docker Setup
+
 ```bash
 # Start PostgreSQL + pgvector (from project root)
 cd deployments/docker
@@ -243,6 +276,64 @@ pnpm db:reset
 # 3. Run all migrations
 ```
 
+## 🧪 Testing
+
+### Running Tests
+
+```bash
+# Run all tests (unit + integration)
+pnpm test
+
+# Watch mode
+pnpm test:watch
+
+# Coverage report
+pnpm test:coverage
+```
+
+### Integration Tests
+
+Integration tests run against the **real test database** (port 5433):
+
+```bash
+# Start test database
+docker compose up -d postgres-test
+
+# Run migrations on test DB
+export DATABASE_URL="postgresql://codex7_test:codex7_test_password@localhost:5433/codex7_test"
+pnpm migrate
+
+# Run integration tests
+export TEST_DATABASE_URL="postgresql://codex7_test:codex7_test_password@localhost:5433/codex7_test"
+pnpm test
+```
+
+**Integration tests verify:**
+- ✅ Connection to real PostgreSQL database
+- ✅ pgvector extension loaded correctly
+- ✅ Vector similarity search with actual embeddings
+- ✅ CRUD operations on all tables
+- ✅ Migration tracking and execution
+
+### Verify pgvector
+
+```bash
+# Check extension is installed
+docker exec codex7-postgres-dev psql -U codex7 -d codex7_dev -c "\dx vector"
+
+# Verify vector index exists
+docker exec codex7-postgres-dev psql -U codex7 -d codex7_dev -c "\di documents_embedding_idx"
+
+# Check embedding column type
+docker exec codex7-postgres-dev psql -U codex7 -d codex7_dev -c "\d documents" | grep embedding
+```
+
+Expected output:
+```
+ embedding    | vector(1536) |           |          |
+    "documents_embedding_idx" ivfflat (embedding vector_cosine_ops) WITH (lists='274')
+```
+
 ## 🎯 Next Steps
 
 After running migrations, you can:
@@ -251,6 +342,7 @@ After running migrations, you can:
 2. **Build storage adapter**: Implement DocumentStore interface
 3. **Create indexer service**: Populate the database
 4. **Integrate LlamaIndex.TS**: For document chunking
+5. **Run integration tests**: Verify everything works end-to-end
 
 ---
 
