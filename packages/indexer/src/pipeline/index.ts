@@ -21,7 +21,7 @@
  * 🔄 Processing Pipeline Coordinator
  *
  * Orchestrates the full indexing workflow.
- * Phase 0: STUB - All steps return placeholder data.
+ * Implements complete end-to-end processing pipeline.
  */
 
 import { logger } from '../utils/logger.js';
@@ -36,35 +36,33 @@ import type { IndexJobData, JobResult } from '../queue/job-types.js';
  *
  * Orchestrates the full indexing workflow:
  * 1. Fetch source (GitHub, web, PDF)
- * 2. Chunk documents
- * 3. Generate embeddings
- * 4. Store in database
- *
- * STUB: All steps return placeholder data.
+ * 2. Chunk documents using LangChain MarkdownTextSplitter
+ * 3. Generate embeddings using OpenAI API
+ * 4. Store in PostgreSQL database with pgvector
  */
 export async function processJob(jobData: IndexJobData): Promise<JobResult> {
-  logger.info({ jobData }, '🔄 Starting processing pipeline (STUB)');
+  logger.info({ jobData }, '🔄 Starting processing pipeline');
 
   try {
     // Step 1: Fetch source
-    logger.info('📥 Step 1: Fetching source (STUB)...');
+    logger.info('📥 Step 1: Fetching source...');
     const rawDocuments = await fetchSource(jobData);
-    logger.info({ count: rawDocuments.length }, '✅ Source fetched (STUB)');
+    logger.info({ count: rawDocuments.length }, '✅ Source fetched');
 
     // Step 2: Chunk documents
-    logger.info('✂️ Step 2: Chunking documents (STUB)...');
+    logger.info('✂️ Step 2: Chunking documents...');
     const chunks = await chunkDocuments(rawDocuments);
-    logger.info({ count: chunks.length }, '✅ Documents chunked (STUB)');
+    logger.info({ count: chunks.length }, '✅ Documents chunked');
 
     // Step 3: Generate embeddings
-    logger.info('✨ Step 3: Generating embeddings (STUB)...');
+    logger.info('✨ Step 3: Generating embeddings...');
     const withEmbeddings = await generateEmbeddings(chunks);
-    logger.info({ count: withEmbeddings.length }, '✅ Embeddings generated (STUB)');
+    logger.info({ count: withEmbeddings.length }, '✅ Embeddings generated');
 
     // Step 4: Store documents
-    logger.info('💾 Step 4: Storing documents (STUB)...');
+    logger.info('💾 Step 4: Storing documents...');
     await storeDocuments(withEmbeddings);
-    logger.info('✅ Documents stored (STUB)');
+    logger.info('✅ Documents stored');
 
     return {
       success: true,
