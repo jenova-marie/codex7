@@ -17,12 +17,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 // Domain entity classes (with data + methods)
-export { Library, } from './classes/Library';
-export { Version, } from './classes/Version';
-export { Document, } from './classes/Document';
+export { Library, } from './classes/Library.js';
+export { Version, } from './classes/Version.js';
+export { Document, } from './classes/Document.js';
 // Constants
-export { SOURCE_TYPES, DOCUMENT_STATUS } from './constants';
+export { SOURCE_TYPES, DOCUMENT_STATUS } from './constants.js';
 // Scripts (for build pipeline)
-export { convertTsFilesToSchemas } from './scripts/ts-to-json';
-export { generateIndexFile } from './scripts/generate-index-dts';
+export { convertTsFilesToSchemas } from './scripts/ts-to-json.js';
+export { generateIndexFile } from './scripts/generate-index-dts.js';
 //# sourceMappingURL=index.js.map

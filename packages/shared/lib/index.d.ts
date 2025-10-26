@@ -16,15 +16,15 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-export { Library, type LibraryMetadata, type CreateLibraryInput, } from './classes/Library';
-export { Version, type VersionMetadata, type CreateVersionInput, } from './classes/Version';
-export { Document, type DocumentMetadata, type CreateDocumentInput, } from './classes/Document';
-export type { StorageAdapter, StorageAdapterFactory } from './storage/adapter';
-export type { StorageConfig, StorageStats, MigrationInfo, IndexingJob, IndexingJobStatus, TransactionContext, } from './storage/types';
-export type { SearchOptions, SearchResult, VectorSearchParams, SearchResponse, } from './types/search';
-export type { EmbeddingProvider, EmbeddingRequest, EmbeddingResponse, EmbeddingJob, } from './types/embedding';
-export type { ResolveLibraryIdParams, ResolveLibraryIdResult, GetLibraryDocsParams, GetLibraryDocsResult, SearchDocumentationParams, SearchDocumentationResult, GetLibraryVersionsParams, GetLibraryVersionsResult, } from './types/mcp';
-export type { ApiError, PaginatedResponse, HealthCheckResponse, ComponentHealth, ApiToken, RateLimitInfo, } from './types/api';
-export { SOURCE_TYPES, DOCUMENT_STATUS } from './constants';
-export { convertTsFilesToSchemas } from './scripts/ts-to-json';
-export { generateIndexFile } from './scripts/generate-index-dts';
+export { Library, type LibraryMetadata, type CreateLibraryInput, } from './classes/Library.js';
+export { Version, type VersionMetadata, type CreateVersionInput, } from './classes/Version.js';
+export { Document, type DocumentMetadata, type CreateDocumentInput, } from './classes/Document.js';
+export type { StorageAdapter, StorageAdapterFactory } from './storage/adapter.js';
+export type { StorageConfig, StorageStats, MigrationInfo, IndexingJob, IndexingJobStatus, TransactionContext, } from './storage/types.js';
+export type { SearchOptions, SearchResult, VectorSearchParams, SearchResponse, } from './types/search.js';
+export type { EmbeddingProvider, EmbeddingRequest, EmbeddingResponse, EmbeddingJob, } from './types/embedding.js';
+export type { ResolveLibraryIdParams, ResolveLibraryIdResult, GetLibraryDocsParams, GetLibraryDocsResult, SearchDocumentationParams, SearchDocumentationResult, GetLibraryVersionsParams, GetLibraryVersionsResult, } from './types/mcp.js';
+export type { ApiError, PaginatedResponse, HealthCheckResponse, ComponentHealth, ApiToken, RateLimitInfo, } from './types/api.js';
+export { SOURCE_TYPES, DOCUMENT_STATUS } from './constants.js';
+export { convertTsFilesToSchemas } from './scripts/ts-to-json.js';
+export { generateIndexFile } from './scripts/generate-index-dts.js';

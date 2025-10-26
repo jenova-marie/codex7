@@ -22,20 +22,20 @@ export {
   Library,
   type LibraryMetadata,
   type CreateLibraryInput,
-} from './classes/Library';
+} from './classes/Library.js';
 export {
   Version,
   type VersionMetadata,
   type CreateVersionInput,
-} from './classes/Version';
+} from './classes/Version.js';
 export {
   Document,
   type DocumentMetadata,
   type CreateDocumentInput,
-} from './classes/Document';
+} from './classes/Document.js';
 
 // Storage adapter interface and types
-export type { StorageAdapter, StorageAdapterFactory } from './storage/adapter';
+export type { StorageAdapter, StorageAdapterFactory } from './storage/adapter.js';
 export type {
   StorageConfig,
   StorageStats,
@@ -43,7 +43,7 @@ export type {
   IndexingJob,
   IndexingJobStatus,
   TransactionContext,
-} from './storage/types';
+} from './storage/types.js';
 
 // Search types
 export type {
@@ -51,7 +51,7 @@ export type {
   SearchResult,
   VectorSearchParams,
   SearchResponse,
-} from './types/search';
+} from './types/search.js';
 
 // Embedding types
 export type {
@@ -59,7 +59,7 @@ export type {
   EmbeddingRequest,
   EmbeddingResponse,
   EmbeddingJob,
-} from './types/embedding';
+} from './types/embedding.js';
 
 // MCP types (tool parameters and results)
 export type {
@@ -71,7 +71,7 @@ export type {
   SearchDocumentationResult,
   GetLibraryVersionsParams,
   GetLibraryVersionsResult,
-} from './types/mcp';
+} from './types/mcp.js';
 
 // API types
 export type {
@@ -81,11 +81,11 @@ export type {
   ComponentHealth,
   ApiToken,
   RateLimitInfo,
-} from './types/api';
+} from './types/api.js';
 
 // Constants
-export { SOURCE_TYPES, DOCUMENT_STATUS } from './constants';
+export { SOURCE_TYPES, DOCUMENT_STATUS } from './constants.js';
 
 // Scripts (for build pipeline)
-export { convertTsFilesToSchemas } from './scripts/ts-to-json';
-export { generateIndexFile } from './scripts/generate-index-dts';
+export { convertTsFilesToSchemas } from './scripts/ts-to-json.js';
+export { generateIndexFile } from './scripts/generate-index-dts.js';
