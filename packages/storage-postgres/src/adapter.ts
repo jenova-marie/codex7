@@ -10,14 +10,10 @@
 import { ok as tsOk, err as tsErr, type Result } from '@jenova-marie/ts-rust-result';
 import { eq, desc, sql, and, or, ilike, cosineDistance, gt } from 'drizzle-orm';
 import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
-import ObjectID from 'bson-objectid';
+import { randomUUID } from 'node:crypto';
 
 // Import entity classes (needed as values for .fromJSON() methods)
-import {
-  Library,
-  Version,
-  Document,
-} from '@codex7/shared';
+import { Library, Version, Document } from '@codex7/shared';
 // Import type-only interfaces
 import type {
   StorageAdapter,
@@ -93,7 +89,8 @@ export class PostgresAdapter implements StorageAdapter {
         ) as enabled;
       `);
 
-      const enabled = Array.isArray(result) && result.length > 0 && (result[0] as any)?.enabled === true;
+      const enabled =
+        Array.isArray(result) && result.length > 0 && (result[0] as any)?.enabled === true;
       if (!enabled) {
         logger.warn('⚠️  pgvector extension not enabled - vector search will not work');
       }
@@ -139,17 +136,11 @@ export class PostgresAdapter implements StorageAdapter {
 
     try {
       // Get counts for each table
-      const libCountResult = await this.db
-        .select({ count: sql<number>`count(*)` })
-        .from(libraries);
+      const libCountResult = await this.db.select({ count: sql<number>`count(*)` }).from(libraries);
 
-      const verCountResult = await this.db
-        .select({ count: sql<number>`count(*)` })
-        .from(versions);
+      const verCountResult = await this.db.select({ count: sql<number>`count(*)` }).from(versions);
 
-      const docCountResult = await this.db
-        .select({ count: sql<number>`count(*)` })
-        .from(documents);
+      const docCountResult = await this.db.select({ count: sql<number>`count(*)` }).from(documents);
 
       const libCount = libCountResult[0]?.count ?? 0;
       const verCount = verCountResult[0]?.count ?? 0;
@@ -159,9 +150,10 @@ export class PostgresAdapter implements StorageAdapter {
       const sizeResult = await this.db.execute(sql`
         SELECT pg_database_size(current_database()) as size;
       `);
-      const storageSize = Array.isArray(sizeResult) && sizeResult.length > 0
-        ? Number((sizeResult[0] as any)?.size ?? 0)
-        : 0;
+      const storageSize =
+        Array.isArray(sizeResult) && sizeResult.length > 0
+          ? Number((sizeResult[0] as any)?.size ?? 0)
+          : 0;
 
       // Get pgvector version
       let pgvectorVersion = 'unknown';
@@ -191,9 +183,7 @@ export class PostgresAdapter implements StorageAdapter {
       return tsOk(stats);
     } catch (error) {
       return tsErr(
-        error instanceof Error
-          ? error
-          : new Error(`Failed to get stats: ${String(error)}`)
+        error instanceof Error ? error : new Error(`Failed to get stats: ${String(error)}`)
       );
     }
   }
@@ -222,7 +212,7 @@ export class PostgresAdapter implements StorageAdapter {
 
     try {
       // Use provided ID or generate new one
-      const id = ('id' in library && library.id) ? library.id : new ObjectID().toHexString();
+      const id = 'id' in library && library.id ? library.id : new ObjectID().toHexString();
       const now = Date.now();
 
       // Create full library object
@@ -259,9 +249,7 @@ export class PostgresAdapter implements StorageAdapter {
       return tsOk(libraryResult.value);
     } catch (error) {
       return tsErr(
-        error instanceof Error
-          ? error
-          : new Error(`Failed to create library: ${String(error)}`)
+        error instanceof Error ? error : new Error(`Failed to create library: ${String(error)}`)
       );
     }
   }
@@ -270,11 +258,7 @@ export class PostgresAdapter implements StorageAdapter {
     logger.debug({ id }, '📚 getLibrary called');
 
     try {
-      const result = await this.db
-        .select()
-        .from(libraries)
-        .where(eq(libraries.id, id))
-        .limit(1);
+      const result = await this.db.select().from(libraries).where(eq(libraries.id, id)).limit(1);
 
       if (result.length === 0) {
         return tsOk(null);
@@ -304,9 +288,7 @@ export class PostgresAdapter implements StorageAdapter {
       return tsOk(libraryResult.value);
     } catch (error) {
       return tsErr(
-        error instanceof Error
-          ? error
-          : new Error(`Failed to get library: ${String(error)}`)
+        error instanceof Error ? error : new Error(`Failed to get library: ${String(error)}`)
       );
     }
   }
@@ -356,7 +338,10 @@ export class PostgresAdapter implements StorageAdapter {
     }
   }
 
-  async listLibraries(options?: { limit?: number; offset?: number }): Promise<Result<Library[], Error>> {
+  async listLibraries(options?: {
+    limit?: number;
+    offset?: number;
+  }): Promise<Result<Library[], Error>> {
     logger.debug({ options }, '📚 listLibraries called');
 
     try {
@@ -398,9 +383,7 @@ export class PostgresAdapter implements StorageAdapter {
       return tsOk(libraryList);
     } catch (error) {
       return tsErr(
-        error instanceof Error
-          ? error
-          : new Error(`Failed to list libraries: ${String(error)}`)
+        error instanceof Error ? error : new Error(`Failed to list libraries: ${String(error)}`)
       );
     }
   }
@@ -435,10 +418,7 @@ export class PostgresAdapter implements StorageAdapter {
       }
 
       // Update in database
-      await this.db
-        .update(libraries)
-        .set(updateData)
-        .where(eq(libraries.id, id));
+      await this.db.update(libraries).set(updateData).where(eq(libraries.id, id));
 
       // Fetch and return updated library
       const updatedResult = await this.getLibrary(id);
@@ -450,9 +430,7 @@ export class PostgresAdapter implements StorageAdapter {
       return tsOk(updatedResult.value);
     } catch (error) {
       return tsErr(
-        error instanceof Error
-          ? error
-          : new Error(`Failed to update library: ${String(error)}`)
+        error instanceof Error ? error : new Error(`Failed to update library: ${String(error)}`)
       );
     }
   }
@@ -470,22 +448,16 @@ export class PostgresAdapter implements StorageAdapter {
       }
 
       // Delete all versions for this library
-      await this.db
-        .delete(versions)
-        .where(eq(versions.libraryId, id));
+      await this.db.delete(versions).where(eq(versions.libraryId, id));
 
       // Delete the library
-      await this.db
-        .delete(libraries)
-        .where(eq(libraries.id, id));
+      await this.db.delete(libraries).where(eq(libraries.id, id));
 
       logger.info({ id }, '✅ Library deleted');
       return tsOk(undefined);
     } catch (error) {
       return tsErr(
-        error instanceof Error
-          ? error
-          : new Error(`Failed to delete library: ${String(error)}`)
+        error instanceof Error ? error : new Error(`Failed to delete library: ${String(error)}`)
       );
     }
   }
@@ -537,9 +509,7 @@ export class PostgresAdapter implements StorageAdapter {
       return tsOk(libraryList);
     } catch (error) {
       return tsErr(
-        error instanceof Error
-          ? error
-          : new Error(`Failed to search libraries: ${String(error)}`)
+        error instanceof Error ? error : new Error(`Failed to search libraries: ${String(error)}`)
       );
     }
   }
@@ -555,7 +525,7 @@ export class PostgresAdapter implements StorageAdapter {
 
     try {
       // Use provided ID or generate new one
-      const id = ('id' in version && version.id) ? version.id : new ObjectID().toHexString();
+      const id = 'id' in version && version.id ? version.id : new ObjectID().toHexString();
       const now = Date.now();
 
       // Create full version object
@@ -589,9 +559,7 @@ export class PostgresAdapter implements StorageAdapter {
       return tsOk(versionResult.value);
     } catch (error) {
       return tsErr(
-        error instanceof Error
-          ? error
-          : new Error(`Failed to create version: ${String(error)}`)
+        error instanceof Error ? error : new Error(`Failed to create version: ${String(error)}`)
       );
     }
   }
@@ -600,11 +568,7 @@ export class PostgresAdapter implements StorageAdapter {
     logger.debug({ id }, '📌 getVersion called');
 
     try {
-      const result = await this.db
-        .select()
-        .from(versions)
-        .where(eq(versions.id, id))
-        .limit(1);
+      const result = await this.db.select().from(versions).where(eq(versions.id, id)).limit(1);
 
       if (result.length === 0) {
         return tsOk(null);
@@ -631,9 +595,7 @@ export class PostgresAdapter implements StorageAdapter {
       return tsOk(versionResult.value);
     } catch (error) {
       return tsErr(
-        error instanceof Error
-          ? error
-          : new Error(`Failed to get version: ${String(error)}`)
+        error instanceof Error ? error : new Error(`Failed to get version: ${String(error)}`)
       );
     }
   }
@@ -673,9 +635,7 @@ export class PostgresAdapter implements StorageAdapter {
       return tsOk(versionList);
     } catch (error) {
       return tsErr(
-        error instanceof Error
-          ? error
-          : new Error(`Failed to list versions: ${String(error)}`)
+        error instanceof Error ? error : new Error(`Failed to list versions: ${String(error)}`)
       );
     }
   }
@@ -687,12 +647,7 @@ export class PostgresAdapter implements StorageAdapter {
       const result = await this.db
         .select()
         .from(versions)
-        .where(
-          and(
-            eq(versions.libraryId, libraryId),
-            eq(versions.isLatest, true)
-          )
-        )
+        .where(and(eq(versions.libraryId, libraryId), eq(versions.isLatest, true)))
         .limit(1);
 
       if (result.length === 0) {
@@ -720,9 +675,7 @@ export class PostgresAdapter implements StorageAdapter {
       return tsOk(versionResult.value);
     } catch (error) {
       return tsErr(
-        error instanceof Error
-          ? error
-          : new Error(`Failed to get latest version: ${String(error)}`)
+        error instanceof Error ? error : new Error(`Failed to get latest version: ${String(error)}`)
       );
     }
   }
@@ -746,7 +699,8 @@ export class PostgresAdapter implements StorageAdapter {
       };
 
       if (updates.versionString !== undefined) updateData.versionString = updates.versionString;
-      if (updates.versionNormalized !== undefined) updateData.versionNormalized = updates.versionNormalized;
+      if (updates.versionNormalized !== undefined)
+        updateData.versionNormalized = updates.versionNormalized;
       if (updates.isLatest !== undefined) updateData.isLatest = updates.isLatest;
       if (updates.isDeprecated !== undefined) updateData.isDeprecated = updates.isDeprecated;
       if (updates.metadata !== undefined) {
@@ -754,10 +708,7 @@ export class PostgresAdapter implements StorageAdapter {
       }
 
       // Update in database
-      await this.db
-        .update(versions)
-        .set(updateData)
-        .where(eq(versions.id, id));
+      await this.db.update(versions).set(updateData).where(eq(versions.id, id));
 
       // Fetch and return updated version
       const updatedResult = await this.getVersion(id);
@@ -769,9 +720,7 @@ export class PostgresAdapter implements StorageAdapter {
       return tsOk(updatedResult.value);
     } catch (error) {
       return tsErr(
-        error instanceof Error
-          ? error
-          : new Error(`Failed to update version: ${String(error)}`)
+        error instanceof Error ? error : new Error(`Failed to update version: ${String(error)}`)
       );
     }
   }
@@ -784,17 +733,13 @@ export class PostgresAdapter implements StorageAdapter {
       await this.deleteDocumentsByVersion(id);
 
       // Delete the version
-      await this.db
-        .delete(versions)
-        .where(eq(versions.id, id));
+      await this.db.delete(versions).where(eq(versions.id, id));
 
       logger.info({ id }, '✅ Version deleted');
       return tsOk(undefined);
     } catch (error) {
       return tsErr(
-        error instanceof Error
-          ? error
-          : new Error(`Failed to delete version: ${String(error)}`)
+        error instanceof Error ? error : new Error(`Failed to delete version: ${String(error)}`)
       );
     }
   }
@@ -810,7 +755,7 @@ export class PostgresAdapter implements StorageAdapter {
 
     try {
       // Use provided ID or generate new one
-      const id = ('id' in document && document.id) ? document.id : new ObjectID().toHexString();
+      const id = 'id' in document && document.id ? document.id : new ObjectID().toHexString();
       const now = Date.now();
 
       // Create full document object
@@ -828,7 +773,10 @@ export class PostgresAdapter implements StorageAdapter {
         title: fullDocument.title,
         content: fullDocument.content,
         contentHash: fullDocument.contentHash,
-        embedding: fullDocument.embedding && fullDocument.embedding.length > 0 ? fullDocument.embedding : null,
+        embedding:
+          fullDocument.embedding && fullDocument.embedding.length > 0
+            ? fullDocument.embedding
+            : null,
         chunkIndex: fullDocument.chunkIndex ?? 0,
         hierarchy: fullDocument.hierarchy || [],
         hasCode: fullDocument.hasCode ?? false,
@@ -852,9 +800,7 @@ export class PostgresAdapter implements StorageAdapter {
       return tsOk(documentResult.value);
     } catch (error) {
       return tsErr(
-        error instanceof Error
-          ? error
-          : new Error(`Failed to index document: ${String(error)}`)
+        error instanceof Error ? error : new Error(`Failed to index document: ${String(error)}`)
       );
     }
   }
@@ -909,9 +855,7 @@ export class PostgresAdapter implements StorageAdapter {
       return tsOk(fullDocuments);
     } catch (error) {
       return tsErr(
-        error instanceof Error
-          ? error
-          : new Error(`Failed to index documents: ${String(error)}`)
+        error instanceof Error ? error : new Error(`Failed to index documents: ${String(error)}`)
       );
     }
   }
@@ -920,11 +864,7 @@ export class PostgresAdapter implements StorageAdapter {
     logger.debug({ id }, '📄 getDocument called');
 
     try {
-      const result = await this.db
-        .select()
-        .from(documents)
-        .where(eq(documents.id, id))
-        .limit(1);
+      const result = await this.db.select().from(documents).where(eq(documents.id, id)).limit(1);
 
       if (result.length === 0) {
         return tsOk(null);
@@ -937,7 +877,8 @@ export class PostgresAdapter implements StorageAdapter {
         title: row.title,
         content: row.content,
         contentHash: row.contentHash,
-        embedding: typeof row.embedding === 'string' ? JSON.parse(row.embedding) : (row.embedding || []),
+        embedding:
+          typeof row.embedding === 'string' ? JSON.parse(row.embedding) : row.embedding || [],
         chunkIndex: row.chunkIndex,
         hierarchy: typeof row.hierarchy === 'string' ? JSON.parse(row.hierarchy) : row.hierarchy,
         hasCode: row.hasCode,
@@ -955,9 +896,7 @@ export class PostgresAdapter implements StorageAdapter {
       return tsOk(documentResult.value);
     } catch (error) {
       return tsErr(
-        error instanceof Error
-          ? error
-          : new Error(`Failed to get document: ${String(error)}`)
+        error instanceof Error ? error : new Error(`Failed to get document: ${String(error)}`)
       );
     }
   }
@@ -966,17 +905,13 @@ export class PostgresAdapter implements StorageAdapter {
     logger.debug({ id }, '📄 deleteDocument called');
 
     try {
-      await this.db
-        .delete(documents)
-        .where(eq(documents.id, id));
+      await this.db.delete(documents).where(eq(documents.id, id));
 
       logger.info({ id }, '✅ Document deleted');
       return tsOk(undefined);
     } catch (error) {
       return tsErr(
-        error instanceof Error
-          ? error
-          : new Error(`Failed to delete document: ${String(error)}`)
+        error instanceof Error ? error : new Error(`Failed to delete document: ${String(error)}`)
       );
     }
   }
@@ -994,9 +929,7 @@ export class PostgresAdapter implements StorageAdapter {
       const count = countResult[0]?.count ?? 0;
 
       // Delete all documents for this version
-      await this.db
-        .delete(documents)
-        .where(eq(documents.versionId, versionId));
+      await this.db.delete(documents).where(eq(documents.versionId, versionId));
 
       logger.info({ versionId, count }, '✅ Documents deleted by version');
       return tsOk(count);
@@ -1084,9 +1017,7 @@ export class PostgresAdapter implements StorageAdapter {
       }
 
       // Execute query with ordering and limit
-      const results = await query
-        .orderBy(desc(similarity))
-        .limit(limit);
+      const results = await query.orderBy(desc(similarity)).limit(limit);
 
       const searchResults: SearchResult[] = [];
 
@@ -1109,9 +1040,7 @@ export class PostgresAdapter implements StorageAdapter {
             id: row.id,
             title: row.title,
             content: row.content,
-            metadata: typeof row.metadata === 'string'
-              ? JSON.parse(row.metadata)
-              : row.metadata,
+            metadata: typeof row.metadata === 'string' ? JSON.parse(row.metadata) : row.metadata,
           },
           library: {
             name: libraryResult.value.name,
@@ -1147,10 +1076,7 @@ export class PostgresAdapter implements StorageAdapter {
       // Text search using ILIKE (case-insensitive pattern matching)
       const searchPattern = `%${options.query}%`;
       conditions.push(
-        or(
-          ilike(documents.title, searchPattern),
-          ilike(documents.content, searchPattern)
-        )
+        or(ilike(documents.title, searchPattern), ilike(documents.content, searchPattern))
       );
 
       // Filter by version if provided
@@ -1232,7 +1158,9 @@ export class PostgresAdapter implements StorageAdapter {
     // 2. Perform both vector and full-text search
     // 3. Combine and rerank results
 
-    logger.info('hybridSearch: Using full-text search (vector search requires embedding generation)');
+    logger.info(
+      'hybridSearch: Using full-text search (vector search requires embedding generation)'
+    );
     return this.fullTextSearch(options);
   }
 
@@ -1315,14 +1243,15 @@ export class PostgresAdapter implements StorageAdapter {
       return tsOk(jobData);
     } catch (error) {
       return tsErr(
-        error instanceof Error
-          ? error
-          : new Error(`Failed to get indexing job: ${String(error)}`)
+        error instanceof Error ? error : new Error(`Failed to get indexing job: ${String(error)}`)
       );
     }
   }
 
-  async updateIndexingJob(id: string, updates: Partial<IndexingJob>): Promise<Result<IndexingJob, Error>> {
+  async updateIndexingJob(
+    id: string,
+    updates: Partial<IndexingJob>
+  ): Promise<Result<IndexingJob, Error>> {
     logger.debug({ id, updates }, '🔄 updateIndexingJob called');
 
     try {
@@ -1340,8 +1269,10 @@ export class PostgresAdapter implements StorageAdapter {
 
       if (updates.status !== undefined) updateData.status = updates.status;
       if (updates.totalDocuments !== undefined) updateData.totalDocuments = updates.totalDocuments;
-      if (updates.processedDocuments !== undefined) updateData.processedDocuments = updates.processedDocuments;
-      if (updates.failedDocuments !== undefined) updateData.failedDocuments = updates.failedDocuments;
+      if (updates.processedDocuments !== undefined)
+        updateData.processedDocuments = updates.processedDocuments;
+      if (updates.failedDocuments !== undefined)
+        updateData.failedDocuments = updates.failedDocuments;
       if (updates.error !== undefined) updateData.error = updates.error;
       if (updates.completedAt !== undefined) updateData.completedAt = updates.completedAt;
       if (updates.metadata !== undefined) {
@@ -1349,10 +1280,7 @@ export class PostgresAdapter implements StorageAdapter {
       }
 
       // Update in database
-      await this.db
-        .update(indexingJobs)
-        .set(updateData)
-        .where(eq(indexingJobs.id, id));
+      await this.db.update(indexingJobs).set(updateData).where(eq(indexingJobs.id, id));
 
       // Fetch and return updated job
       const updatedResult = await this.getIndexingJob(id);
@@ -1371,7 +1299,10 @@ export class PostgresAdapter implements StorageAdapter {
     }
   }
 
-  async listIndexingJobs(options?: { limit?: number; offset?: number }): Promise<Result<IndexingJob[], Error>> {
+  async listIndexingJobs(options?: {
+    limit?: number;
+    offset?: number;
+  }): Promise<Result<IndexingJob[], Error>> {
     logger.debug({ options }, '🔄 listIndexingJobs called');
 
     try {
@@ -1406,9 +1337,7 @@ export class PostgresAdapter implements StorageAdapter {
       return tsOk(jobList);
     } catch (error) {
       return tsErr(
-        error instanceof Error
-          ? error
-          : new Error(`Failed to list indexing jobs: ${String(error)}`)
+        error instanceof Error ? error : new Error(`Failed to list indexing jobs: ${String(error)}`)
       );
     }
   }

@@ -5,7 +5,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { CodexError, ok, err, CodexResult } from '../index';
+import { CodexError, ok, err, CodexResult } from '../index.js';
 
 describe('CodexError Type', () => {
   it('should create error with required fields', () => {

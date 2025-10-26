@@ -843,7 +843,7 @@ Location: `packages/storage-postgres/src/migrations/`
 ### Actual Schema (As Implemented)
 
 **Tables created:**
-- `libraries` - Library/project metadata (text primary keys, BSON ObjectID format)
+- `libraries` - Library/project metadata (text primary keys)
 - `versions` - Library version tracking (text primary keys)
 - `documents` - Documentation chunks with `vector(1536)` embeddings
 - `indexing_jobs` - Background job tracking for document processing
@@ -855,7 +855,7 @@ Location: `packages/storage-postgres/src/migrations/`
 - Foreign key indexes for joins
 
 **Differences from original design:**
-- Using **text PKs** (BSON ObjectID hex strings) instead of UUIDs for Context7 compatibility
+- Using **text PKs** UUIDs
 - Schema generated from TypeScript models via JSON intermediate format
 - Drizzle ORM integration for type-safe queries
 

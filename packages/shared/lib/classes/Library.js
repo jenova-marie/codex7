@@ -1,12 +1,12 @@
 import { ok, err } from '@jenova-marie/ts-rust-result';
-import ObjectID from 'bson-objectid';
+import { randomUUID } from 'node:crypto';
 /**
  * Library domain entity
  * Represents a library/project (e.g., React, Next.js, Express)
  */
 export class Library {
     constructor() {
-        /** Unique identifier (BSON ObjectId hex string) */
+        /** Unique identifier  */
         this.id = '';
         /** Human-readable library name */
         this.name = '';
@@ -66,8 +66,7 @@ export class Library {
     static create(data) {
         try {
             const lib = new Library();
-            const objectId = new ObjectID();
-            lib.id = objectId.toHexString();
+            lib.id = randomUUID();
             const now = Date.now();
             lib.created = now;
             lib.updated = now;

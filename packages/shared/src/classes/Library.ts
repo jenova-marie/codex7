@@ -1,5 +1,5 @@
 import { ok, err, type Result } from '@jenova-marie/ts-rust-result';
-import ObjectID from 'bson-objectid';
+import { randomUUID } from 'node:crypto';
 
 /**
  * Library metadata stored in database
@@ -39,7 +39,7 @@ export interface CreateLibraryInput {
  * Represents a library/project (e.g., React, Next.js, Express)
  */
 export class Library {
-  /** Unique identifier (BSON ObjectId hex string) */
+  /** Unique identifier  */
   id: string = '';
 
   /** Human-readable library name */
@@ -116,8 +116,7 @@ export class Library {
   static create(data: CreateLibraryInput): Result<Library, Error> {
     try {
       const lib = new Library();
-      const objectId = new ObjectID();
-      lib.id = objectId.toHexString();
+      lib.id = randomUUID();
 
       const now = Date.now();
       lib.created = now;
@@ -144,7 +143,9 @@ export class Library {
 
       return ok(lib);
     } catch (e) {
-      return err(new Error(`Failed to create Library: ${e instanceof Error ? e.message : String(e)}`));
+      return err(
+        new Error(`Failed to create Library: ${e instanceof Error ? e.message : String(e)}`)
+      );
     }
   }
 
@@ -169,7 +170,9 @@ export class Library {
 
       return ok(this);
     } catch (e) {
-      return err(new Error(`Failed to update Library: ${e instanceof Error ? e.message : String(e)}`));
+      return err(
+        new Error(`Failed to update Library: ${e instanceof Error ? e.message : String(e)}`)
+      );
     }
   }
 
@@ -208,7 +211,9 @@ export class Library {
 
       return ok(lib);
     } catch (e) {
-      return err(new Error(`Failed to deserialize Library: ${e instanceof Error ? e.message : String(e)}`));
+      return err(
+        new Error(`Failed to deserialize Library: ${e instanceof Error ? e.message : String(e)}`)
+      );
     }
   }
 }

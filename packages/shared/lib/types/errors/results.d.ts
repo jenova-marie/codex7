@@ -17,7 +17,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 import { Result } from '@jenova-marie/ts-rust-result';
-import type { CodexError } from './types';
+import type { CodexError } from './types.js';
 export type CodexResult<T> = Result<T, CodexError>;
 export type LibraryResult<T> = Result<T, CodexError>;
 export type VersionResult<T> = Result<T, CodexError>;

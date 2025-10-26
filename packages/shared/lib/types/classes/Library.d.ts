@@ -35,7 +35,7 @@ export interface CreateLibraryInput {
  * Represents a library/project (e.g., React, Next.js, Express)
  */
 export declare class Library {
-    /** Unique identifier (BSON ObjectId hex string) */
+    /** Unique identifier  */
     id: string;
     /** Human-readable library name */
     name: string;

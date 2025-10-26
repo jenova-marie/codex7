@@ -4,7 +4,7 @@
  * Phase 0: Basic error type and Result integration tests
  */
 import { describe, it, expect } from 'vitest';
-import { ok, err } from '../index';
+import { ok, err } from '../index.js';
 describe('CodexError Type', () => {
     it('should create error with required fields', () => {
         const error = {

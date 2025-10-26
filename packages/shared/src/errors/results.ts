@@ -18,7 +18,7 @@
  */
 
 import { Result, Ok, Err } from '@jenova-marie/ts-rust-result';
-import type { CodexError } from './types';
+import type { CodexError } from './types.js';
 
 // Result type aliases for Codex7
 export type CodexResult<T> = Result<T, CodexError>;

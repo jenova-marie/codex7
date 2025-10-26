@@ -17,6 +17,6 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-export type { CodexError } from './types';
-export type { CodexResult, LibraryResult, VersionResult, DocumentResult } from './results';
-export { ok, err } from './results';
+export type { CodexError } from './types.js';
+export type { CodexResult, LibraryResult, VersionResult, DocumentResult } from './results.js';
+export { ok, err } from './results.js';

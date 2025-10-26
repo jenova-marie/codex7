@@ -1,5 +1,5 @@
 import { ok, err, type Result } from '@jenova-marie/ts-rust-result';
-import ObjectID from 'bson-objectid';
+import { randomUUID } from 'node:crypto';
 
 /**
  * Version metadata stored in database
@@ -30,7 +30,7 @@ export interface CreateVersionInput {
  * Represents a specific version of a library (e.g., React v18.2.0, Next.js v14.0.0)
  */
 export class Version {
-  /** Unique identifier (BSON ObjectId hex string) */
+  /** Unique identifier  */
   id: string = '';
 
   /** Parent library ID */
@@ -118,8 +118,8 @@ export class Version {
   static create(data: CreateVersionInput): Result<Version, Error> {
     try {
       const ver = new Version();
-      const objectId = new ObjectID();
-      ver.id = objectId.toHexString();
+
+      ver.id = randomUUID();
 
       const now = Date.now();
       ver.indexed = now;
@@ -144,7 +144,9 @@ export class Version {
 
       return ok(ver);
     } catch (e) {
-      return err(new Error(`Failed to create Version: ${e instanceof Error ? e.message : String(e)}`));
+      return err(
+        new Error(`Failed to create Version: ${e instanceof Error ? e.message : String(e)}`)
+      );
     }
   }
 
@@ -169,7 +171,9 @@ export class Version {
 
       return ok(this);
     } catch (e) {
-      return err(new Error(`Failed to update Version: ${e instanceof Error ? e.message : String(e)}`));
+      return err(
+        new Error(`Failed to update Version: ${e instanceof Error ? e.message : String(e)}`)
+      );
     }
   }
 
@@ -236,7 +240,9 @@ export class Version {
 
       return ok(ver);
     } catch (e) {
-      return err(new Error(`Failed to deserialize Version: ${e instanceof Error ? e.message : String(e)}`));
+      return err(
+        new Error(`Failed to deserialize Version: ${e instanceof Error ? e.message : String(e)}`)
+      );
     }
   }
 }

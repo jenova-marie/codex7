@@ -26,7 +26,7 @@ export interface CreateVersionInput {
  * Represents a specific version of a library (e.g., React v18.2.0, Next.js v14.0.0)
  */
 export declare class Version {
-    /** Unique identifier (BSON ObjectId hex string) */
+    /** Unique identifier  */
     id: string;
     /** Parent library ID */
     libraryId: string;

@@ -212,13 +212,10 @@ importers:
     dependencies:
       '@jenova-marie/ts-rust-result':
         specifier: file:../../../ts-rust-result/ts-rust-result.tgz
-        version: file:../ts-rust-result/ts-rust-result.tgz(zod@3.25.76)
+        version: file:../ts-rust-result/ts-rust-result.tgz
       bson:
         specifier: ^6.10.2
         version: 6.10.4
-      bson-objectid:
-        specifier: ^2.0.4
-        version: 2.0.4
     devDependencies:
       '@types/node':
         specifier: ^22.10.5
@@ -8956,6 +8953,19 @@ packages:
 
   /zod@4.1.12:
     resolution: {integrity: sha512-JInaHOamG8pt5+Ey8kGmdcAcg3OL9reK8ltczgHTAwNhMys/6ThXHityHxVV2p3fkw/c+MAvBHFVYHFZDmjMCQ==}
+    dev: false
+
+  file:../ts-rust-result/ts-rust-result.tgz:
+    resolution: {integrity: sha512-oTyexVZPsH3mdPmqp7PBkm4L9zqogUlNMdoBLp2IMKejdmTkpi1sQkPKn8LkySIs9zpq4cBfFEETG6LQtcrT7A==, tarball: file:../ts-rust-result/ts-rust-result.tgz}
+    name: '@jenova-marie/ts-rust-result'
+    version: 2.2.11
+    engines: {node: '>=18'}
+    requiresBuild: true
+    peerDependencies:
+      zod: ^3.0.0
+    peerDependenciesMeta:
+      zod:
+        optional: true
     dev: false
 
   file:../ts-rust-result/ts-rust-result.tgz(zod@3.25.76):

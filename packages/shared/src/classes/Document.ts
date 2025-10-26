@@ -1,5 +1,5 @@
 import { ok, err, type Result } from '@jenova-marie/ts-rust-result';
-import ObjectID from 'bson-objectid';
+import { randomUUID } from 'node:crypto';
 import { createHash } from 'crypto';
 
 /**
@@ -37,7 +37,7 @@ export interface CreateDocumentInput {
  * Represents a chunk of documentation with vector embedding
  */
 export class Document {
-  /** Unique identifier (BSON ObjectId hex string) */
+  /** Unique identifier  */
   id: string = '';
 
   /** Parent version ID */
@@ -164,8 +164,8 @@ export class Document {
   static create(data: CreateDocumentInput): Result<Document, Error> {
     try {
       const doc = new Document();
-      const objectId = new ObjectID();
-      doc.id = objectId.toHexString();
+
+      doc.id = randomUUID();
 
       const now = Date.now();
       doc.indexed = now;
@@ -199,7 +199,9 @@ export class Document {
 
       return ok(doc);
     } catch (e) {
-      return err(new Error(`Failed to create Document: ${e instanceof Error ? e.message : String(e)}`));
+      return err(
+        new Error(`Failed to create Document: ${e instanceof Error ? e.message : String(e)}`)
+      );
     }
   }
 
@@ -227,7 +229,9 @@ export class Document {
 
       return ok(this);
     } catch (e) {
-      return err(new Error(`Failed to update Document: ${e instanceof Error ? e.message : String(e)}`));
+      return err(
+        new Error(`Failed to update Document: ${e instanceof Error ? e.message : String(e)}`)
+      );
     }
   }
 
@@ -306,7 +310,9 @@ export class Document {
 
       return ok(doc);
     } catch (e) {
-      return err(new Error(`Failed to deserialize Document: ${e instanceof Error ? e.message : String(e)}`));
+      return err(
+        new Error(`Failed to deserialize Document: ${e instanceof Error ? e.message : String(e)}`)
+      );
     }
   }
 }

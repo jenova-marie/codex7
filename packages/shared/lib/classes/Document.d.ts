@@ -32,7 +32,7 @@ export interface CreateDocumentInput {
  * Represents a chunk of documentation with vector embedding
  */
 export declare class Document {
-    /** Unique identifier (BSON ObjectId hex string) */
+    /** Unique identifier  */
     id: string;
     /** Parent version ID */
     versionId: string;

@@ -1,5 +1,5 @@
 import { ok, err } from '@jenova-marie/ts-rust-result';
-import ObjectID from 'bson-objectid';
+import { randomUUID } from 'node:crypto';
 import { createHash } from 'crypto';
 /**
  * Document domain entity
@@ -7,7 +7,7 @@ import { createHash } from 'crypto';
  */
 export class Document {
     constructor() {
-        /** Unique identifier (BSON ObjectId hex string) */
+        /** Unique identifier  */
         this.id = '';
         /** Parent version ID */
         this.versionId = '';
@@ -106,8 +106,7 @@ export class Document {
     static create(data) {
         try {
             const doc = new Document();
-            const objectId = new ObjectID();
-            doc.id = objectId.toHexString();
+            doc.id = randomUUID();
             const now = Date.now();
             doc.indexed = now;
             doc.updated = now;

@@ -1,12 +1,12 @@
 import { ok, err } from '@jenova-marie/ts-rust-result';
-import ObjectID from 'bson-objectid';
+import { randomUUID } from 'node:crypto';
 /**
  * Version domain entity
  * Represents a specific version of a library (e.g., React v18.2.0, Next.js v14.0.0)
  */
 export class Version {
     constructor() {
-        /** Unique identifier (BSON ObjectId hex string) */
+        /** Unique identifier  */
         this.id = '';
         /** Parent library ID */
         this.libraryId = '';
@@ -75,8 +75,7 @@ export class Version {
     static create(data) {
         try {
             const ver = new Version();
-            const objectId = new ObjectID();
-            ver.id = objectId.toHexString();
+            ver.id = randomUUID();
             const now = Date.now();
             ver.indexed = now;
             ver.updated = now;
