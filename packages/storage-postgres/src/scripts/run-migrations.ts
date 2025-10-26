@@ -35,12 +35,15 @@ const MIGRATIONS_DIR = join(import.meta.dirname, '../../src/migrations');
 
 /**
  * Run all pending migrations
+ *
+ * @param connectionUrl - Optional database connection URL. If not provided, uses environment variables
  */
-export async function runMigrations(): Promise<Result<MigrationInfo[], Error>> {
+export async function runMigrations(connectionUrl?: string): Promise<Result<MigrationInfo[], Error>> {
   console.log('🚀 Codex7 Migration Runner\n');
 
-  // Get connection string from environment
-  const connectionString = process.env.DATABASE_URL ||
+  // Get connection string from parameter or environment
+  const connectionString = connectionUrl ||
+    process.env.DATABASE_URL ||
     `postgresql://${process.env.POSTGRES_USER || 'postgres'}:${process.env.POSTGRES_PASSWORD || 'postgres'}@${process.env.POSTGRES_HOST || 'localhost'}:${process.env.POSTGRES_PORT || '5432'}/${process.env.POSTGRES_DB || 'codex7'}`;
 
   console.log(`📦 Connecting to database...`);

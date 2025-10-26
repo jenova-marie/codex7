@@ -53,7 +53,7 @@ export class PostgresAdapter implements StorageAdapter {
   /**
    * Initialize the adapter - connect and verify schema
    */
-  async initialize(_config: StorageConfig): Promise<Result<void, Error>> {
+  async initialize(config: StorageConfig): Promise<Result<void, Error>> {
     logger.info('🚀 Initializing PostgresAdapter...');
 
     const connectResult = await this.connection.connect();
@@ -67,6 +67,23 @@ export class PostgresAdapter implements StorageAdapter {
       return tsErr(new Error(dbResult.error.message));
     }
     this.db = dbResult.value;
+
+    // Run migrations if auto strategy is enabled
+    if (config.migrationStrategy === 'auto') {
+      logger.info('🔄 Running database migrations...');
+
+      // Build connection URL from config
+      const pgConfig = this.connection['config']; // Access private config
+      const connectionUrl = `postgresql://${pgConfig.user}:${pgConfig.password}@${pgConfig.host}:${pgConfig.port}/${pgConfig.database}`;
+
+      const migrationResult = await runMigrations(connectionUrl);
+      if (!migrationResult.ok) {
+        logger.error({ error: migrationResult.error }, '❌ Migration failed');
+        return tsErr(new Error(`Migration failed: ${migrationResult.error.message}`));
+      }
+
+      logger.info({ migrations: migrationResult.value }, '✅ Migrations completed');
+    }
 
     // Verify pgvector extension is enabled
     try {
@@ -199,19 +216,19 @@ export class PostgresAdapter implements StorageAdapter {
   // ========================================
 
   async createLibrary(
-    library: Omit<Library, 'id' | 'created' | 'updated'>
+    library: Omit<Library, 'created' | 'updated'> | Omit<Library, 'id' | 'created' | 'updated'>
   ): Promise<Result<Library, Error>> {
     logger.debug({ library }, '📚 createLibrary called');
 
     try {
-      // Generate new ID
-      const id = new ObjectID().toHexString();
+      // Use provided ID or generate new one
+      const id = ('id' in library && library.id) ? library.id : new ObjectID().toHexString();
       const now = Date.now();
 
       // Create full library object
       const fullLibrary = {
-        id,
         ...library,
+        id,
         created: now,
         updated: now,
       };
@@ -516,19 +533,19 @@ export class PostgresAdapter implements StorageAdapter {
   // ========================================
 
   async createVersion(
-    version: Omit<Version, 'id' | 'indexed' | 'updated'>
+    version: Omit<Version, 'indexed' | 'updated'> | Omit<Version, 'id' | 'indexed' | 'updated'>
   ): Promise<Result<Version, Error>> {
     logger.debug({ version }, '📌 createVersion called');
 
     try {
-      // Generate new ID
-      const id = new ObjectID().toHexString();
+      // Use provided ID or generate new one
+      const id = ('id' in version && version.id) ? version.id : new ObjectID().toHexString();
       const now = Date.now();
 
       // Create full version object
       const fullVersion = {
-        id,
         ...version,
+        id,
         indexed: now,
         updated: now,
       };
@@ -771,19 +788,19 @@ export class PostgresAdapter implements StorageAdapter {
   // ========================================
 
   async indexDocument(
-    document: Omit<Document, 'id' | 'indexed' | 'updated'>
+    document: Omit<Document, 'indexed' | 'updated'> | Omit<Document, 'id' | 'indexed' | 'updated'>
   ): Promise<Result<Document, Error>> {
     logger.debug({ document }, '📄 indexDocument called');
 
     try {
-      // Generate new ID
-      const id = new ObjectID().toHexString();
+      // Use provided ID or generate new one
+      const id = ('id' in document && document.id) ? document.id : new ObjectID().toHexString();
       const now = Date.now();
 
       // Create full document object
       const fullDocument = {
-        id,
         ...document,
+        id,
         indexed: now,
         updated: now,
       };
