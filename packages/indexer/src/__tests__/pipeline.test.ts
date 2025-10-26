@@ -1,15 +1,48 @@
 /**
  * 🧪 Tests for Processing Pipeline
  *
- * Phase 0: Tests verify stubs return expected empty results.
+ * Tests verify pipeline orchestrates all steps correctly.
  */
 
-import { describe, it, expect } from 'vitest';
-import { processJob } from '../pipeline/index.js';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { SourceType } from '../queue/job-types.js';
+import { ok } from '@jenova-marie/ts-rust-result';
+
+// Mock the PostgreSQL adapter with factory function
+vi.mock('@codex7/storage-postgres', () => {
+  return {
+    PostgresAdapter: class MockPostgresAdapter {
+      async initialize() {
+        return ok(undefined);
+      }
+      async indexDocuments() {
+        return ok([]);
+      }
+      async close() {
+        return ok(undefined);
+      }
+    },
+  };
+});
+
+// Mock the processor modules before importing the pipeline
+vi.mock('../processors/github.js', () => ({
+  processGitHub: vi.fn(async () => []),
+}));
+
+vi.mock('../processors/web.js', () => ({
+  processWeb: vi.fn(async () => []),
+}));
+
+vi.mock('../processors/pdf.js', () => ({
+  processPDF: vi.fn(async () => []),
+}));
+
+// Now import after mocks are set up
+import { processJob } from '../pipeline/index.js';
 
 describe('Processing Pipeline', () => {
-  it('should process GitHub job and return success result (STUB)', async () => {
+  it('should process GitHub job and return success result', async () => {
     const jobData = {
       libraryId: 'test-lib',
       source: 'https://github.com/test/repo',
@@ -20,10 +53,10 @@ describe('Processing Pipeline', () => {
 
     expect(result).toBeDefined();
     expect(result.success).toBe(true);
-    expect(result.documentsIndexed).toBe(0); // Stub returns 0
+    expect(result.documentsIndexed).toBe(0); // Mock returns empty array
   });
 
-  it('should process Web job and return success result (STUB)', async () => {
+  it('should process Web job and return success result', async () => {
     const jobData = {
       libraryId: 'test-lib',
       source: 'https://example.com/docs',
@@ -34,10 +67,10 @@ describe('Processing Pipeline', () => {
 
     expect(result).toBeDefined();
     expect(result.success).toBe(true);
-    expect(result.documentsIndexed).toBe(0); // Stub returns 0
+    expect(result.documentsIndexed).toBe(0); // Mock returns empty array
   });
 
-  it('should process PDF job and return success result (STUB)', async () => {
+  it('should process PDF job and return success result', async () => {
     const jobData = {
       libraryId: 'test-lib',
       source: '/path/to/doc.pdf',
@@ -48,6 +81,6 @@ describe('Processing Pipeline', () => {
 
     expect(result).toBeDefined();
     expect(result.success).toBe(true);
-    expect(result.documentsIndexed).toBe(0); // Stub returns 0
+    expect(result.documentsIndexed).toBe(0); // Mock returns empty array
   });
 });
