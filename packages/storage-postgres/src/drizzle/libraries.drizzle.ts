@@ -17,10 +17,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { pgTable, text, integer } from 'drizzle-orm/pg-core';
+import { pgTable, text, integer, bigint } from 'drizzle-orm/pg-core';
 
 export const libraries = pgTable('libraries', {
-  created: integer('created').notNull().default(0),
+  created: bigint('created', { mode: 'number' }).notNull().default(0),
   description: text('description').notNull().default(''),
   homepageUrl: text('homepageUrl').notNull().default(''),
   id: text('id').notNull().primaryKey().default(''),
@@ -31,5 +31,5 @@ export const libraries = pgTable('libraries', {
   project: text('project').notNull().default(''),
   repositoryUrl: text('repositoryUrl').notNull().default(''),
   trustScore: integer('trustScore').notNull().default(5),
-  updated: integer('updated').notNull().default(0),
+  updated: bigint('updated', { mode: 'number' }).notNull().default(0),
 });

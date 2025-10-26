@@ -17,7 +17,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { pgTable, text, integer, boolean, json, vector } from 'drizzle-orm/pg-core';
+import { pgTable, text, integer, boolean, json, vector, bigint } from 'drizzle-orm/pg-core';
 
 export const documents = pgTable('documents', {
   chunkIndex: integer('chunkIndex').notNull().default(0),
@@ -28,14 +28,14 @@ export const documents = pgTable('documents', {
   hasCode: boolean('hasCode').notNull().default(false),
   hierarchy: json('hierarchy').notNull(),
   id: text('id').notNull().primaryKey().default(''),
-  indexed: integer('indexed').notNull().default(0),
+  indexed: bigint('indexed', { mode: 'number' }).notNull().default(0),
   language: text('language').notNull().default('en'),
   metadata: text('metadata').notNull(),
   sourcePath: text('sourcePath').notNull().default(''),
   sourceType: text('sourceType').notNull().default('github'),
   sourceUrl: text('sourceUrl').notNull().default(''),
   title: text('title').notNull().default(''),
-  updated: integer('updated').notNull().default(0),
+  updated: bigint('updated', { mode: 'number' }).notNull().default(0),
   versionId: text('versionId').notNull().default(''),
 });
 

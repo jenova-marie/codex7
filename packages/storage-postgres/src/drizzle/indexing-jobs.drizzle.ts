@@ -17,7 +17,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { pgTable, text, integer } from 'drizzle-orm/pg-core';
+import { pgTable, text, integer, bigint } from 'drizzle-orm/pg-core';
 
 /**
  * IndexingJob table schema
@@ -33,7 +33,7 @@ export const indexingJobs = pgTable('indexing_jobs', {
   processedDocuments: integer('processedDocuments').notNull().default(0),
   failedDocuments: integer('failedDocuments').notNull().default(0),
   error: text('error'),
-  startedAt: integer('startedAt').notNull().default(0),
-  completedAt: integer('completedAt'),
+  startedAt: bigint('startedAt', { mode: 'number' }).notNull().default(0),
+  completedAt: bigint('completedAt', { mode: 'number' }),
   metadata: text('metadata').notNull().default('{}'),
 });

@@ -17,19 +17,19 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { pgTable, text, integer, boolean } from 'drizzle-orm/pg-core';
+import { pgTable, text, integer, boolean, bigint } from 'drizzle-orm/pg-core';
 
 export const versions = pgTable('versions', {
   documentCount: integer('documentCount').notNull().default(0),
   gitCommitSha: text('gitCommitSha').notNull().default(''),
   id: text('id').notNull().primaryKey().default(''),
-  indexed: integer('indexed').notNull().default(0),
+  indexed: bigint('indexed', { mode: 'number' }).notNull().default(0),
   isDeprecated: boolean('isDeprecated').notNull().default(false),
   isLatest: boolean('isLatest').notNull().default(false),
   libraryId: text('libraryId').notNull().default(''),
   metadata: text('metadata').notNull(),
-  releaseDate: integer('releaseDate').notNull().default(0),
-  updated: integer('updated').notNull().default(0),
+  releaseDate: bigint('releaseDate', { mode: 'number' }).notNull().default(0),
+  updated: bigint('updated', { mode: 'number' }).notNull().default(0),
   versionNormalized: text('versionNormalized').notNull().default(''),
   versionString: text('versionString').notNull().default(''),
 });
