@@ -1,0 +1,245 @@
+# Codex7 Commercial License Agreement
+
+**Version 1.0 - Effective January 2025**
+
+Copyright (C) 2025 Jenova Marie and Codex7 Contributors
+
+---
+
+## Purpose
+
+This Commercial License Agreement ("Agreement") grants you the right to use, modify, and distribute Codex7 in proprietary applications and services **without** the obligations of the GNU Affero General Public License v3 (AGPL v3).
+
+## Grant of Commercial License
+
+Subject to the terms of this Agreement and payment of applicable fees, Jenova Marie ("Licensor") grants you ("Licensee") a non-exclusive, worldwide, perpetual (subject to termination provisions) license to:
+
+1. **Use** the Codex7 software in proprietary products and services
+2. **Modify** the Codex7 software for your internal use
+3. **Distribute** the Codex7 software as part of your proprietary product
+4. **Deploy** the Codex7 software as a network service without source disclosure obligations
+5. **Create** derivative works based on Codex7 for commercial purposes
+
+## What This License Includes
+
+### Community Edition Features
+All features available in the AGPL v3 Community Edition:
+- Complete indexing pipeline (GitHub, web, PDF)
+- Full MCP server implementation
+- PostgreSQL + pgvector storage
+- SQLite storage adapter
+- Semantic search with embeddings
+- REST API
+- Web dashboard
+- Docker deployment
+- Version tracking
+- Community documentation registry
+- Basic monitoring (Prometheus endpoints)
+
+### Enterprise Edition Features
+Additional proprietary features available only with Commercial License:
+
+**Authentication & Access Control**
+- SSO/SAML integration (Okta, Auth0, Azure AD)
+- LDAP/Active Directory integration
+- Role-based access control (RBAC)
+- Fine-grained API key management
+- Multi-tenant isolation
+- Team management and permissions
+
+**Enterprise Operations**
+- High availability clustering
+- Read replica support
+- Advanced monitoring & alerting
+- Disaster recovery tools
+- Automated backup/restore
+- Performance optimization toolkit
+- Zero-downtime upgrades
+
+**Compliance & Governance**
+- Comprehensive audit logging
+- Data retention policy enforcement
+- GDPR compliance tools
+- SOC2 compliance features
+- Air-gapped deployment support
+- Custom data residency controls
+- Encryption key management
+
+**Advanced Features**
+- Custom LLM integration for reranking
+- Advanced caching strategies
+- Multi-region deployment
+- Custom indexing pipelines
+- Enterprise docs integrations (Confluence, SharePoint, Notion)
+- Priority indexing queues
+- Advanced analytics dashboard
+
+## License Fees
+
+Commercial licensing is offered on the following terms:
+
+### Self-Hosted Enterprise
+- **$12,000 USD per year**
+- Unlimited documents
+- Unlimited users
+- Includes all Enterprise Edition features
+- Standard support (email, community Slack)
+- Quarterly security updates
+
+### Self-Hosted Enterprise Plus
+- **$24,000 USD per year**
+- Everything in Enterprise
+- Dedicated support engineer
+- SLA guarantees (99.9% uptime)
+- Direct Slack/phone support
+- Quarterly architecture reviews
+- Migration assistance
+- Priority feature requests
+
+### OEM / Embedded License
+- **Custom pricing** - Contact licensing@codex7.dev
+- For embedding Codex7 in your product
+- Redistribution rights
+- White-label options
+- Custom branding support
+
+## Support & Maintenance
+
+### Support Levels
+
+**Standard Support** (included with Self-Hosted Enterprise):
+- Email support (48-hour response time)
+- Community Slack access
+- Quarterly security updates
+- Bugfix releases
+- Documentation access
+
+**Premium Support** (included with Enterprise Plus):
+- Dedicated support engineer
+- Email & Slack support (8-hour response time)
+- Phone support (business hours)
+- Monthly security updates
+- Priority bugfix releases
+- Quarterly architecture reviews
+
+### Service Level Agreements (SLA)
+
+**Enterprise Plus SLA**:
+- 99.9% uptime guarantee
+- Response times:
+  - Critical issues: 4 hours
+  - High priority: 8 hours
+  - Normal priority: 24 hours
+- Compensation for SLA breaches
+
+## Restrictions
+
+Even with a Commercial License, you may NOT:
+
+1. Remove or modify copyright notices from the source code
+2. Use the Codex7 name or trademarks without written permission
+3. Claim that your product is endorsed by Codex7 or Jenova Marie
+4. Redistribute the Enterprise Edition features under open source licenses
+5. Sublicense the Commercial License to third parties (except as explicitly allowed for OEM licenses)
+
+## Proprietary vs Open Source Code
+
+This Commercial License applies to:
+- All code in the Community Edition (normally under AGPL v3)
+- All Enterprise Edition features and add-ons
+
+The Enterprise Edition features are **proprietary** and are ONLY available under Commercial License. They are NOT available under AGPL v3.
+
+## Term and Termination
+
+### Term
+This license is granted for the specified subscription period (typically one year) and automatically renews unless terminated.
+
+### Termination
+This Agreement may be terminated:
+
+1. **By Licensee**: 30 days written notice before renewal
+2. **By Licensor**: Immediately if Licensee breaches material terms
+3. **By Either Party**: With 90 days notice for any reason
+
+### Effect of Termination
+Upon termination:
+- Licensee must cease using Enterprise Edition features
+- Licensee may continue using Community Edition under AGPL v3
+- Licensee must destroy all copies of Enterprise Edition code
+- Support and updates will cease immediately
+
+## Warranty Disclaimer
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+
+**Exception**: Enterprise Plus includes SLA guarantees as specified above.
+
+## Limitation of Liability
+
+IN NO EVENT SHALL LICENSOR BE LIABLE FOR ANY SPECIAL, INCIDENTAL, INDIRECT, OR CONSEQUENTIAL DAMAGES WHATSOEVER (INCLUDING, WITHOUT LIMITATION, DAMAGES FOR LOSS OF BUSINESS PROFITS, BUSINESS INTERRUPTION, LOSS OF BUSINESS INFORMATION, OR ANY OTHER PECUNIARY LOSS) ARISING OUT OF THE USE OF OR INABILITY TO USE THIS SOFTWARE.
+
+**Exception**: Enterprise Plus includes liability caps as specified in the SLA.
+
+## Dual Licensing
+
+Codex7 is available under two licenses:
+
+1. **AGPL v3** (Community Edition) - Free, open source, copyleft
+2. **Commercial License** (This Agreement) - Paid, proprietary use allowed
+
+You must choose one license. You cannot combine rights from both licenses.
+
+## Contributor License Agreement (CLA)
+
+All contributors to the Codex7 project have signed a CLA that allows dual-licensing. This ensures:
+- Community Edition remains AGPL v3 and open source
+- Commercial customers can use Codex7 without AGPL obligations
+- Contributors retain credit and copyright notices
+
+See CLA.md for details.
+
+## Payment Terms
+
+- Annual licenses are billed yearly in advance
+- Payment due within 30 days of invoice
+- Late payments subject to 1.5% monthly interest
+- License suspended if payment is 60+ days overdue
+
+## Governing Law
+
+This Agreement is governed by the laws of the State of California, United States, without regard to conflicts of law principles.
+
+## Entire Agreement
+
+This Agreement constitutes the entire agreement between the parties concerning its subject matter and supersedes all prior agreements and understandings.
+
+## Modifications
+
+Licensor reserves the right to modify license terms for future versions. Current licenses remain valid under their original terms.
+
+---
+
+## How to Obtain a Commercial License
+
+To purchase a Commercial License:
+
+1. **Contact**: licensing@codex7.dev
+2. **Consultation**: We'll discuss your needs and recommend a tier
+3. **Agreement**: Sign this Commercial License Agreement
+4. **Payment**: Pay annual license fee
+5. **Activation**: Receive license key and Enterprise Edition access
+6. **Support**: Onboarding with support team
+
+## Questions?
+
+- **Email**: licensing@codex7.dev
+- **Sales**: sales@codex7.dev
+- **Documentation**: https://docs.codex7.dev/commercial
+- **Schedule Demo**: https://codex7.dev/demo
+
+---
+
+**Made with 💜 by the Codex7 team**
+
+*Transparent licensing, no surprises, real value*
