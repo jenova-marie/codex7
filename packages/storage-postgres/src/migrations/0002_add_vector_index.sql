@@ -1,6 +1,3 @@
--- Enable pgvector extension (idempotent)
-CREATE EXTENSION IF NOT EXISTS vector;
-
 -- Create IVFFlat index for embedding similarity search
 -- Using cosine distance (best for normalized OpenAI embeddings)
 -- lists = sqrt(row_count) ≈ 274 for ~75k documents

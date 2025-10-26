@@ -27,10 +27,11 @@
 import { readdir, readFile } from 'fs/promises';
 import { join } from 'path';
 import postgres from 'postgres';
-import { ok as tsOk, err as tsErr, type Result } from '@jenova-marie/ts-rust-result';
+import { ok, err, type Result } from '@jenova-marie/ts-rust-result';
 import type { MigrationInfo } from '@codex7/shared';
 
-const MIGRATIONS_DIR = join(import.meta.dirname, '../migrations');
+// Always use src/migrations (SQL files aren't compiled to dist)
+const MIGRATIONS_DIR = join(import.meta.dirname, '../../src/migrations');
 
 /**
  * Run all pending migrations
@@ -59,7 +60,7 @@ export async function runMigrations(): Promise<Result<MigrationInfo[], Error>> {
     if (sqlFiles.length === 0) {
       console.log('⚠️  No migration files found');
       await sql.end();
-      return tsOk([]);
+      return ok([]);
     }
 
     console.log(`📋 Found ${sqlFiles.length} migration file(s):\n`);
@@ -132,14 +133,14 @@ export async function runMigrations(): Promise<Result<MigrationInfo[], Error>> {
         });
 
         await sql.end();
-        return tsErr(new Error(`Migration failed: ${file} - ${(error as Error).message}`));
+        return err(new Error(`Migration failed: ${file} - ${(error as Error).message}`));
       }
     }
 
     console.log('🎉 All migrations completed successfully!\n');
     await sql.end();
 
-    return tsOk(migrationResults);
+    return ok(migrationResults);
 
   } catch (error) {
     console.error('\n❌ Migration failed:');
@@ -152,7 +153,7 @@ export async function runMigrations(): Promise<Result<MigrationInfo[], Error>> {
     }
 
     await sql.end();
-    return tsErr(error as Error);
+    return err(error as Error);
   }
 }
 
