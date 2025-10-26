@@ -76,6 +76,8 @@ codex7/
 - **Logging**: @jenova-marie/wonder-logger (beautiful structured logs!)
 - **Embeddings**: OpenAI API (configurable)
 - **LLM**: Claude SDK (future intelligent reranking)
+- **Text Chunking**: @langchain/textsplitters (markdown-aware splitting with hierarchy)
+- **Job Queue**: BullMQ + Redis (background indexing jobs)
 
 ### Infrastructure
 - **Containers**: Docker + Docker Compose
@@ -95,6 +97,40 @@ codex7/
 4. 🔒 **Security-first** - Encryption, least privilege, input validation
 5. 🎨 **Beautiful code** - ESLint + Prettier configured
 6. 💜 **Community-focused** - Clear, welcoming, emoji-rich!
+7. 🔍 **Search-first implementation** - Research existing solutions before building from scratch
+
+### 🔍 Search-First Implementation Philosophy
+
+**CRITICAL PRINCIPLE**: Before implementing any new feature or component, ALWAYS search for existing open-source solutions first.
+
+#### The Research Process:
+1. 🔎 **Search thoroughly** - Look for npm packages, libraries, frameworks
+2. 🤔 **Evaluate options** - Compare features, maintenance, community
+3. 💬 **Discuss findings** - Review with team before deciding
+4. ✅ **Choose wisely** - Prefer battle-tested solutions over custom code
+5. 🛠️ **Integrate** - Use existing tools, only build what's unique to Codex7
+
+#### Why This Matters:
+- 🚫 **Don't reinvent the wheel** - Others have solved these problems
+- ⚡ **Faster development** - Proven solutions save time
+- 🐛 **Fewer bugs** - Battle-tested code has been debugged
+- 📚 **Better docs** - Popular libraries have examples and support
+- 🔒 **More secure** - Community-reviewed code catches vulnerabilities
+
+#### Examples from Codex7:
+- ✅ **Drizzle ORM** - Instead of raw SQL or custom ORM
+- ✅ **pgvector** - Instead of custom vector similarity
+- ✅ **@langchain/textsplitters** - Instead of custom markdown chunking
+- ✅ **BullMQ** - Instead of custom job queue
+- ✅ **RxJS** - Instead of custom reactive patterns
+
+#### When to Build Custom:
+- 🎯 **Core differentiation** - Features unique to Codex7's value prop
+- 🔌 **Integration glue** - Connecting existing libraries together
+- 🎨 **User experience** - UI/UX specific to our users
+- 🔧 **Adapters** - Implementing interfaces for different backends
+
+**Remember**: Building from scratch should be the exception, not the rule. Stand on the shoulders of giants! 🌟
 
 ### Emoji Usage 🎨
 
