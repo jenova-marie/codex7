@@ -25,6 +25,7 @@
 
 import type { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { ListToolsRequestSchema, CallToolRequestSchema } from '@modelcontextprotocol/sdk/types.js';
+import type { StorageAdapter } from '@codex7/shared';
 import { resolveLibraryIdTool, handleResolveLibraryId } from './resolve-library-id.js';
 import { getLibraryDocsTool, handleGetLibraryDocs } from './get-library-docs.js';
 import { searchDocsTool, handleSearchDocs } from './search-docs.js';
@@ -37,8 +38,9 @@ import { logger } from '../utils/logger.js';
  * Registers both context7-compatible tools and Codex7 extensions.
  *
  * @param server - MCP server instance
+ * @param storageAdapter - Storage adapter for database operations
  */
-export function registerTools(server: Server): void {
+export function registerTools(server: Server, storageAdapter: StorageAdapter): void {
   logger.debug('🔧 Registering tools...');
 
   // Register tools/list handler - returns all tool schemas
@@ -62,7 +64,10 @@ export function registerTools(server: Server): void {
 
     switch (toolName) {
       case 'resolve-library-id':
-        return await handleResolveLibraryId(args as { libraryName: string });
+        return await handleResolveLibraryId(
+          args as { libraryName: string },
+          storageAdapter
+        );
 
       case 'get-library-docs':
         return await handleGetLibraryDocs(
@@ -70,7 +75,8 @@ export function registerTools(server: Server): void {
             context7CompatibleLibraryID: string;
             topic?: string;
             tokens?: number;
-          }
+          },
+          storageAdapter
         );
 
       case 'search-documentation':
@@ -79,11 +85,15 @@ export function registerTools(server: Server): void {
             query: string;
             filters?: Record<string, unknown>;
             limit?: number;
-          }
+          },
+          storageAdapter
         );
 
       case 'get-library-versions':
-        return await handleGetVersions(args as { library_id: string });
+        return await handleGetVersions(
+          args as { library_id: string },
+          storageAdapter
+        );
 
       default:
         throw new Error(`Unknown tool: ${toolName}`);

@@ -24,6 +24,7 @@
  * STUB: Returns hardcoded placeholder data (Phase 0)
  */
 
+import type { StorageAdapter } from '@codex7/shared';
 import { logger } from '../utils/logger.js';
 
 /**
@@ -51,47 +52,98 @@ export const resolveLibraryIdTool = {
  * Maps a library name (e.g., "react", "next.js") to Context7-compatible
  * library identifiers (e.g., "/facebook/react").
  *
- * **Phase 0 Implementation:**
- * - ✅ Returns stub data (hardcoded React example)
- * - ❌ Does not query storage
- * - ❌ Does not perform semantic matching
+ * Implementation:
+ * 1. Search libraries by name (case-insensitive fuzzy match)
+ * 2. Sort by trust score and relevance
+ * 3. Return matching libraries with metadata
  */
-export async function handleResolveLibraryId(args: { libraryName: string }) {
+export async function handleResolveLibraryId(
+  args: { libraryName: string },
+  storageAdapter: StorageAdapter
+) {
   const { libraryName } = args;
 
-  logger.info({ libraryName }, '🔍 resolve-library-id called (STUB)');
+  logger.info({ libraryName }, '🔍 resolve-library-id called');
 
-  // TODO Phase 1:
-  // 1. Query storage for matching libraries
-  // 2. Perform semantic + exact matching
-  // 3. Sort by relevance and trust score
-  // 4. Return real results
+  try {
+    // Search for matching libraries using storage adapter
+    const searchResult = await storageAdapter.searchLibraries(libraryName);
 
-  // STUB: Return placeholder data
-  return {
-    content: [
-      {
-        type: 'text',
-        text: JSON.stringify(
+    if (!searchResult.ok) {
+      logger.error({ error: searchResult.error }, '❌ Library search failed');
+      return {
+        content: [
           {
-            matches: [
+            type: 'text',
+            text: JSON.stringify(
               {
-                id: '/facebook/react',
-                name: 'React',
-                description: 'A JavaScript library for building user interfaces',
-                trust_score: 10,
-                repository_url: 'https://github.com/facebook/react',
-                versions: ['v18.2.0', 'latest'],
+                error: 'Failed to search libraries',
+                message: searchResult.error.message,
+                matches: [],
               },
-            ],
-            _stub: true,
-            _message: 'STUB DATA: This is placeholder for Phase 0 testing',
-            _note: 'Phase 1 will return real search results from the database',
+              null,
+              2
+            ),
           },
-          null,
-          2
-        ),
-      },
-    ],
-  };
+        ],
+      };
+    }
+
+    const libraries = searchResult.value;
+    logger.info({ count: libraries.length }, '✅ Found matching libraries');
+
+    // Get versions for each library
+    const matches = await Promise.all(
+      libraries.map(async (lib) => {
+        // Get versions for this library
+        const versionsResult = await storageAdapter.listVersions(lib.id);
+        const versions = versionsResult.ok ? versionsResult.value : [];
+
+        return {
+          id: lib.identifier,
+          name: lib.name,
+          description: lib.description,
+          trust_score: lib.trustScore,
+          repository_url: lib.repositoryUrl,
+          homepage_url: lib.homepageUrl,
+          versions: versions.map((v) => v.versionString),
+        };
+      })
+    );
+
+    return {
+      content: [
+        {
+          type: 'text',
+          text: JSON.stringify(
+            {
+              query: libraryName,
+              matches,
+              total: matches.length,
+            },
+            null,
+            2
+          ),
+        },
+      ],
+    };
+  } catch (error) {
+    logger.error({ error }, '❌ Unexpected error in resolve-library-id');
+    return {
+      content: [
+        {
+          type: 'text',
+          text: JSON.stringify(
+            {
+              error: 'Internal error',
+              message: error instanceof Error ? error.message : 'Unknown error',
+              matches: [],
+            },
+            null,
+            2
+          ),
+        },
+      ],
+    };
+  }
 }

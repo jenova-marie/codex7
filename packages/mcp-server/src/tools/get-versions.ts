@@ -24,7 +24,20 @@
  * STUB: Returns placeholder version list (Phase 0)
  */
 
+import type { StorageAdapter } from '@codex7/shared';
+import { Version } from '@codex7/shared';
 import { logger } from '../utils/logger.js';
+
+/**
+ * Parse library ID to extract org and project
+ */
+function parseLibraryId(libraryId: string): { org: string; project: string } {
+  const parts = libraryId.split('/').filter((p) => p.length > 0);
+  if (parts.length < 2) {
+    throw new Error(`Invalid library ID: ${libraryId}`);
+  }
+  return { org: parts[0]!, project: parts[1]! };
+}
 
 /**
  * Tool schema for get-library-versions
@@ -51,56 +64,119 @@ export const getVersionsTool = {
  * Lists all indexed versions for a specific library.
  * This is a Codex7 extension beyond Context7's API.
  *
- * **Phase 0 Implementation:**
- * - ✅ Returns stub version list
- * - ❌ Does not query storage
- * - ❌ Does not fetch actual versions
+ * Implementation:
+ * 1. Parse library ID
+ * 2. Find library in storage
+ * 3. Retrieve all versions with metadata
  */
-export async function handleGetVersions(args: { library_id: string }) {
+export async function handleGetVersions(
+  args: { library_id: string },
+  storageAdapter: StorageAdapter
+) {
   const { library_id } = args;
 
-  logger.info({ library_id }, '📋 get-library-versions called (STUB)');
+  logger.info({ library_id }, '📋 get-library-versions called');
 
-  // TODO Phase 1:
-  // 1. Parse library ID
-  // 2. Query storage for all indexed versions
-  // 3. Sort versions (semver order)
-  // 4. Return with metadata
+  try {
+    // Parse library ID
+    const { org, project } = parseLibraryId(library_id);
 
-  // STUB: Return placeholder version list
-  return {
-    content: [
-      {
-        type: 'text',
-        text: JSON.stringify(
+    // Search for the library
+    const librariesResult = await storageAdapter.searchLibraries(project);
+    if (!librariesResult.ok || librariesResult.value.length === 0) {
+      return {
+        content: [
           {
-            library: library_id,
-            versions: [
+            type: 'text',
+            text: JSON.stringify(
               {
-                version: 'v18.2.0',
-                indexed_at: '2024-01-15T10:30:00Z',
-                documentation_chunks: 125,
+                error: 'Library not found',
+                library_id,
+                message: `No library found matching ${org}/${project}`,
               },
-              {
-                version: 'v18.1.0',
-                indexed_at: '2023-12-01T14:20:00Z',
-                documentation_chunks: 118,
-              },
-              {
-                version: 'latest',
-                indexed_at: '2024-01-20T09:15:00Z',
-                documentation_chunks: 130,
-              },
-            ],
-            total: 3,
-            _stub: true,
-            _message: 'STUB: Version list is placeholder (Phase 1)',
-            _note: 'Phase 1 will return actual versions from database',
+              null,
+              2
+            ),
           },
-          null,
-          2
-        ),
-      },
-    ],
-  };
+        ],
+      };
+    }
+
+    // Find matching library
+    const library = librariesResult.value.find((lib) => lib.org === org && lib.project === project);
+    if (!library) {
+      return {
+        content: [
+          {
+            type: 'text',
+            text: JSON.stringify(
+              {
+                error: 'Library not found',
+                library_id,
+                message: `No library found for ${org}/${project}`,
+              },
+              null,
+              2
+            ),
+          },
+        ],
+      };
+    }
+
+    // Get all versions
+    const versionsResult = await storageAdapter.listVersions(library.id);
+    if (!versionsResult.ok) {
+      throw new Error(`Failed to get versions: ${versionsResult.error.message}`);
+    }
+
+    const versions = versionsResult.value;
+    logger.info({ count: versions.length }, '✅ Found versions');
+
+    // Format version information
+    const formattedVersions = versions.map((v: Version) => ({
+      version: v.versionString,
+      indexed_at: new Date(v.indexed).toISOString(),
+      documentation_chunks: v.documentCount,
+      is_latest: v.isLatest,
+      is_deprecated: v.isDeprecated,
+      release_date: v.releaseDate ? new Date(v.releaseDate).toISOString() : null,
+      git_commit_sha: v.gitCommitSha,
+    }));
+
+    return {
+      content: [
+        {
+          type: 'text',
+          text: JSON.stringify(
+            {
+              library: library.name,
+              library_id,
+              versions: formattedVersions,
+              total: formattedVersions.length,
+            },
+            null,
+            2
+          ),
+        },
+      ],
+    };
+  } catch (error) {
+    logger.error({ error }, '❌ Error in get-library-versions');
+    return {
+      content: [
+        {
+          type: 'text',
+          text: JSON.stringify(
+            {
+              error: 'Internal error',
+              message: error instanceof Error ? error.message : 'Unknown error',
+              library_id,
+            },
+            null,
+            2
+          ),
+        },
+      ],
+    };
+  }
 }

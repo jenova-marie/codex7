@@ -24,6 +24,7 @@
  * STUB: Returns placeholder search results (Phase 0)
  */
 
+import type { StorageAdapter } from '@codex7/shared';
 import { logger } from '../utils/logger.js';
 
 /**
@@ -74,17 +75,20 @@ export const searchDocsTool = {
  * Searches across all indexed libraries for relevant documentation.
  * This is a Codex7 extension beyond Context7's API.
  *
- * **Phase 0 Implementation:**
- * - ✅ Returns empty stub results
- * - ❌ Does not perform semantic search
- * - ❌ Does not apply filters
- * - ❌ Does not rank results
+ * Implementation:
+ * 1. Use hybrid search across all documentation
+ * 2. Apply optional filters (library, version, docType)
+ * 3. Rank and limit results
+ * 4. Format for display
  */
-export async function handleSearchDocs(args: {
-  query: string;
-  filters?: Record<string, unknown>;
-  limit?: number;
-}) {
+export async function handleSearchDocs(
+  args: {
+    query: string;
+    filters?: Record<string, unknown>;
+    limit?: number;
+  },
+  storageAdapter: StorageAdapter
+) {
   const { query, filters, limit = 10 } = args;
 
   logger.info(
@@ -93,37 +97,75 @@ export async function handleSearchDocs(args: {
       filters,
       limit,
     },
-    '🔍 search-documentation called (STUB)'
+    '🔍 search-documentation called'
   );
 
-  // TODO Phase 1:
-  // 1. Generate query embedding
-  // 2. Perform semantic search across all libraries
-  // 3. Apply filters (library, version, docType)
-  // 4. Rank and limit results
-  // 5. Format for display
+  try {
+    // Perform hybrid search
+    const searchResult = await storageAdapter.hybridSearch({
+      query,
+      limit,
+      library: filters?.library as string | undefined,
+      version: filters?.version as string | undefined,
+      sourceType: filters?.sourceType as string | undefined,
+    });
 
-  // STUB: Return empty results with explanation
-  return {
-    content: [
-      {
-        type: 'text',
-        text: JSON.stringify(
-          {
-            results: [],
-            total: 0,
-            query,
-            filters: filters || {},
-            limit,
-            _stub: true,
-            _message:
-              'STUB: Search not implemented yet (Phase 1). This tool will enable cross-library documentation search.',
-            _note: 'Phase 1 will return actual search results from vector database',
-          },
-          null,
-          2
-        ),
-      },
-    ],
-  };
+    if (!searchResult.ok) {
+      throw new Error(`Search failed: ${searchResult.error.message}`);
+    }
+
+    const searchResults = searchResult.value;
+    logger.info({ count: searchResults.length }, '✅ Search completed');
+
+    // Format results for display
+    const results = searchResults.map((result) => {
+      const doc = result.document;
+      return {
+        title: doc.title,
+        content: doc.content.substring(0, 500) + (doc.content.length > 500 ? '...' : ''), // Truncate long content
+        library: result.library,
+        score: result.score,
+        source_url: doc.url,
+        metadata: doc.metadata,
+      };
+    });
+
+    return {
+      content: [
+        {
+          type: 'text',
+          text: JSON.stringify(
+            {
+              query,
+              results,
+              total: results.length,
+              filters: filters || {},
+              limit,
+            },
+            null,
+            2
+          ),
+        },
+      ],
+    };
+  } catch (error) {
+    logger.error({ error }, '❌ Error in search-documentation');
+    return {
+      content: [
+        {
+          type: 'text',
+          text: JSON.stringify(
+            {
+              error: 'Internal error',
+              message: error instanceof Error ? error.message : 'Unknown error',
+              query,
+              results: [],
+            },
+            null,
+            2
+          ),
+        },
+      ],
+    };
+  }
 }
