@@ -25,6 +25,8 @@
 
 import postgres from 'postgres';
 import type { Sql } from 'postgres';
+import { drizzle } from 'drizzle-orm/postgres-js';
+import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import { ok, err, type PostgresResult, postgresConnectionFailed } from './errors/index.js';
 import { logger } from './utils/logger.js';
 
@@ -122,6 +124,23 @@ export class PostgresConnection {
         )
       );
     }
+  }
+
+  /**
+   * Get Drizzle database instance
+   */
+  getDb(): PostgresResult<PostgresJsDatabase> {
+    if (!this.sql) {
+      return err(
+        postgresConnectionFailed(
+          'Database not connected',
+          this.config.host,
+          this.config.database
+        )
+      );
+    }
+
+    return ok(drizzle(this.sql));
   }
 
   /**
