@@ -1,11 +1,18 @@
 #!/usr/bin/env node
 
+import "dotenv/config";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
 import { searchLibraries, fetchLibraryDocumentation } from "./lib/api.js";
 import { formatSearchResults } from "./lib/utils.js";
 import { SearchResponse } from "./lib/types.js";
+import {
+  searchLocalLibraries,
+  isLocalLibrary,
+  fetchLocalDocumentation,
+  isLocalStorageConfigured,
+} from "./lib/local-api.js";
 import { createServer } from "http";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
@@ -145,28 +152,51 @@ For ambiguous queries, request clarification before proceeding with a best-guess
       },
     },
     async ({ libraryName }) => {
-      const searchResponse: SearchResponse = await searchLibraries(libraryName, clientIp, apiKey);
+      // Check local libraries first
+      let localResults: SearchResponse = { results: [] };
+      if (isLocalStorageConfigured()) {
+        try {
+          localResults = await searchLocalLibraries(libraryName);
+        } catch (error) {
+          console.error(`Local search failed: ${error}`);
+        }
+      }
 
-      if (!searchResponse.results || searchResponse.results.length === 0) {
+      // Then check remote
+      const remoteResponse: SearchResponse = await searchLibraries(libraryName, clientIp, apiKey);
+
+      // Merge results: local first (higher trust), then remote
+      const mergedResponse: SearchResponse = {
+        results: [...localResults.results, ...remoteResponse.results],
+        error: remoteResponse.error,
+      };
+
+      if (!mergedResponse.results || mergedResponse.results.length === 0) {
         return {
           content: [
             {
               type: "text",
-              text: searchResponse.error
-                ? searchResponse.error
+              text: mergedResponse.error
+                ? mergedResponse.error
                 : "Failed to retrieve library documentation data from Codex7",
             },
           ],
         };
       }
 
-      const resultsText = formatSearchResults(searchResponse);
+      const resultsText = formatSearchResults(mergedResponse);
+
+      // Add note about local libraries if any found
+      const localNote =
+        localResults.results.length > 0
+          ? `\n\nNote: ${localResults.results.length} local library/libraries found (marked with trust score 10).\n`
+          : "";
 
       return {
         content: [
           {
             type: "text",
-            text: `Available Libraries (top matches):
+            text: `Available Libraries (top matches):${localNote}
 
 Each result includes:
 - Library ID: Codex7-compatible identifier (format: /org/project)
@@ -213,7 +243,36 @@ ${resultsText}`,
       },
     },
     async ({ codex7CompatibleLibraryID, tokens = DEFAULT_TOKENS, topic = "" }) => {
-      const fetchDocsResponse = await fetchLibraryDocumentation(
+      let fetchDocsResponse: string | null = null;
+
+      // Check if this is a local library first
+      if (isLocalStorageConfigured()) {
+        try {
+          const isLocal = await isLocalLibrary(codex7CompatibleLibraryID);
+          if (isLocal) {
+            fetchDocsResponse = await fetchLocalDocumentation(codex7CompatibleLibraryID, {
+              tokens,
+              topic,
+            });
+
+            if (fetchDocsResponse) {
+              return {
+                content: [
+                  {
+                    type: "text",
+                    text: fetchDocsResponse,
+                  },
+                ],
+              };
+            }
+          }
+        } catch (error) {
+          console.error(`Local docs fetch failed: ${error}`);
+        }
+      }
+
+      // Fall back to remote API
+      fetchDocsResponse = await fetchLibraryDocumentation(
         codex7CompatibleLibraryID,
         {
           tokens,

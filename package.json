@@ -5,11 +5,14 @@
   "description": "MCP server for Codex7",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc && chmod 755 dist/index.js",
+    "build": "tsc && chmod 755 dist/index.js && chmod 755 dist/cli/index.js",
     "format": "prettier --write .",
     "lint": "eslint \"**/*.{js,ts,tsx}\" --fix",
     "lint:check": "eslint \"**/*.{js,ts,tsx}\"",
     "start": "node dist/index.js --transport http",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:push": "drizzle-kit push",
     "pack-mcpb": "bun install && bun run build && rm -rf node_modules && bun install --production && mv mcpb/.mcpbignore .mcpbignore && mv mcpb/manifest.json manifest.json && mv public/icon.png icon.png && mcpb validate manifest.json && mcpb pack . mcpb/codex7.mcpb && mv manifest.json mcpb/manifest.json && mv .mcpbignore mcpb/.mcpbignore && mv icon.png public/icon.png && bun install"
   },
   "repository": {
@@ -29,7 +32,8 @@
   "license": "MIT",
   "type": "module",
   "bin": {
-    "codex7-mcp": "dist/index.js"
+    "codex7-mcp": "dist/index.js",
+    "codex7": "dist/cli/index.js"
   },
   "files": [
     "dist"
@@ -40,7 +44,12 @@
   "homepage": "https://github.com/upstash/codex7#readme",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.17.5",
+    "@qdrant/js-client-rest": "^1.12.0",
     "commander": "^14.0.0",
+    "drizzle-orm": "^0.38.3",
+    "openai": "^4.77.0",
+    "dotenv": "^16.4.7",
+    "postgres": "^3.4.5",
     "undici": "^6.6.3",
     "zod": "^3.24.2"
   },
@@ -48,6 +57,7 @@
     "@types/node": "^22.13.14",
     "@typescript-eslint/eslint-plugin": "^8.28.0",
     "@typescript-eslint/parser": "^8.28.0",
+    "drizzle-kit": "^0.30.1",
     "eslint": "^9.34.0",
     "eslint-config-prettier": "^10.1.1",
     "eslint-plugin-prettier": "^5.2.5",
