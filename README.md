@@ -1130,6 +1130,79 @@ The slash syntax tells the MCP tool exactly which library to load docs for.
 
 If you are behind an HTTP proxy, Codex7 uses the standard `https_proxy` / `HTTPS_PROXY` environment variables.
 
+## 📦 Local Knowledge Management
+
+Codex7 supports indexing local project documentation for retrieval alongside remote libraries. Local libraries always take priority (trust score 10) over remote Context7 results.
+
+### Requirements
+
+- PostgreSQL database (for metadata and snippets)
+- Qdrant vector database (for semantic search)
+- OpenAI API key (for generating embeddings)
+
+### Environment Variables
+
+```bash
+# Required for local knowledge features
+CODEX7_PG_URL=postgres://user:pass@localhost:5432/codex7
+CODEX7_QDRANT_URL=http://localhost:6333
+OPENAI_API_KEY=sk-...
+
+# Optional: Qdrant API key if your instance requires authentication
+CODEX7_QDRANT_API_KEY=your-qdrant-api-key
+```
+
+### CLI Commands
+
+#### Index a Project
+
+```bash
+# Basic usage - extracts metadata from package.json
+codex7 index /path/to/your/project
+
+# With custom options
+codex7 index /path/to/project \
+  --id /my-org/my-library \
+  --title "My Library" \
+  --description "A great library" \
+  --keywords "typescript,utilities"
+```
+
+The indexer scans for documentation in:
+- `README.md`, `API.md`, `REFERENCE.md`
+- `docs/**/*.md`
+- `examples/**/*.md`
+- `content/**/*.md`
+
+#### List Indexed Libraries
+
+```bash
+codex7 list
+```
+
+#### Remove a Library
+
+```bash
+codex7 remove /my-org/my-library
+```
+
+#### Re-index a Library
+
+```bash
+# Updates documentation from the original source path
+codex7 sync /my-org/my-library
+```
+
+### How It Works
+
+1. **Indexing**: Documents are parsed, chunked by markdown headers (~500-1000 tokens each), and embeddings are generated using OpenAI's `text-embedding-3-small` model.
+
+2. **Storage**: Library metadata and snippets are stored in PostgreSQL. Vector embeddings are stored in Qdrant for semantic search.
+
+3. **Retrieval**: When you use `resolve-library-id`, local libraries are searched first. When fetching docs with `get-library-docs`, if the library is local, Qdrant performs semantic search by topic to return the most relevant snippets.
+
+4. **Priority**: Local libraries always appear first in search results with a trust score of 10, ensuring your project documentation takes precedence over remote results.
+
 ## 💻 Development
 
 Clone the project and install dependencies:
