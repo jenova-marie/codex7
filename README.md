@@ -719,7 +719,7 @@ If you prefer to run the MCP server in a Docker container:
    ```json
    {
      "mcpServers": {
-       "Сontext7": {
+       "Codex7": {
          "autoApprove": [],
          "disabled": false,
          "timeout": 60,
