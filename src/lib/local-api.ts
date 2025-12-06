@@ -195,6 +195,15 @@ function formatDocumentation(
     parts.push(`${library.description}\n`);
   }
 
+  // Add rules/best practices if present
+  if (library.rules && library.rules.length > 0) {
+    parts.push(`\n## Best Practices\n`);
+    parts.push(`When using this library, follow these guidelines:\n`);
+    for (const rule of library.rules) {
+      parts.push(`- ${rule}\n`);
+    }
+  }
+
   let currentTokens = estimateTokens(parts.join("\n"));
 
   // Add snippets until we hit token limit

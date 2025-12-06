@@ -53,6 +53,7 @@ program
   .option("--title <title>", "Override library title")
   .option("--description <desc>", "Override library description")
   .option("--keywords <keywords>", "Comma-separated keywords for search")
+  .option("--verbose", "Show detailed output of files being processed")
   .action(async (projectPath: string, options) => {
     checkEnvironment();
 
@@ -67,6 +68,7 @@ program
         title: options.title,
         description: options.description,
         keywords,
+        verbose: options.verbose,
       });
 
       console.log("\nIndexing complete!");
@@ -171,7 +173,8 @@ program
 program
   .command("sync <library-id>")
   .description("Re-index an existing library (updates from source)")
-  .action(async (libraryId: string) => {
+  .option("--verbose", "Show detailed output of files being processed")
+  .action(async (libraryId: string, options) => {
     checkEnvironment();
 
     try {
@@ -215,6 +218,7 @@ program
         title: lib.title,
         description: lib.description || undefined,
         keywords: lib.keywords || undefined,
+        verbose: options.verbose,
       });
 
       console.log("\nSync complete!");

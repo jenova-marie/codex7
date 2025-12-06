@@ -21,6 +21,8 @@ export const localLibraries = pgTable("local_libraries", {
   version: text("version"),
   // Keywords for search matching
   keywords: text("keywords").array(),
+  // Rules/best practices from codex7.json (shown to coding agents)
+  rules: text("rules").array(),
   // Approximate token count of all snippets
   totalTokens: integer("total_tokens").default(0),
   // Number of code snippets

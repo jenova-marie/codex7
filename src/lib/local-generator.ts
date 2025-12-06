@@ -12,6 +12,22 @@ import { generateEmbeddings, createEmbeddingText } from "./embeddings.js";
 type SourceType = "readme" | "api" | "docs" | "examples" | "content";
 
 /**
+ * Project configuration file (codex7.json or context7.json)
+ * Compatible with Context7's configuration format
+ */
+interface ProjectConfig {
+  $schema?: string;
+  projectTitle?: string;
+  description?: string;
+  branch?: string;
+  folders?: string[];
+  excludeFolders?: string[];
+  excludeFiles?: string[];
+  rules?: string[];
+  previousVersions?: Array<{ tag: string; title?: string }>;
+}
+
+/**
  * A parsed documentation snippet before storage
  */
 interface ParsedSnippet {
@@ -32,6 +48,7 @@ export interface IndexConfig {
   title?: string;
   description?: string;
   keywords?: string[];
+  verbose?: boolean;
 }
 
 /**
@@ -47,15 +64,82 @@ export interface IndexResult {
 }
 
 /**
+ * Load project configuration from codex7.json or context7.json
+ */
+function loadProjectConfig(projectPath: string): ProjectConfig | null {
+  // Try codex7.json first, then context7.json
+  for (const configName of ["codex7.json", "context7.json"]) {
+    const configPath = path.join(projectPath, configName);
+    if (fs.existsSync(configPath)) {
+      try {
+        const content = fs.readFileSync(configPath, "utf-8");
+        return JSON.parse(content) as ProjectConfig;
+      } catch (error) {
+        console.error(`Warning: Failed to parse ${configName}: ${error}`);
+      }
+    }
+  }
+  return null;
+}
+
+/**
+ * Check if a path matches any of the exclude patterns
+ */
+function matchesExcludePattern(relativePath: string, patterns: string[]): boolean {
+  const normalizedPath = relativePath.replace(/\\/g, "/");
+  const pathParts = normalizedPath.split("/");
+
+  for (const pattern of patterns) {
+    // Root-specific pattern (starts with ./)
+    if (pattern.startsWith("./")) {
+      const rootPattern = pattern.slice(2);
+      if (normalizedPath === rootPattern || normalizedPath.startsWith(rootPattern + "/")) {
+        return true;
+      }
+    }
+    // Simple folder name - matches anywhere in tree
+    else if (!pattern.includes("/")) {
+      if (pathParts.includes(pattern)) {
+        return true;
+      }
+    }
+    // Path pattern - matches specific path
+    else {
+      if (normalizedPath === pattern || normalizedPath.startsWith(pattern + "/")) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+/**
+ * Check if a filename matches any of the exclude file patterns
+ */
+function matchesExcludeFile(filename: string, patterns: string[]): boolean {
+  return patterns.includes(filename);
+}
+
+/**
  * Index a local project and store its documentation
  */
 export async function indexProject(config: IndexConfig): Promise<IndexResult> {
   const projectPath = path.resolve(config.projectPath);
   const warnings: string[] = [];
+  const verbose = config.verbose ?? false;
 
   // Validate project exists
   if (!fs.existsSync(projectPath)) {
     throw new Error(`Project path does not exist: ${projectPath}`);
+  }
+
+  // Load project config (codex7.json or context7.json)
+  const projectConfig = loadProjectConfig(projectPath);
+  if (projectConfig && verbose) {
+    const configFile = fs.existsSync(path.join(projectPath, "codex7.json"))
+      ? "codex7.json"
+      : "context7.json";
+    console.error(`Using configuration from ${configFile}`);
   }
 
   // Extract project metadata
@@ -69,15 +153,26 @@ export async function indexProject(config: IndexConfig): Promise<IndexResult> {
     );
   }
 
-  const title = config.title || metadata.title || libraryId;
-  const description = config.description || metadata.description || "";
+  // Use config file values, then CLI overrides, then metadata
+  const title = config.title || projectConfig?.projectTitle || metadata.title || libraryId;
+  const description = config.description || projectConfig?.description || metadata.description || "";
   const keywords = [...(config.keywords || []), ...(metadata.keywords || [])];
+  const rules = projectConfig?.rules || [];
 
   console.error(`Indexing: ${title} (${libraryId})`);
 
   // Find and parse documentation files
-  const docFiles = findDocumentationFiles(projectPath);
+  const docFiles = findDocumentationFiles(projectPath, projectConfig);
   console.error(`Found ${docFiles.length} documentation files`);
+
+  if (verbose && docFiles.length > 0) {
+    console.error("\nDocumentation files:");
+    for (const file of docFiles) {
+      const relativePath = path.relative(projectPath, file.path);
+      console.error(`  [${file.type}] ${relativePath}`);
+    }
+    console.error("");
+  }
 
   if (docFiles.length === 0) {
     warnings.push("No documentation files found");
@@ -95,6 +190,10 @@ export async function indexProject(config: IndexConfig): Promise<IndexResult> {
 
       allSnippets.push(...snippets);
       processedFiles.push(relativePath);
+
+      if (verbose) {
+        console.error(`  Parsing ${relativePath} → ${snippets.length} snippets`);
+      }
     } catch (error) {
       warnings.push(`Failed to parse ${file.path}: ${error}`);
     }
@@ -136,6 +235,7 @@ export async function indexProject(config: IndexConfig): Promise<IndexResult> {
     packageName: metadata.packageName,
     version: metadata.version,
     keywords,
+    rules: rules.length > 0 ? rules : null,
     totalTokens,
     totalSnippets: allSnippets.length,
     totalPages: processedFiles.length,
@@ -248,17 +348,80 @@ function extractProjectMetadata(projectPath: string): {
 }
 
 /**
+ * Default folders to exclude (similar to Context7 defaults)
+ */
+const DEFAULT_EXCLUDE_FOLDERS = [
+  "node_modules",
+  ".git",
+  "dist",
+  "build",
+  "coverage",
+  "archive",
+  "deprecated",
+  "i18n",
+];
+
+/**
+ * Default files to exclude (similar to Context7 defaults)
+ */
+const DEFAULT_EXCLUDE_FILES = [
+  "CHANGELOG.md",
+  "LICENSE.md",
+  "LICENSE",
+  "CODE_OF_CONDUCT.md",
+  "CONTRIBUTING.md",
+  "SECURITY.md",
+];
+
+/**
  * Find documentation files in the project
  */
 function findDocumentationFiles(
-  projectPath: string
+  projectPath: string,
+  config: ProjectConfig | null
 ): Array<{ path: string; type: SourceType }> {
   const files: Array<{ path: string; type: SourceType }> = [];
+
+  // Merge exclude patterns with defaults
+  const excludeFolders = [
+    ...DEFAULT_EXCLUDE_FOLDERS,
+    ...(config?.excludeFolders || []),
+  ];
+  const excludeFiles = [
+    ...DEFAULT_EXCLUDE_FILES,
+    ...(config?.excludeFiles || []),
+  ];
+
+  // If specific folders are configured, only scan those
+  if (config?.folders && config.folders.length > 0) {
+    // Always include root-level markdown files
+    for (const name of ["README.md", "README.rst", "README.txt", "readme.md"]) {
+      const filePath = path.join(projectPath, name);
+      if (fs.existsSync(filePath) && !matchesExcludeFile(name, excludeFiles)) {
+        files.push({ path: filePath, type: "readme" });
+      }
+    }
+
+    // Scan configured folders
+    for (const folder of config.folders) {
+      const folderPath = path.join(projectPath, folder);
+      if (fs.existsSync(folderPath) && fs.statSync(folderPath).isDirectory()) {
+        const type = inferSourceType(folder);
+        files.push(
+          ...findMarkdownFilesWithExclusions(folderPath, projectPath, type, excludeFolders, excludeFiles)
+        );
+      }
+    }
+
+    return files;
+  }
+
+  // Default behavior: scan standard locations
 
   // README files
   for (const name of ["README.md", "README.rst", "README.txt", "readme.md"]) {
     const filePath = path.join(projectPath, name);
-    if (fs.existsSync(filePath)) {
+    if (fs.existsSync(filePath) && !matchesExcludeFile(name, excludeFiles)) {
       files.push({ path: filePath, type: "readme" });
     }
   }
@@ -266,7 +429,7 @@ function findDocumentationFiles(
   // API documentation
   for (const name of ["API.md", "api.md", "REFERENCE.md"]) {
     const filePath = path.join(projectPath, name);
-    if (fs.existsSync(filePath)) {
+    if (fs.existsSync(filePath) && !matchesExcludeFile(name, excludeFiles)) {
       files.push({ path: filePath, type: "api" });
     }
   }
@@ -274,30 +437,44 @@ function findDocumentationFiles(
   // docs/ directory
   const docsDir = path.join(projectPath, "docs");
   if (fs.existsSync(docsDir) && fs.statSync(docsDir).isDirectory()) {
-    files.push(...findMarkdownFiles(docsDir, "docs"));
+    files.push(...findMarkdownFilesWithExclusions(docsDir, projectPath, "docs", excludeFolders, excludeFiles));
   }
 
   // examples/ directory
   const examplesDir = path.join(projectPath, "examples");
   if (fs.existsSync(examplesDir) && fs.statSync(examplesDir).isDirectory()) {
-    files.push(...findMarkdownFiles(examplesDir, "examples"));
+    files.push(...findMarkdownFilesWithExclusions(examplesDir, projectPath, "examples", excludeFolders, excludeFiles));
   }
 
   // content/ directory
   const contentDir = path.join(projectPath, "content");
   if (fs.existsSync(contentDir) && fs.statSync(contentDir).isDirectory()) {
-    files.push(...findMarkdownFiles(contentDir, "content"));
+    files.push(...findMarkdownFilesWithExclusions(contentDir, projectPath, "content", excludeFolders, excludeFiles));
   }
 
   return files;
 }
 
 /**
- * Recursively find markdown files in a directory
+ * Infer source type from folder name
  */
-function findMarkdownFiles(
+function inferSourceType(folder: string): SourceType {
+  const lower = folder.toLowerCase();
+  if (lower.includes("example")) return "examples";
+  if (lower.includes("api") || lower.includes("reference")) return "api";
+  if (lower.includes("content")) return "content";
+  return "docs";
+}
+
+/**
+ * Recursively find markdown files in a directory with exclusion support
+ */
+function findMarkdownFilesWithExclusions(
   dir: string,
-  type: SourceType
+  projectPath: string,
+  type: SourceType,
+  excludeFolders: string[],
+  excludeFiles: string[]
 ): Array<{ path: string; type: SourceType }> {
   const files: Array<{ path: string; type: SourceType }> = [];
 
@@ -306,14 +483,23 @@ function findMarkdownFiles(
 
     for (const entry of entries) {
       const fullPath = path.join(dir, entry.name);
+      const relativePath = path.relative(projectPath, fullPath);
 
       if (entry.isDirectory()) {
-        // Skip node_modules and hidden directories
-        if (!entry.name.startsWith(".") && entry.name !== "node_modules") {
-          files.push(...findMarkdownFiles(fullPath, type));
+        // Check exclusion patterns
+        if (
+          !entry.name.startsWith(".") &&
+          !matchesExcludePattern(relativePath, excludeFolders)
+        ) {
+          files.push(
+            ...findMarkdownFilesWithExclusions(fullPath, projectPath, type, excludeFolders, excludeFiles)
+          );
         }
       } else if (entry.isFile() && /\.(md|mdx|rst)$/i.test(entry.name)) {
-        files.push({ path: fullPath, type });
+        // Check file exclusions
+        if (!matchesExcludeFile(entry.name, excludeFiles)) {
+          files.push({ path: fullPath, type });
+        }
       }
     }
   } catch {
