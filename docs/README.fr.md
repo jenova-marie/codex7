@@ -1,8 +1,8 @@
-# Context7 MCP - Documentation à jour pour vos prompts
+# Codex7 MCP - Documentation à jour pour vos prompts
 
-[![Site Web](https://img.shields.io/badge/Website-context7.com-blue)](https://context7.com) [![badge smithery](https://smithery.ai/badge/@upstash/context7-mcp)](https://smithery.ai/server/@upstash/context7-mcp) [<img alt="Installer dans VS Code (npx)" src="https://img.shields.io/badge/VS_Code-VS_Code?style=flat-square&label=Installer%20Context7%20MCP&color=0098FF">](https://insiders.vscode.dev/redirect?url=vscode%3Amcp%2Finstall%3F%7B%22name%22%3A%22context7%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22%40upstash%2Fcontext7-mcp%40latest%22%5D%7D)
+[![Site Web](https://img.shields.io/badge/Website-codex7.com-blue)](https://codex7.com) [![badge smithery](https://smithery.ai/badge/@upstash/codex7-mcp)](https://smithery.ai/server/@upstash/codex7-mcp) [<img alt="Installer dans VS Code (npx)" src="https://img.shields.io/badge/VS_Code-VS_Code?style=flat-square&label=Installer%20Codex7%20MCP&color=0098FF">](https://insiders.vscode.dev/redirect?url=vscode%3Amcp%2Finstall%3F%7B%22name%22%3A%22codex7%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22%40upstash%2Fcodex7-mcp%40latest%22%5D%7D)
 
-## ❌ Sans Context7
+## ❌ Sans Codex7
 
 Les LLMs s’appuient sur des informations obsolètes ou génériques concernant les bibliothèques que vous utilisez. Vous obtenez :
 
@@ -10,24 +10,24 @@ Les LLMs s’appuient sur des informations obsolètes ou génériques concernant
 - ❌ Des APIs inventées qui n’existent même pas
 - ❌ Des réponses génériques pour d’anciennes versions de packages
 
-## ✅ Avec Context7
+## ✅ Avec Codex7
 
-Context7 MCP récupère la documentation et les exemples de code à jour, spécifiques à la version, directement à la source — et les place dans votre prompt.
+Codex7 MCP récupère la documentation et les exemples de code à jour, spécifiques à la version, directement à la source — et les place dans votre prompt.
 
-Ajoutez `use context7` à votre prompt dans Cursor :
+Ajoutez `use codex7` à votre prompt dans Cursor :
 
 ```txt
-Crée un projet Next.js basique avec app router. use context7
+Crée un projet Next.js basique avec app router. use codex7
 ```
 
 ```txt
-Crée un script pour supprimer les lignes où la ville est "" avec des identifiants PostgreSQL. use context7
+Crée un script pour supprimer les lignes où la ville est "" avec des identifiants PostgreSQL. use codex7
 ```
 
-Context7 apporte des exemples de code et de la documentation à jour directement dans le contexte de votre LLM.
+Codex7 apporte des exemples de code et de la documentation à jour directement dans le contexte de votre LLM.
 
 - 1️⃣ Rédigez votre prompt naturellement
-- 2️⃣ Dites au LLM `use context7`
+- 2️⃣ Dites au LLM `use codex7`
 - 3️⃣ Obtenez des réponses de code qui fonctionnent
 
 Plus besoin de changer d’onglet, plus d’APIs inventées, plus de code obsolète.
@@ -41,10 +41,10 @@ Plus besoin de changer d’onglet, plus d’APIs inventées, plus de code obsol�
 
 ### Installation via Smithery
 
-Pour installer Context7 MCP Server pour Claude Desktop automatiquement via [Smithery](https://smithery.ai/server/@upstash/context7-mcp) :
+Pour installer Codex7 MCP Server pour Claude Desktop automatiquement via [Smithery](https://smithery.ai/server/@upstash/codex7-mcp) :
 
 ```bash
-npx -y @smithery/cli install @upstash/context7-mcp --client claude
+npx -y @smithery/cli install @upstash/codex7-mcp --client claude
 ```
 
 ### Installation dans Cursor
@@ -56,9 +56,9 @@ La méthode recommandée est de coller la configuration suivante dans votre fich
 ```json
 {
   "mcpServers": {
-    "context7": {
+    "codex7": {
       "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp@latest"]
+      "args": ["-y", "@upstash/codex7-mcp@latest"]
     }
   }
 }
@@ -70,9 +70,9 @@ La méthode recommandée est de coller la configuration suivante dans votre fich
 ```json
 {
   "mcpServers": {
-    "context7": {
+    "codex7": {
       "command": "bunx",
-      "args": ["-y", "@upstash/context7-mcp@latest"]
+      "args": ["-y", "@upstash/codex7-mcp@latest"]
     }
   }
 }
@@ -86,9 +86,9 @@ La méthode recommandée est de coller la configuration suivante dans votre fich
 ```json
 {
   "mcpServers": {
-    "context7": {
+    "codex7": {
       "command": "deno",
-      "args": ["run", "--allow-net", "npm:@upstash/context7-mcp"]
+      "args": ["run", "--allow-net", "npm:@upstash/codex7-mcp"]
     }
   }
 }
@@ -103,9 +103,9 @@ Ajoutez ceci à votre fichier de configuration MCP Windsurf. Voir la [documentat
 ```json
 {
   "mcpServers": {
-    "context7": {
+    "codex7": {
       "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp@latest"]
+      "args": ["-y", "@upstash/codex7-mcp@latest"]
     }
   }
 }
@@ -113,18 +113,18 @@ Ajoutez ceci à votre fichier de configuration MCP Windsurf. Voir la [documentat
 
 ### Installation dans VS Code
 
-[<img alt="Installer dans VS Code (npx)" src="https://img.shields.io/badge/VS_Code-VS_Code?style=flat-square&label=Installer%20Context7%20MCP&color=0098FF">](https://insiders.vscode.dev/redirect?url=vscode%3Amcp%2Finstall%3F%7B%22name%22%3A%22context7%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22%40upstash%2Fcontext7-mcp%40latest%22%5D%7D)
-[<img alt="Installer dans VS Code Insiders (npx)" src="https://img.shields.io/badge/VS_Code_Insiders-VS_Code_Insiders?style=flat-square&label=Installer%20Context7%20MCP&color=24bfa5">](https://insiders.vscode.dev/redirect?url=vscode-insiders%3Amcp%2Finstall%3F%7B%22name%22%3A%22context7%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22%40upstash%2Fcontext7-mcp%40latest%22%5D%7D)
+[<img alt="Installer dans VS Code (npx)" src="https://img.shields.io/badge/VS_Code-VS_Code?style=flat-square&label=Installer%20Codex7%20MCP&color=0098FF">](https://insiders.vscode.dev/redirect?url=vscode%3Amcp%2Finstall%3F%7B%22name%22%3A%22codex7%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22%40upstash%2Fcodex7-mcp%40latest%22%5D%7D)
+[<img alt="Installer dans VS Code Insiders (npx)" src="https://img.shields.io/badge/VS_Code_Insiders-VS_Code_Insiders?style=flat-square&label=Installer%20Codex7%20MCP&color=24bfa5">](https://insiders.vscode.dev/redirect?url=vscode-insiders%3Amcp%2Finstall%3F%7B%22name%22%3A%22codex7%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22%40upstash%2Fcodex7-mcp%40latest%22%5D%7D)
 
 Ajoutez ceci à votre fichier de configuration MCP VS Code. Voir la [documentation VS Code MCP](https://code.visualstudio.com/docs/copilot/chat/mcp-servers) pour plus d'informations.
 
 ```json
 {
   "servers": {
-    "Context7": {
+    "Codex7": {
       "type": "stdio",
       "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp@latest"]
+      "args": ["-y", "@upstash/codex7-mcp@latest"]
     }
   }
 }
@@ -132,15 +132,15 @@ Ajoutez ceci à votre fichier de configuration MCP VS Code. Voir la [documentati
 
 ### Installation dans Zed
 
-Peut être installé via [Zed Extensions](https://zed.dev/extensions?query=Context7) ou en ajoutant ceci à votre `settings.json` Zed. Voir la [documentation Zed Context Server](https://zed.dev/docs/assistant/context-servers).
+Peut être installé via [Zed Extensions](https://zed.dev/extensions?query=Codex7) ou en ajoutant ceci à votre `settings.json` Zed. Voir la [documentation Zed Context Server](https://zed.dev/docs/assistant/context-servers).
 
 ```json
 {
   "context_servers": {
-    "Context7": {
+    "Codex7": {
       "command": {
         "path": "npx",
-        "args": ["-y", "@upstash/context7-mcp@latest"]
+        "args": ["-y", "@upstash/codex7-mcp@latest"]
       },
       "settings": {}
     }
@@ -153,7 +153,7 @@ Peut être installé via [Zed Extensions](https://zed.dev/extensions?query=Conte
 Exécutez cette commande. Voir la [documentation Claude Code MCP](https://docs.anthropic.com/fr/docs/claude-code/mcp).
 
 ```sh
-claude mcp add context7 -- npx -y @upstash/context7-mcp@latest
+claude mcp add codex7 -- npx -y @upstash/codex7-mcp@latest
 ```
 
 ### Installation dans Claude Desktop
@@ -163,9 +163,9 @@ Ajoutez ceci à votre fichier `claude_desktop_config.json`. Voir la [documentati
 ```json
 {
   "mcpServers": {
-    "Context7": {
+    "Codex7": {
       "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp@latest"]
+      "args": ["-y", "@upstash/codex7-mcp@latest"]
     }
   }
 }
@@ -178,15 +178,15 @@ Ouvrez la page "Settings" de l'application, naviguez jusqu'à "Plugins", et entr
 ```json
 {
   "mcpServers": {
-    "context7": {
+    "codex7": {
       "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp@latest"]
+      "args": ["-y", "@upstash/codex7-mcp@latest"]
     }
   }
 }
 ```
 
-Une fois enregistré, saisissez dans le chat `get-library-docs` suivi de votre ID de documentation Context7 (par exemple, `get-library-docs /nuxt/ui`). Plus d'informations sont disponibles sur le [site de documentation BoltAI](https://docs.boltai.com/docs/plugins/mcp-servers). Pour BoltAI sur iOS, [consultez ce guide](https://docs.boltai.com/docs/boltai-mobile/mcp-servers).
+Une fois enregistré, saisissez dans le chat `get-library-docs` suivi de votre ID de documentation Codex7 (par exemple, `get-library-docs /nuxt/ui`). Plus d'informations sont disponibles sur le [site de documentation BoltAI](https://docs.boltai.com/docs/plugins/mcp-servers). Pour BoltAI sur iOS, [consultez ce guide](https://docs.boltai.com/docs/boltai-mobile/mcp-servers).
 
 ### Installation dans Copilot Coding Agent
 
@@ -195,9 +195,9 @@ Ajoutez la configuration suivante à la section `mcp` de votre fichier de config
 ```json
 {
   "mcpServers": {
-    "context7": {
+    "codex7": {
       "type": "http",
-      "url": "https://mcp.context7.com/mcp",
+      "url": "https://mcp.codex7.com/mcp",
       "tools": ["get-library-docs", "resolve-library-id"]
     }
   }
@@ -223,13 +223,13 @@ Si vous préférez exécuter le serveur MCP dans un conteneur Docker :
     WORKDIR /app
 
     # Installer la dernière version en global
-    RUN npm install -g @upstash/context7-mcp@latest
+    RUN npm install -g @upstash/codex7-mcp@latest
 
     # Exposer le port par défaut si besoin (optionnel)
     # EXPOSE 3000
 
     # Commande par défaut
-    CMD ["context7-mcp"]
+    CMD ["codex7-mcp"]
     ```
 
     </details>
@@ -237,7 +237,7 @@ Si vous préférez exécuter le serveur MCP dans un conteneur Docker :
     Puis, construisez l’image :
 
     ```bash
-    docker build -t context7-mcp .
+    docker build -t codex7-mcp .
     ```
 
 2.  **Configurez votre client MCP :**
@@ -254,7 +254,7 @@ Si vous préférez exécuter le serveur MCP dans un conteneur Docker :
           "disabled": false,
           "timeout": 60,
           "command": "docker",
-          "args": ["run", "-i", "--rm", "context7-mcp"],
+          "args": ["run", "-i", "--rm", "codex7-mcp"],
           "transportType": "stdio"
         }
       }
@@ -270,9 +270,9 @@ La configuration sous Windows est légèrement différente par rapport à Linux 
 ```json
 {
   "mcpServers": {
-    "github.com/upstash/context7-mcp": {
+    "github.com/upstash/codex7-mcp": {
       "command": "cmd",
-      "args": ["/c", "npx", "-y", "@upstash/context7-mcp@latest"],
+      "args": ["/c", "npx", "-y", "@upstash/codex7-mcp@latest"],
       "disabled": false,
       "autoApprove": []
     }
@@ -289,9 +289,9 @@ Exemples:
 ```json
 {
   "mcpServers": {
-    "context7": {
+    "codex7": {
       "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp@latest"],
+      "args": ["-y", "@upstash/codex7-mcp@latest"],
       "env": {
         "DEFAULT_MINIMUM_TOKENS": "10000"
       }
@@ -302,10 +302,10 @@ Exemples:
 
 ### Outils disponibles
 
-- `resolve-library-id` : Résout un nom de bibliothèque général en un ID compatible Context7.
+- `resolve-library-id` : Résout un nom de bibliothèque général en un ID compatible Codex7.
   - `libraryName` (obligatoire)
-- `get-library-docs` : Récupère la documentation d’une bibliothèque via un ID Context7.
-  - `context7CompatibleLibraryID` (obligatoire)
+- `get-library-docs` : Récupère la documentation d’une bibliothèque via un ID Codex7.
+  - `codex7CompatibleLibraryID` (obligatoire)
   - `topic` (optionnel) : Focaliser la doc sur un sujet précis (ex : "routing", "hooks")
   - `tokens` (optionnel, par défaut 10000) : Nombre max de tokens à retourner. Les valeurs < 10000 sont automatiquement augmentées à 10000.
 
@@ -328,9 +328,9 @@ bun run build
 ```json
 {
   "mcpServers": {
-    "context7": {
+    "codex7": {
       "command": "npx",
-      "args": ["tsx", "/path/to/folder/context7-mcp/src/index.ts"]
+      "args": ["tsx", "/path/to/folder/codex7-mcp/src/index.ts"]
     }
   }
 }
@@ -339,7 +339,7 @@ bun run build
 ### Tester avec MCP Inspector
 
 ```bash
-npx -y @modelcontextprotocol/inspector npx @upstash/context7-mcp@latest
+npx -y @modelcontextprotocol/inspector npx @upstash/codex7-mcp@latest
 ```
 
 ## Dépannage
@@ -351,9 +351,9 @@ Si vous voyez cette erreur, essayez d’utiliser `bunx` à la place de `npx`.
 ```json
 {
   "mcpServers": {
-    "context7": {
+    "codex7": {
       "command": "bunx",
-      "args": ["-y", "@upstash/context7-mcp@latest"]
+      "args": ["-y", "@upstash/codex7-mcp@latest"]
     }
   }
 }
@@ -368,9 +368,9 @@ Si vous rencontrez une erreur comme : `Error: Cannot find module 'uriTemplate.js
 ```json
 {
   "mcpServers": {
-    "context7": {
+    "codex7": {
       "command": "npx",
-      "args": ["-y", "--node-options=--experimental-vm-modules", "@upstash/context7-mcp@1.0.6"]
+      "args": ["-y", "--node-options=--experimental-vm-modules", "@upstash/codex7-mcp@1.0.6"]
     }
   }
 }
@@ -385,22 +385,22 @@ Si vous rencontrez une erreur comme : `Error: Cannot find module 'uriTemplate.js
 
 ## Clause de non-responsabilité
 
-Les projets Context7 sont des contributions de la communauté, et bien que nous nous efforcions de maintenir une haute qualité, nous ne pouvons garantir l'exactitude, l'exhaustivité ou la sécurité de toute la documentation des bibliothèques. Les projets listés dans Context7 sont développés et maintenus par leurs propriétaires respectifs, et non par Context7. Si vous rencontrez un contenu suspect, inapproprié ou potentiellement nuisible, veuillez utiliser le bouton "Signaler" sur la page du projet pour nous le faire savoir immédiatement. Nous prenons tous les signalements au sérieux et examinerons rapidement les contenus signalés pour maintenir l'intégrité et la sécurité de notre plateforme. En utilisant Context7, vous reconnaissez que vous le faites à votre propre discrétion et à vos risques et périls.
+Les projets Codex7 sont des contributions de la communauté, et bien que nous nous efforcions de maintenir une haute qualité, nous ne pouvons garantir l'exactitude, l'exhaustivité ou la sécurité de toute la documentation des bibliothèques. Les projets listés dans Codex7 sont développés et maintenus par leurs propriétaires respectifs, et non par Codex7. Si vous rencontrez un contenu suspect, inapproprié ou potentiellement nuisible, veuillez utiliser le bouton "Signaler" sur la page du projet pour nous le faire savoir immédiatement. Nous prenons tous les signalements au sérieux et examinerons rapidement les contenus signalés pour maintenir l'intégrité et la sécurité de notre plateforme. En utilisant Codex7, vous reconnaissez que vous le faites à votre propre discrétion et à vos risques et périls.
 
-## Context7 dans les médias
+## Codex7 dans les médias
 
 - [Better Stack: "Free Tool Makes Cursor 10x Smarter"](https://youtu.be/52FC3qObp9E)
 - [Cole Medin: "This is Hands Down the BEST MCP Server for AI Coding Assistants"](https://www.youtube.com/watch?v=G7gK8H6u7Rs)
-- [Income stream surfers: "Context7 + SequentialThinking MCPs: Is This AGI?"](https://www.youtube.com/watch?v=-ggvzyLpK6o)
-- [Julian Goldie SEO: "Context7: New MCP AI Agent Update"](https://www.youtube.com/watch?v=CTZm6fBYisc)
+- [Income stream surfers: "Codex7 + SequentialThinking MCPs: Is This AGI?"](https://www.youtube.com/watch?v=-ggvzyLpK6o)
+- [Julian Goldie SEO: "Codex7: New MCP AI Agent Update"](https://www.youtube.com/watch?v=CTZm6fBYisc)
 - [JeredBlu: "Context 7 MCP: Get Documentation Instantly + VS Code Setup"](https://www.youtube.com/watch?v=-ls0D-rtET4)
-- [Income stream surfers: "Context7: The New MCP Server That Will CHANGE AI Coding"](https://www.youtube.com/watch?v=PS-2Azb-C3M)
-- [AICodeKing: "Context7 + Cline & RooCode: This MCP Server Makes CLINE 100X MORE EFFECTIVE!"](https://www.youtube.com/watch?v=qZfENAPMnyo)
+- [Income stream surfers: "Codex7: The New MCP Server That Will CHANGE AI Coding"](https://www.youtube.com/watch?v=PS-2Azb-C3M)
+- [AICodeKing: "Codex7 + Cline & RooCode: This MCP Server Makes CLINE 100X MORE EFFECTIVE!"](https://www.youtube.com/watch?v=qZfENAPMnyo)
 - [Sean Kochel: "5 MCP Servers For Vibe Coding Glory (Just Plug-In & Go)"](https://www.youtube.com/watch?v=LqTQi8qexJM)
 
 ## Historique des stars
 
-[![Graphique d'historique des stars](https://api.star-history.com/svg?repos=upstash/context7&type=Date)](https://www.star-history.com/#upstash/context7&Date)
+[![Graphique d'historique des stars](https://api.star-history.com/svg?repos=upstash/codex7&type=Date)](https://www.star-history.com/#upstash/codex7&Date)
 
 ## Licence
 

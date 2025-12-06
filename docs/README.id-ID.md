@@ -1,9 +1,9 @@
-# Context7 MCP - Dokumentasi Kode Terkini Untuk Setiap Permintaan
+# Codex7 MCP - Dokumentasi Kode Terkini Untuk Setiap Permintaan
 
-[![Website](https://img.shields.io/badge/Website-context7.com-blue)](https://context7.com) [![smithery badge](https://smithery.ai/badge/@upstash/context7-mcp)](https://smithery.ai/server/@upstash/context7-mcp) [<img alt="Install in VS Code (npx)" src="https://img.shields.io/badge/VS_Code-VS_Code?style=flat-square&label=Install%20Context7%20MCP&color=0098FF">](https://insiders.vscode.dev/redirect?url=vscode%3Amcp%2Finstall%3F%7B%22name%22%3A%22context7%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22%40upstash%2Fcontext7-mcp%40latest%22%5D%7D)
+[![Website](https://img.shields.io/badge/Website-codex7.com-blue)](https://codex7.com) [![smithery badge](https://smithery.ai/badge/@upstash/codex7-mcp)](https://smithery.ai/server/@upstash/codex7-mcp) [<img alt="Install in VS Code (npx)" src="https://img.shields.io/badge/VS_Code-VS_Code?style=flat-square&label=Install%20Codex7%20MCP&color=0098FF">](https://insiders.vscode.dev/redirect?url=vscode%3Amcp%2Finstall%3F%7B%22name%22%3A%22codex7%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22%40upstash%2Fcodex7-mcp%40latest%22%5D%7D)
 [![English](https://img.shields.io/badge/docs-English-blue)](../README.md) [![繁體中文](https://img.shields.io/badge/docs-繁體中文-yellow)](./README.zh-TW.md) [![简体中文](https://img.shields.io/badge/docs-简体中文-yellow)](./README.zh-CN.md) [![日本語](https://img.shields.io/badge/docs-日本語-b7003a)](./README.ja.md) [![한국어 문서](https://img.shields.io/badge/docs-한국어-green)](./README.ko.md) [![Documentación en Español](https://img.shields.io/badge/docs-Español-orange)](./README.es.md) [![Documentation en Français](https://img.shields.io/badge/docs-Français-blue)](./README.fr.md) [![Documentação em Português (Brasil)](<https://img.shields.io/badge/docs-Português%20(Brasil)-purple>)](./README.pt-BR.md) [![Documentazione in italiano](https://img.shields.io/badge/docs-Italian-red)](./README.it.md) [![Dokumentasi Bahasa Indonesia](https://img.shields.io/badge/docs-Bahasa%20Indonesia-pink)](./README.id-ID.md) [![Dokumentation auf Deutsch](https://img.shields.io/badge/docs-Deutsch-darkgreen)](./README.de.md) [![Документация на русском языке](https://img.shields.io/badge/docs-Русский-darkblue)](./README.ru.md) [![Українська документація](https://img.shields.io/badge/docs-Українська-lightblue)](./README.uk.md) [![Türkçe Doküman](https://img.shields.io/badge/docs-Türkçe-blue)](./README.tr.md) [![Arabic Documentation](https://img.shields.io/badge/docs-Arabic-white)](./README.ar.md)
 
-## ❌ Tanpa Context7
+## ❌ Tanpa Codex7
 
 LLM bergantung pada informasi yang sudah usang atau generik tentang pustaka yang Anda gunakan. Anda mendapatkan:
 
@@ -11,29 +11,29 @@ LLM bergantung pada informasi yang sudah usang atau generik tentang pustaka yang
 - ❌ API yang diimajinasikan tidak pernah ada
 - ❌ Jawaban generik untuk versi paket yang lama
 
-## ✅ Dengan Context7
+## ✅ Dengan Codex7
 
-Context7 MCP mengambil dokumentasi dan contoh kode terkini yang spesifik versi langsung dari sumbernya — dan menempatkannya langsung ke dalam prompt Anda.
-Tambahkan `use context7` ke prompt Anda di Cursor:
+Codex7 MCP mengambil dokumentasi dan contoh kode terkini yang spesifik versi langsung dari sumbernya — dan menempatkannya langsung ke dalam prompt Anda.
+Tambahkan `use codex7` ke prompt Anda di Cursor:
 
 ```txt
-Buat middleware Next.js yang memeriksa JWT valid di cookie dan mengarahkan pengguna yang tidak terautentikasi ke `/login`. use context7
+Buat middleware Next.js yang memeriksa JWT valid di cookie dan mengarahkan pengguna yang tidak terautentikasi ke `/login`. use codex7
 ```
 
 ```txt
-Konfigurasikan skrip Cloudflare Worker untuk menyimpan respons API JSON selama lima menit. use context7
+Konfigurasikan skrip Cloudflare Worker untuk menyimpan respons API JSON selama lima menit. use codex7
 ```
 
-Context7 mengambil contoh kode dan dokumentasi terkini langsung ke konteks LLM.
+Codex7 mengambil contoh kode dan dokumentasi terkini langsung ke konteks LLM.
 
 - 1️⃣ Tulis permintaan Anda secara alami
-- 2️⃣ Beri tahu LLM untuk `use context7`
+- 2️⃣ Beri tahu LLM untuk `use codex7`
 - 3️⃣ Dapatkan jawaban kode yang berfungsi
   Tidak perlu berpindah tab, tidak ada API yang diimajinasikan yang tidak ada, tidak ada hasil kode usang.
 
 ## 📚 Menambahkan Proyek
 
-Kunjungi [panduan penambahan proyek](./adding-projects.md) untuk mempelajari cara menambahkan (atau memperbarui) pustaka favorit Anda ke Context7.
+Kunjungi [panduan penambahan proyek](./adding-projects.md) untuk mempelajari cara menambahkan (atau memperbarui) pustaka favorit Anda ke Codex7.
 
 ## 🛠️ Instalasi
 
@@ -44,11 +44,11 @@ Kunjungi [panduan penambahan proyek](./adding-projects.md) untuk mempelajari car
 
 <details>
 <summary><b>Menginstal melalui Smithery</b></summary>
-Untuk menginstal Context7 MCP Server untuk klien apa pun secara otomatis melalui [Smithery](https://smithery.ai/server/@upstash/context7-mcp):
+Untuk menginstal Codex7 MCP Server untuk klien apa pun secara otomatis melalui [Smithery](https://smithery.ai/server/@upstash/codex7-mcp):
 ```bash
-npx -y @smithery/cli@latest install @upstash/context7-mcp --client <NAMA_KLIEN> --key <KUNCI_SMITHERY_ANDA>
+npx -y @smithery/cli@latest install @upstash/codex7-mcp --client <NAMA_KLIEN> --key <KUNCI_SMITHERY_ANDA>
 ```
-Anda dapat menemukan kunci Smithery Anda di [halaman web Smithery.ai](https://smithery.ai/server/@upstash/context7-mcp).
+Anda dapat menemukan kunci Smithery Anda di [halaman web Smithery.ai](https://smithery.ai/server/@upstash/codex7-mcp).
 </details>
 
 <details>
@@ -59,13 +59,13 @@ Menyalin konfigurasi berikut ke file `~/.cursor/mcp.json` Anda adalah pendekatan
 
 #### Koneksi Server Remote Cursor
 
-[![Install MCP Server](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/install-mcp?name=context7&config=eyJ1cmwiOiJodHRwczovL21jcC5jb250ZXh0Ny5jb20vbWNwIn0%3D)
+[![Install MCP Server](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/install-mcp?name=codex7&config=eyJ1cmwiOiJodHRwczovL21jcC5jb250ZXh0Ny5jb20vbWNwIn0%3D)
 
 ```json
 {
   "mcpServers": {
-    "context7": {
-      "url": "https://mcp.context7.com/mcp"
+    "codex7": {
+      "url": "https://mcp.codex7.com/mcp"
     }
   }
 }
@@ -73,14 +73,14 @@ Menyalin konfigurasi berikut ke file `~/.cursor/mcp.json` Anda adalah pendekatan
 
 #### Koneksi Server Lokal Cursor
 
-[![Install MCP Server](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/install-mcp?name=context7&config=eyJjb21tYW5kIjoibnB4IC15IEB1cHN0YXNoL2NvbnRleHQ3LW1jcCJ9)
+[![Install MCP Server](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/install-mcp?name=codex7&config=eyJjb21tYW5kIjoibnB4IC15IEB1cHN0YXNoL2NvbnRleHQ3LW1jcCJ9)
 
 ```json
 {
   "mcpServers": {
-    "context7": {
+    "codex7": {
       "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp"]
+      "args": ["-y", "@upstash/codex7-mcp"]
     }
   }
 }
@@ -88,13 +88,13 @@ Menyalin konfigurasi berikut ke file `~/.cursor/mcp.json` Anda adalah pendekatan
 
 <details>
 <summary>Alternatif: Gunakan Bun</summary>
-[![Install MCP Server](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/install-mcp?name=context7&config=eyJjb21tYW5kIjoiYnVueCAteSBAdXBzdGFzaC9jb250ZXh0Ny1tY3AifQ%3D%3D)
+[![Install MCP Server](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/install-mcp?name=codex7&config=eyJjb21tYW5kIjoiYnVueCAteSBAdXBzdGFzaC9jb250ZXh0Ny1tY3AifQ%3D%3D)
 ```json
 {
   "mcpServers": {
-    "context7": {
+    "codex7": {
       "command": "bunx",
-      "args": ["-y", "@upstash/context7-mcp"]
+      "args": ["-y", "@upstash/codex7-mcp"]
     }
   }
 }
@@ -103,13 +103,13 @@ Menyalin konfigurasi berikut ke file `~/.cursor/mcp.json` Anda adalah pendekatan
 
 <details>
 <summary>Alternatif: Gunakan Deno</summary>
-[![Install MCP Server](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/install-mcp?name=context7&config=eyJjb21tYW5kIjoiZGVubyBydW4gLS1hbGxvdy1lbnYgLS1hbGxvdy1uZXQgbnBtOkB1cHN0YXNoL2NvbnRleHQ3LW1jcCJ9)
+[![Install MCP Server](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/install-mcp?name=codex7&config=eyJjb21tYW5kIjoiZGVubyBydW4gLS1hbGxvdy1lbnYgLS1hbGxvdy1uZXQgbnBtOkB1cHN0YXNoL2NvbnRleHQ3LW1jcCJ9)
 ```json
 {
   "mcpServers": {
-    "context7": {
+    "codex7": {
       "command": "deno",
-      "args": ["run", "--allow-env=NO_DEPRECATION,TRACE_DEPRECATION", "--allow-net", "npm:@upstash/context7-mcp"]
+      "args": ["run", "--allow-env=NO_DEPRECATION,TRACE_DEPRECATION", "--allow-net", "npm:@upstash/codex7-mcp"]
     }
   }
 }
@@ -126,8 +126,8 @@ Tambahkan ini ke file konfigurasi MCP Windsurf Anda. Lihat [dokumentasi MCP Wind
 ```json
 {
   "mcpServers": {
-    "context7": {
-      "serverUrl": "https://mcp.context7.com/sse"
+    "codex7": {
+      "serverUrl": "https://mcp.codex7.com/sse"
     }
   }
 }
@@ -138,9 +138,9 @@ Tambahkan ini ke file konfigurasi MCP Windsurf Anda. Lihat [dokumentasi MCP Wind
 ```json
 {
   "mcpServers": {
-    "context7": {
+    "codex7": {
       "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp"]
+      "args": ["-y", "@upstash/codex7-mcp"]
     }
   }
 }
@@ -158,8 +158,8 @@ Untuk detail lebih lanjut, kunjungi [dokumentasi Trae](https://docs.trae.ai/ide/
 ```json
 {
   "mcpServers": {
-    "context7": {
-      "url": "https://mcp.context7.com/mcp"
+    "codex7": {
+      "url": "https://mcp.codex7.com/mcp"
     }
   }
 }
@@ -170,9 +170,9 @@ Untuk detail lebih lanjut, kunjungi [dokumentasi Trae](https://docs.trae.ai/ide/
 ```json
 {
   "mcpServers": {
-    "context7": {
+    "codex7": {
       "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp"]
+      "args": ["-y", "@upstash/codex7-mcp"]
     }
   }
 }
@@ -182,8 +182,8 @@ Untuk detail lebih lanjut, kunjungi [dokumentasi Trae](https://docs.trae.ai/ide/
 
 <details>
 <summary><b>Instal di VS Code</b></summary>
-[<img alt="Install in VS Code (npx)" src="https://img.shields.io/badge/VS_Code-VS_Code?style=flat-square&label=Install%20Context7%20MCP&color=0098FF">](https://insiders.vscode.dev/redirect?url=vscode%3Amcp%2Finstall%3F%7B%22name%22%3A%22context7%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22%40upstash%2Fcontext7-mcp%40latest%22%5D%7D)
-[<img alt="Install in VS Code Insiders (npx)" src="https://img.shields.io/badge/VS_Code_Insiders-VS_Code_Insiders?style=flat-square&label=Install%20Context7%20MCP&color=24bfa5">](https://insiders.vscode.dev/redirect?url=vscode-insiders%3Amcp%2Finstall%3F%7B%22name%22%3A%22context7%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22%40upstash%2Fcontext7-mcp%40latest%22%5D%7D)
+[<img alt="Install in VS Code (npx)" src="https://img.shields.io/badge/VS_Code-VS_Code?style=flat-square&label=Install%20Codex7%20MCP&color=0098FF">](https://insiders.vscode.dev/redirect?url=vscode%3Amcp%2Finstall%3F%7B%22name%22%3A%22codex7%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22%40upstash%2Fcodex7-mcp%40latest%22%5D%7D)
+[<img alt="Install in VS Code Insiders (npx)" src="https://img.shields.io/badge/VS_Code_Insiders-VS_Code_Insiders?style=flat-square&label=Install%20Codex7%20MCP&color=24bfa5">](https://insiders.vscode.dev/redirect?url=vscode-insiders%3Amcp%2Finstall%3F%7B%22name%22%3A%22codex7%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22%40upstash%2Fcodex7-mcp%40latest%22%5D%7D)
 
 Tambahkan ini ke file konfigurasi MCP VS Code Anda. Lihat [dokumentasi MCP VS Code](https://code.visualstudio.com/docs/copilot/chat/mcp-servers) untuk info lebih lanjut.
 
@@ -192,9 +192,9 @@ Tambahkan ini ke file konfigurasi MCP VS Code Anda. Lihat [dokumentasi MCP VS Co
 ```json
 "mcp": {
   "servers": {
-    "context7": {
+    "codex7": {
       "type": "http",
-      "url": "https://mcp.context7.com/mcp"
+      "url": "https://mcp.codex7.com/mcp"
     }
   }
 }
@@ -205,10 +205,10 @@ Tambahkan ini ke file konfigurasi MCP VS Code Anda. Lihat [dokumentasi MCP VS Co
 ```json
 "mcp": {
   "servers": {
-    "context7": {
+    "codex7": {
       "type": "stdio",
       "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp"]
+      "args": ["-y", "@upstash/codex7-mcp"]
     }
   }
 }
@@ -218,15 +218,15 @@ Tambahkan ini ke file konfigurasi MCP VS Code Anda. Lihat [dokumentasi MCP VS Co
 
 <details>
 <summary><b>Instal di Visual Studio 2022</b></summary>
-Anda dapat mengonfigurasi Context7 MCP di Visual Studio 2022 dengan mengikuti [dokumentasi Server MCP Visual Studio](https://learn.microsoft.com/visualstudio/ide/mcp-servers?view=vs-2022).
+Anda dapat mengonfigurasi Codex7 MCP di Visual Studio 2022 dengan mengikuti [dokumentasi Server MCP Visual Studio](https://learn.microsoft.com/visualstudio/ide/mcp-servers?view=vs-2022).
 Tambahkan ini ke file konfigurasi MCP Visual Studio Anda (lihat [dokumentasi Visual Studio](https://learn.microsoft.com/visualstudio/ide/mcp-servers?view=vs-2022) untuk detailnya):
 ```json
 {
   "mcp": {
     "servers": {
-      "context7": {
+      "codex7": {
         "type": "http",
-        "url": "https://mcp.context7.com/mcp"
+        "url": "https://mcp.codex7.com/mcp"
       }
     }
   }
@@ -237,10 +237,10 @@ Atau, untuk server lokal:
 {
   "mcp": {
     "servers": {
-      "context7": {
+      "codex7": {
         "type": "stdio",
         "command": "npx",
-        "args": ["-y", "@upstash/context7-mcp"]
+        "args": ["-y", "@upstash/codex7-mcp"]
       }
     }
   }
@@ -251,14 +251,14 @@ Untuk informasi dan pemecahan masalah lebih lanjut, lihat [dokumentasi Server MC
 
 <details>
 <summary><b>Instal di Zed</b></summary>
-Dapat diinstal melalui [Ekstensi Zed](https://zed.dev/extensions?query=Context7) atau Anda dapat menambahkan ini ke `settings.json` Zed Anda. Lihat [dokumentasi Server Konteks Zed](https://zed.dev/docs/assistant/context-servers) untuk info lebih lanjut.
+Dapat diinstal melalui [Ekstensi Zed](https://zed.dev/extensions?query=Codex7) atau Anda dapat menambahkan ini ke `settings.json` Zed Anda. Lihat [dokumentasi Server Konteks Zed](https://zed.dev/docs/assistant/context-servers) untuk info lebih lanjut.
 ```json
 {
   "context_servers": {
-    "Context7": {
+    "Codex7": {
       "command": {
         "path": "npx",
-        "args": ["-y", "@upstash/context7-mcp"]
+        "args": ["-y", "@upstash/codex7-mcp"]
       },
       "settings": {}
     }
@@ -275,8 +275,8 @@ Lihat [Konfigurasi Gemini CLI](https://github.com/google-gemini/gemini-cli/blob/
 ```json
 {
   "mcpServers": {
-    "context7": {
-      "httpUrl": "https://mcp.context7.com/mcp"
+    "codex7": {
+      "httpUrl": "https://mcp.codex7.com/mcp"
     }
   }
 }
@@ -285,9 +285,9 @@ Atau, untuk server lokal:
 ```json
 {
   "mcpServers": {
-    "context7": {
+    "codex7": {
       "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp"]
+      "args": ["-y", "@upstash/codex7-mcp"]
     }
   }
 }
@@ -302,19 +302,19 @@ Jalankan perintah ini. Lihat [dokumentasi MCP Claude Code](https://docs.anthropi
 #### Koneksi Server Remote Claude Code
 
 ```sh
-claude mcp add --transport http context7 https://mcp.context7.com/mcp
+claude mcp add --transport http codex7 https://mcp.codex7.com/mcp
 ```
 
 Atau menggunakan transport SSE:
 
 ```sh
-claude mcp add --transport sse context7 https://mcp.context7.com/sse
+claude mcp add --transport sse codex7 https://mcp.codex7.com/sse
 ```
 
 #### Koneksi Server Lokal Claude Code
 
 ```sh
-claude mcp add context7 -- npx -y @upstash/context7-mcp
+claude mcp add codex7 -- npx -y @upstash/codex7-mcp
 ```
 
 </details>
@@ -325,9 +325,9 @@ Tambahkan ini ke file `claude_desktop_config.json` Claude Desktop Anda. Lihat [d
 ```json
 {
   "mcpServers": {
-    "Context7": {
+    "Codex7": {
       "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp"]
+      "args": ["-y", "@upstash/codex7-mcp"]
     }
   }
 }
@@ -338,10 +338,10 @@ Tambahkan ini ke file `claude_desktop_config.json` Claude Desktop Anda. Lihat [d
 <summary>
 <b>Instal di Cline</b>
 </summary>
-Anda dapat dengan mudah menginstal Context7 melalui [Pasar Server MCP Cline](https://cline.bot/mcp-marketplace) dengan mengikuti petunjuk berikut:
+Anda dapat dengan mudah menginstal Codex7 melalui [Pasar Server MCP Cline](https://cline.bot/mcp-marketplace) dengan mengikuti petunjuk berikut:
 1. Buka **Cline**.
 2. Klik ikon menu hamburger (☰) untuk masuk ke bagian **Server MCP**.
-3. Gunakan bilah pencarian di tab **Marketplace** untuk menemukan *Context7*.
+3. Gunakan bilah pencarian di tab **Marketplace** untuk menemukan *Codex7*.
 4. Klik tombol **Instal**.
 </details>
 
@@ -351,14 +351,14 @@ Buka halaman "Pengaturan" aplikasi, navigasikan ke "Plugin," dan masukkan JSON b
 ```json
 {
   "mcpServers": {
-    "context7": {
+    "codex7": {
       "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp"]
+      "args": ["-y", "@upstash/codex7-mcp"]
     }
   }
 }
 ```
-Setelah disimpan, masukkan di obrolan `get-library-docs` diikuti oleh ID dokumentasi Context7 Anda (contoh: `get-library-docs /nuxt/ui`). Informasi lebih lanjut tersedia di [situs dokumentasi BoltAI](https://docs.boltai.com/docs/plugins/mcp-servers). Untuk BoltAI di iOS, [lihat panduan ini](https://docs.boltai.com/docs/boltai-mobile/mcp-servers).
+Setelah disimpan, masukkan di obrolan `get-library-docs` diikuti oleh ID dokumentasi Codex7 Anda (contoh: `get-library-docs /nuxt/ui`). Informasi lebih lanjut tersedia di [situs dokumentasi BoltAI](https://docs.boltai.com/docs/plugins/mcp-servers). Untuk BoltAI di iOS, [lihat panduan ini](https://docs.boltai.com/docs/boltai-mobile/mcp-servers).
 </details>
 
 <details>
@@ -372,16 +372,16 @@ Jika Anda lebih suka menjalankan server MCP dalam wadah Docker:
    FROM node:18-alpine
    WORKDIR /app
    # Instal versi terbaru secara global
-   RUN npm install -g @upstash/context7-mcp
+   RUN npm install -g @upstash/codex7-mcp
    # Ekspor port default jika diperlukan (opsional, tergantung pada interaksi klien MCP)
    # EXPOSE 3000
    # Perintah default untuk menjalankan server
-   CMD ["context7-mcp"]
+   CMD ["codex7-mcp"]
    ```
    </details>
-   Kemudian, bangun gambar menggunakan tag (contoh: `context7-mcp`). **Pastikan Docker Desktop (atau daemon Docker) berjalan.** Jalankan perintah berikut di direktori yang sama tempat Anda menyimpan `Dockerfile`:
+   Kemudian, bangun gambar menggunakan tag (contoh: `codex7-mcp`). **Pastikan Docker Desktop (atau daemon Docker) berjalan.** Jalankan perintah berikut di direktori yang sama tempat Anda menyimpan `Dockerfile`:
    ```bash
-   docker build -t context7-mcp .
+   docker build -t codex7-mcp .
    ```
 2. **Konfigurasikan Klien MCP Anda:**
    Perbarui konfigurasi klien MCP Anda untuk menggunakan perintah Docker.
@@ -394,7 +394,7 @@ Jika Anda lebih suka menjalankan server MCP dalam wadah Docker:
          "disabled": false,
          "timeout": 60,
          "command": "docker",
-         "args": ["run", "-i", "--rm", "context7-mcp"],
+         "args": ["run", "-i", "--rm", "codex7-mcp"],
          "transportType": "stdio"
        }
      }
@@ -409,9 +409,9 @@ Konfigurasi di Windows sedikit berbeda dibandingkan Linux atau macOS (_`Cline` d
 ```json
 {
   "mcpServers": {
-    "github.com/upstash/context7-mcp": {
+    "github.com/upstash/codex7-mcp": {
       "command": "cmd",
-      "args": ["/c", "npx", "-y", "@upstash/context7-mcp@latest"],
+      "args": ["/c", "npx", "-y", "@upstash/codex7-mcp@latest"],
       "disabled": false,
       "autoApprove": []
     }
@@ -422,7 +422,7 @@ Konfigurasi di Windows sedikit berbeda dibandingkan Linux atau macOS (_`Cline` d
 
 <details>
 <summary><b>Instal di Augment Code</b></summary>
-Untuk mengonfigurasi Context7 MCP di Augment Code, Anda dapat menggunakan antarmuka grafis atau konfigurasi manual.
+Untuk mengonfigurasi Codex7 MCP di Augment Code, Anda dapat menggunakan antarmuka grafis atau konfigurasi manual.
 
 ### **A. Menggunakan UI Augment Code**
 
@@ -432,11 +432,11 @@ Untuk mengonfigurasi Context7 MCP di Augment Code, Anda dapat menggunakan antarm
 4. Klik tombol **+ Tambah MCP**.
 5. Masukkan perintah berikut:
    ```
-   npx -y @upstash/context7-mcp@latest
+   npx -y @upstash/codex7-mcp@latest
    ```
-6. Beri nama MCP: **Context7**.
+6. Beri nama MCP: **Codex7**.
 7. Klik tombol **Tambah**.
-   Setelah server MCP ditambahkan, Anda dapat mulai menggunakan fitur dokumentasi kode terkini Context7 langsung di Augment Code.
+   Setelah server MCP ditambahkan, Anda dapat mulai menggunakan fitur dokumentasi kode terkini Codex7 langsung di Augment Code.
 
 ---
 
@@ -451,9 +451,9 @@ Untuk mengonfigurasi Context7 MCP di Augment Code, Anda dapat menggunakan antarm
 "augment.advanced": {
   "mcpServers": [
     {
-      "name": "context7",
+      "name": "codex7",
       "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp"]
+      "args": ["-y", "@upstash/codex7-mcp"]
     }
   ]
 }
@@ -472,9 +472,9 @@ Tambahkan ini ke file konfigurasi MCP Roo Code Anda. Lihat [dokumentasi MCP Roo 
 ```json
 {
   "mcpServers": {
-    "context7": {
+    "codex7": {
       "type": "streamable-http",
-      "url": "https://mcp.context7.com/mcp"
+      "url": "https://mcp.codex7.com/mcp"
     }
   }
 }
@@ -485,9 +485,9 @@ Tambahkan ini ke file konfigurasi MCP Roo Code Anda. Lihat [dokumentasi MCP Roo 
 ```json
 {
   "mcpServers": {
-    "context7": {
+    "codex7": {
       "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp"]
+      "args": ["-y", "@upstash/codex7-mcp"]
     }
   }
 }
@@ -497,7 +497,7 @@ Tambahkan ini ke file konfigurasi MCP Roo Code Anda. Lihat [dokumentasi MCP Roo 
 
 <details>
 <summary><b>Instal di Zencoder</b></summary>
-Untuk mengonfigurasi Context7 MCP di Zencoder, ikuti langkah-langkah berikut:
+Untuk mengonfigurasi Codex7 MCP di Zencoder, ikuti langkah-langkah berikut:
 1. Pergi ke menu Zencoder (...)
 2. Dari menu dropdown, pilih Alat Agen
 3. Klik Tambah MCP Kustom
@@ -507,7 +507,7 @@ Untuk mengonfigurasi Context7 MCP di Zencoder, ikuti langkah-langkah berikut:
     "command": "npx",
     "args": [
         "-y",
-        "@upstash/context7-mcp@latest"
+        "@upstash/codex7-mcp@latest"
     ]
 }
 ```
@@ -520,9 +520,9 @@ Tambahkan ini ke file konfigurasi Amazon Q Developer CLI Anda. Lihat [dokumentas
 ```json
 {
   "mcpServers": {
-    "context7": {
+    "codex7": {
       "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp@latest"]
+      "args": ["-y", "@upstash/codex7-mcp@latest"]
     }
   }
 }
@@ -539,8 +539,8 @@ Lihat [dokumentasi Qodo Gen](https://docs.qodo.ai/qodo-documentation/qodo-gen/qo
 ```json
 {
   "mcpServers": {
-    "context7": {
-      "url": "https://mcp.context7.com/mcp"
+    "codex7": {
+      "url": "https://mcp.codex7.com/mcp"
     }
   }
 }
@@ -557,15 +557,15 @@ Lihat [Dokumentasi JetBrains AI Assistant](https://www.jetbrains.com/help/ai-ass
 ```json
 {
   "mcpServers": {
-    "context7": {
+    "codex7": {
       "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp"]
+      "args": ["-y", "@upstash/codex7-mcp"]
     }
   }
 }
 ```
 5. Klik `Terapkan` untuk menyimpan perubahan.
-6. Dengan cara yang sama context7 dapat ditambahkan untuk JetBrains Junie di `Pengaturan` -> `Alat` -> `Junie` -> `Pengaturan MCP`
+6. Dengan cara yang sama codex7 dapat ditambahkan untuk JetBrains Junie di `Pengaturan` -> `Alat` -> `Junie` -> `Pengaturan MCP`
 </details>
 
 <details>
@@ -576,11 +576,11 @@ Lihat [Dokumentasi Protokol Konteks Model Warp](https://docs.warp.dev/knowledge-
 3. Tempel konfigurasi yang diberikan di bawah:
 ```json
 {
-  "Context7": {
+  "Codex7": {
     "command": "npx",
     "args": [
       "-y",
-      "@upstash/context7-mcp"
+      "@upstash/codex7-mcp"
     ],
     "env": {},
     "working_directory": null,
@@ -599,9 +599,9 @@ Tambahkan ini ke file konfigurasi Opencode Anda. Lihat [dokumentasi MCP Opencode
 
 ```json
 "mcp": {
-  "context7": {
+  "codex7": {
     "type": "remote",
-    "url": "https://mcp.context7.com/mcp",
+    "url": "https://mcp.codex7.com/mcp",
     "enabled": true
   }
 }
@@ -612,9 +612,9 @@ Tambahkan ini ke file konfigurasi Opencode Anda. Lihat [dokumentasi MCP Opencode
 ```json
 {
   "mcp": {
-    "context7": {
+    "codex7": {
       "type": "local",
-      "command": ["npx", "-y", "@upstash/context7-mcp"],
+      "command": ["npx", "-y", "@upstash/codex7-mcp"],
       "enabled": true
     }
   }
@@ -625,14 +625,14 @@ Tambahkan ini ke file konfigurasi Opencode Anda. Lihat [dokumentasi MCP Opencode
 
 <details>
 <summary><b>Instal di Copilot Coding Agent</b></summary>
-## Menggunakan Context7 dengan Copilot Coding Agent
+## Menggunakan Codex7 dengan Copilot Coding Agent
 Tambahkan konfigurasi berikut ke bagian `mcp` file konfigurasi Copilot Coding Agent Anda Repositori->Pengaturan->Copilot->Coding agent->Konfigurasi MCP:
 ```json
 {
   "mcpServers": {
-    "context7": {
+    "codex7": {
       "type": "http",
-      "url": "https://mcp.context7.com/mcp",
+      "url": "https://mcp.codex7.com/mcp",
       "tools": [
         "get-library-docs",
         "resolve-library-id"
@@ -653,11 +653,11 @@ Lihat [Dokumentasi Protokol Konteks Model Kiro](https://kiro.dev/docs/mcp/config
 ```json
 {
   "mcpServers": {
-    "Context7": {
+    "Codex7": {
     "command": "npx",
     "args": [
       "-y",
-      "@upstash/context7-mcp"
+      "@upstash/codex7-mcp"
     ],
     "env": {},
     "disabled": false,
@@ -674,8 +674,8 @@ Lihat [Dokumentasi Protokol Konteks Model Kiro](https://kiro.dev/docs/mcp/config
 Lihat [OpenAI Codex](https://github.com/openai/codex) untuk informasi lebih lanjut.
 Tambahkan konfigurasi berikut ke pengaturan server MCP OpenAI Codex Anda:
 ```toml
-[mcp_servers.context7]
-args = ["-y", "@upstash/context7-mcp"]
+[mcp_servers.codex7]
+args = ["-y", "@upstash/codex7-mcp"]
 command = "npx"
 ```
 </details>
@@ -686,7 +686,7 @@ Lihat [Dukungan MCP LM Studio](https://lmstudio.ai/blog/lmstudio-v0.3.17) untuk 
 
 #### Instal satu klik:
 
-[![Add MCP Server context7 to LM Studio](https://files.lmstudio.ai/deeplink/mcp-install-light.svg)](https://lmstudio.ai/install-mcp?name=context7&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsIkB1cHN0YXNoL2NvbnRleHQ3LW1jcCJdfQ%3D%3D)
+[![Add MCP Server codex7 to LM Studio](https://files.lmstudio.ai/deeplink/mcp-install-light.svg)](https://lmstudio.ai/install-mcp?name=codex7&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsIkB1cHN0YXNoL2NvbnRleHQ3LW1jcCJdfQ%3D%3D)
 
 #### Pengaturan manual:
 
@@ -696,9 +696,9 @@ Lihat [Dukungan MCP LM Studio](https://lmstudio.ai/blog/lmstudio-v0.3.17) untuk 
 ```json
 {
   "mcpServers": {
-    "Context7": {
+    "Codex7": {
       "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp"]
+      "args": ["-y", "@upstash/codex7-mcp"]
     }
   }
 }
@@ -710,12 +710,12 @@ Lihat [Dukungan MCP LM Studio](https://lmstudio.ai/blog/lmstudio-v0.3.17) untuk 
 
 ## 🔨 Alat yang Tersedia
 
-Context7 MCP menyediakan alat berikut yang dapat digunakan oleh LLM:
+Codex7 MCP menyediakan alat berikut yang dapat digunakan oleh LLM:
 
-- `resolve-library-id`: Mengubah nama pustaka umum menjadi ID pustaka yang kompatibel dengan Context7.
+- `resolve-library-id`: Mengubah nama pustaka umum menjadi ID pustaka yang kompatibel dengan Codex7.
   - `libraryName` (wajib): Nama pustaka yang ingin dicari
-- `get-library-docs`: Mengambil dokumentasi untuk pustaka menggunakan ID pustaka yang kompatibel dengan Context7.
-  - `context7CompatibleLibraryID` (wajib): ID pustaka yang kompatibel dengan Context7 (contoh: `/mongodb/docs`, `/vercel/next.js`)
+- `get-library-docs`: Mengambil dokumentasi untuk pustaka menggunakan ID pustaka yang kompatibel dengan Codex7.
+  - `codex7CompatibleLibraryID` (wajib): ID pustaka yang kompatibel dengan Codex7 (contoh: `/mongodb/docs`, `/vercel/next.js`)
   - `topic` (opsional): Fokuskan dokumen pada topik tertentu (contoh: "routing", "hooks")
   - `tokens` (opsional, default 10000): Jumlah maksimum token yang dikembalikan. Nilai kurang dari nilai default 10000 secara otomatis dinaikkan menjadi 10000.
 
@@ -723,19 +723,19 @@ Context7 MCP menyediakan alat berikut yang dapat digunakan oleh LLM:
 
 ### Tambahkan Aturan
 
-> Jika Anda tidak ingin menambahkan `use context7` ke setiap permintaan, Anda dapat menentukan aturan sederhana di file `.windsurfrules` Anda di Windsurf atau dari bagian `Cursor Settings > Rules` di Cursor (atau yang setara di klien MCP Anda) untuk memanggil Context7 secara otomatis pada setiap pertanyaan kode:
+> Jika Anda tidak ingin menambahkan `use codex7` ke setiap permintaan, Anda dapat menentukan aturan sederhana di file `.windsurfrules` Anda di Windsurf atau dari bagian `Cursor Settings > Rules` di Cursor (atau yang setara di klien MCP Anda) untuk memanggil Codex7 secara otomatis pada setiap pertanyaan kode:
 >
 > ```toml
 > [[calls]]
 > match = "when the user requests code examples, setup or configuration steps, or library/API documentation"
-> tool  = "context7"
+> tool  = "codex7"
 > ```
 >
-> Mulai saat itu, Anda akan mendapatkan dokumen Context7 dalam setiap percakapan terkait tanpa mengetik sesuatu tambahan. Anda dapat menambahkan kasus penggunaan Anda ke bagian match.
+> Mulai saat itu, Anda akan mendapatkan dokumen Codex7 dalam setiap percakapan terkait tanpa mengetik sesuatu tambahan. Anda dapat menambahkan kasus penggunaan Anda ke bagian match.
 
 ### Gunakan ID Pustaka
 
-> Jika Anda sudah tahu persis pustaka mana yang ingin digunakan, tambahkan ID Context7-nya ke permintaan Anda. Dengan begitu, server MCP Context7 dapat melewati langkah pencocokan pustaka dan langsung mengambil dokumen.
+> Jika Anda sudah tahu persis pustaka mana yang ingin digunakan, tambahkan ID Codex7-nya ke permintaan Anda. Dengan begitu, server MCP Codex7 dapat melewati langkah pencocokan pustaka dan langsung mengambil dokumen.
 >
 > ```txt
 > implementasikan otentikasi dasar dengan supabase. gunakan pustaka /supabase/supabase untuk api dan docs
@@ -765,7 +765,7 @@ bun run dist/index.js
 
 ### Argumen CLI
 
-`context7-mcp` menerima bendera CLI berikut:
+`codex7-mcp` menerima bendera CLI berikut:
 
 - `--transport <stdio|http|sse>` – Transportasi yang digunakan (`stdio` secara default).
 - `--port <number>` – Port yang didengarkan saat menggunakan transport `http` atau `sse` (default `3000`).
@@ -780,9 +780,9 @@ bun run dist/index.js --transport http --port 8080
 ```json
 {
   "mcpServers": {
-    "context7": {
+    "codex7": {
       "command": "npx",
-      "args": ["tsx", "/path/to/folder/context7-mcp/src/index.ts"]
+      "args": ["tsx", "/path/to/folder/codex7-mcp/src/index.ts"]
     }
   }
 }
@@ -792,7 +792,7 @@ bun run dist/index.js --transport http --port 8080
 <details>
 <summary><b>Pengujian dengan MCP Inspector</b></summary>
 ```bash
-npx -y @modelcontextprotocol/inspector npx @upstash/context7-mcp
+npx -y @modelcontextprotocol/inspector npx @upstash/codex7-mcp
 ```
 </details>
 
@@ -804,9 +804,9 @@ Jika Anda mengalami `ERR_MODULE_NOT_FOUND`, coba gunakan `bunx` alih-alih `npx`:
 ```json
 {
   "mcpServers": {
-    "context7": {
+    "codex7": {
       "command": "bunx",
-      "args": ["-y", "@upstash/context7-mcp"]
+      "args": ["-y", "@upstash/codex7-mcp"]
     }
   }
 }
@@ -820,9 +820,9 @@ Untuk kesalahan seperti `Error: Cannot find module 'uriTemplate.js'`, coba gunak
 ```json
 {
   "mcpServers": {
-    "context7": {
+    "codex7": {
       "command": "npx",
-      "args": ["-y", "--node-options=--experimental-vm-modules", "@upstash/context7-mcp@1.0.6"]
+      "args": ["-y", "--node-options=--experimental-vm-modules", "@upstash/codex7-mcp@1.0.6"]
     }
   }
 }
@@ -835,9 +835,9 @@ Gunakan bendera `--experimental-fetch` untuk melewati masalah terkait TLS:
 ```json
 {
   "mcpServers": {
-    "context7": {
+    "codex7": {
       "command": "npx",
-      "args": ["-y", "--node-options=--experimental-fetch", "@upstash/context7-mcp"]
+      "args": ["-y", "--node-options=--experimental-fetch", "@upstash/codex7-mcp"]
     }
   }
 }
@@ -854,30 +854,30 @@ Gunakan bendera `--experimental-fetch` untuk melewati masalah terkait TLS:
 
 ## ⚠️ Penafian
 
-Proyek Context7 dikontribusikan oleh komunitas dan meskipun kami berusaha menjaga kualitas tinggi, kami tidak dapat menjamin keakuratan, kelengkapan, atau keamanan semua dokumentasi pustaka. Proyek yang terdaftar di Context7 dikembangkan dan dikelola oleh pemilik masing-masing, bukan oleh Context7. Jika Anda menemukan konten yang mencurigakan, tidak pantas, atau berpotensi membahayakan, gunakan tombol "Laporkan" di halaman proyek untuk segera memberi tahu kami. Kami memperlakukan semua laporan dengan serius dan akan segera meninjau konten yang dilaporkan untuk menjaga integritas dan keamanan platform kami. Dengan menggunakan Context7, Anda mengakui bahwa Anda melakukannya atas kebijaksanaan dan risiko Anda sendiri.
+Proyek Codex7 dikontribusikan oleh komunitas dan meskipun kami berusaha menjaga kualitas tinggi, kami tidak dapat menjamin keakuratan, kelengkapan, atau keamanan semua dokumentasi pustaka. Proyek yang terdaftar di Codex7 dikembangkan dan dikelola oleh pemilik masing-masing, bukan oleh Codex7. Jika Anda menemukan konten yang mencurigakan, tidak pantas, atau berpotensi membahayakan, gunakan tombol "Laporkan" di halaman proyek untuk segera memberi tahu kami. Kami memperlakukan semua laporan dengan serius dan akan segera meninjau konten yang dilaporkan untuk menjaga integritas dan keamanan platform kami. Dengan menggunakan Codex7, Anda mengakui bahwa Anda melakukannya atas kebijaksanaan dan risiko Anda sendiri.
 
 ## 🤝 Terhubung dengan Kami
 
 Tetap terbaru dan bergabunglah dengan komunitas kami:
 
-- 📢 Ikuti kami di [X](https://x.com/context7ai) untuk berita dan pembaruan terbaru
-- 🌐 Kunjungi [Situs Web](https://context7.com) kami
+- 📢 Ikuti kami di [X](https://x.com/codex7ai) untuk berita dan pembaruan terbaru
+- 🌐 Kunjungi [Situs Web](https://codex7.com) kami
 - 💬 Bergabunglah dengan [Komunitas Discord](https://upstash.com/discord) kami
 
-## 📺 Context7 Di Media
+## 📺 Codex7 Di Media
 
 - [Better Stack: "Free Tool Makes Cursor 10x Smarter"](https://youtu.be/52FC3qObp9E)
 - [Cole Medin: "This is Hands Down the BEST MCP Server for AI Coding Assistants"](https://www.youtube.com/watch?v=G7gK8H6u7Rs)
-- [Income Stream Surfers: "Context7 + SequentialThinking MCPs: Is This AGI?"](https://www.youtube.com/watch?v=-ggvzyLpK6o)
-- [Julian Goldie SEO: "Context7: New MCP AI Agent Update"](https://www.youtube.com/watch?v=CTZm6fBYisc)
+- [Income Stream Surfers: "Codex7 + SequentialThinking MCPs: Is This AGI?"](https://www.youtube.com/watch?v=-ggvzyLpK6o)
+- [Julian Goldie SEO: "Codex7: New MCP AI Agent Update"](https://www.youtube.com/watch?v=CTZm6fBYisc)
 - [JeredBlu: "Context 7 MCP: Get Documentation Instantly + VS Code Setup"](https://www.youtube.com/watch?v=-ls0D-rtET4)
-- [Income Stream Surfers: "Context7: The New MCP Server That Will CHANGE AI Coding"](https://www.youtube.com/watch?v=PS-2Azb-C3M)
-- [AICodeKing: "Context7 + Cline & RooCode: This MCP Server Makes CLINE 100X MORE EFFECTIVE!"](https://www.youtube.com/watch?v=qZfENAPMnyo)
+- [Income Stream Surfers: "Codex7: The New MCP Server That Will CHANGE AI Coding"](https://www.youtube.com/watch?v=PS-2Azb-C3M)
+- [AICodeKing: "Codex7 + Cline & RooCode: This MCP Server Makes CLINE 100X MORE EFFECTIVE!"](https://www.youtube.com/watch?v=qZfENAPMnyo)
 - [Sean Kochel: "5 MCP Servers For Vibe Coding Glory (Just Plug-In & Go)"](https://www.youtube.com/watch?v=LqTQi8qexJM)
 
 ## ⭐ Sejarah Bintang
 
-[![Star History Chart](https://api.star-history.com/svg?repos=upstash/context7&type=Date)](https://www.star-history.com/#upstash/context7&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=upstash/codex7&type=Date)](https://www.star-history.com/#upstash/codex7&Date)
 
 ## 📄 Lisensi
 

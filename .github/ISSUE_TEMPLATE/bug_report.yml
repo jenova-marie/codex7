@@ -1,5 +1,5 @@
 name: Bug Report
-description: Report a bug or issue with Context7 MCP
+description: Report a bug or issue with Codex7 MCP
 title: "[Bug]: "
 labels: ["bug", "needs-triage"]
 body:
@@ -28,8 +28,8 @@ body:
   - type: input
     id: version
     attributes:
-      label: Context7 MCP Version
-      description: Which version of Context7 MCP are you using? (Check package.json or npm list)
+      label: Codex7 MCP Version
+      description: Which version of Codex7 MCP are you using? (Check package.json or npm list)
       placeholder: e.g., 1.0.21
     validations:
       required: true
@@ -49,7 +49,7 @@ body:
       label: Steps to Reproduce
       description: Steps to reproduce the behavior
       placeholder: |
-        1. Install Context7 MCP via...
+        1. Install Codex7 MCP via...
         2. Run the command...
         3. See error...
     validations:
@@ -108,14 +108,14 @@ body:
     id: config
     attributes:
       label: Configuration
-      description: Your Context7 MCP configuration (remove any API keys!)
+      description: Your Codex7 MCP configuration (remove any API keys!)
       render: json
       placeholder: |
         {
           "mcpServers": {
-            "context7": {
+            "codex7": {
               "command": "npx",
-              "args": ["-y", "@upstash/context7-mcp"]
+              "args": ["-y", "@upstash/codex7-mcp"]
             }
           }
         }

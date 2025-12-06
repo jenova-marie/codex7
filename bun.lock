@@ -2,7 +2,7 @@
   "lockfileVersion": 1,
   "workspaces": {
     "": {
-      "name": "context7-mcp",
+      "name": "codex7-mcp",
       "dependencies": {
         "@modelcontextprotocol/sdk": "^1.17.5",
         "commander": "^14.0.0",

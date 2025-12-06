@@ -1,17 +1,17 @@
 {
   "dxt_version": "0.1",
-  "name": "context7",
-  "display_name": "Context7",
+  "name": "codex7",
+  "display_name": "Codex7",
   "version": "1.0.1",
   "description": "Up-to-date Code Docs For Any Prompt",
-  "long_description": "Context7 MCP pulls up-to-date, version-specific documentation and code examples straight from the source — and places them directly into your prompt.",
+  "long_description": "Codex7 MCP pulls up-to-date, version-specific documentation and code examples straight from the source — and places them directly into your prompt.",
   "author": {
     "name": "Upstash",
-    "email": "context7@upstash.com",
+    "email": "codex7@upstash.com",
     "url": "https://upstash.com"
   },
-  "homepage": "https://context7.com",
-  "documentation": "https://github.com/upstash/context7",
+  "homepage": "https://codex7.com",
+  "documentation": "https://github.com/upstash/codex7",
   "icon": "icon.png",
   "server": {
     "type": "node",
@@ -24,8 +24,8 @@
   },
   "tools": [
     {
-      "name": "Resolve Context7 Library ID",
-      "description": "Resolves a package/product name to a Context7-compatible library ID and returns a list of matching libraries."
+      "name": "Resolve Codex7 Library ID",
+      "description": "Resolves a package/product name to a Codex7-compatible library ID and returns a list of matching libraries."
     },
     {
       "name": "Get Library Docs",
@@ -42,6 +42,6 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/upstash/context7.git"
+    "url": "git+https://github.com/upstash/codex7.git"
   }
 }

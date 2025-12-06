@@ -22,7 +22,7 @@ body:
     attributes:
       label: Proposed Solution
       description: Describe the solution you'd like
-      placeholder: I would like Context7 to...
+      placeholder: I would like Codex7 to...
     validations:
       required: true
 

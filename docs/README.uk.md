@@ -1,10 +1,10 @@
-# Context7 MCP — Актуальна документація з прикладами коду для будь-якого запиту
+# Codex7 MCP — Актуальна документація з прикладами коду для будь-якого запиту
 
-[![Website](https://img.shields.io/badge/Website-context7.com-blue)](https://context7.com) [![smithery badge](https://smithery.ai/badge/@upstash/context7-mcp)](https://smithery.ai/server/@upstash/context7-mcp) [<img alt="Install in VS Code (npx)" src="https://img.shields.io/badge/VS_Code-VS_Code?style=flat-square&label=Install%20Context7%20MCP&color=0098FF">](https://insiders.vscode.dev/redirect?url=vscode%3Amcp%2Finstall%3F%7B%22name%22%3A%22context7%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22%40upstash%2Fcontext7-mcp%40latest%22%5D%7D)
+[![Website](https://img.shields.io/badge/Website-codex7.com-blue)](https://codex7.com) [![smithery badge](https://smithery.ai/badge/@upstash/codex7-mcp)](https://smithery.ai/server/@upstash/codex7-mcp) [<img alt="Install in VS Code (npx)" src="https://img.shields.io/badge/VS_Code-VS_Code?style=flat-square&label=Install%20Codex7%20MCP&color=0098FF">](https://insiders.vscode.dev/redirect?url=vscode%3Amcp%2Finstall%3F%7B%22name%22%3A%22codex7%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22%40upstash%2Fcodex7-mcp%40latest%22%5D%7D)
 
 [![繁體中文](https://img.shields.io/badge/docs-繁體中文-yellow)](./README.zh-TW.md) [![简体中文](https://img.shields.io/badge/docs-简体中文-yellow)](./README.zh-CN.md) [![日本語](https://img.shields.io/badge/docs-日本語-b7003a)](./README.ja.md) [![한국어 문서](https://img.shields.io/badge/docs-한국어-green)](./README.ko.md) [![Documentación en Español](https://img.shields.io/badge/docs-Español-orange)](./README.es.md) [![Documentation en Français](https://img.shields.io/badge/docs-Français-blue)](./README.fr.md) [![Documentação em Português (Brasil)](<https://img.shields.io/badge/docs-Português%20(Brasil)-purple>)](./README.pt-BR.md) [![Documentazione in italiano](https://img.shields.io/badge/docs-Italian-red)](./README.it.md) [![Dokumentasi Bahasa Indonesia](https://img.shields.io/badge/docs-Bahasa%20Indonesia-pink)](./README.id-ID.md) [![Dokumentation auf Deutsch](https://img.shields.io/badge/docs-Deutsch-darkgreen)](./README.de.md) [![Документация на русском языке](https://img.shields.io/badge/docs-Русский-darkblue)](./README.ru.md) [![Türkçe Doküman](https://img.shields.io/badge/docs-Türkçe-blue)](./README.tr.md) [![Arabic Documentation](https://img.shields.io/badge/docs-Arabic-white)](./README.ar.md) [![Українська документація](https://img.shields.io/badge/docs-Українська-lightblue)](./README.uk.md)
 
-## ❌ Без Context7
+## ❌ Без Codex7
 
 Великі мовні моделі покладаються на застарілу або узагальнену інформацію про бібліотеки, які ви використовуєте. Внаслідок цього ви отримуєте:
 
@@ -12,31 +12,31 @@
 - ❌ «Галюцинації» — API, які взагалі не існують
 - ❌ Узагальнені відповіді для старих версій пакунків
 
-## ✅ З Context7
+## ✅ З Codex7
 
-Context7 MCP отримує актуальну, специфічну для версії документацію та приклади коду безпосередньо з джерела — і вбудовує їх прямо у ваш промпт.
+Codex7 MCP отримує актуальну, специфічну для версії документацію та приклади коду безпосередньо з джерела — і вбудовує їх прямо у ваш промпт.
 
-Додайте `use context7` до вашого запиту в Cursor:
+Додайте `use codex7` до вашого запиту в Cursor:
 
 ```txt
-Create a Next.js middleware that checks for a valid JWT in cookies and redirects unauthenticated users to `/login`. use context7
+Create a Next.js middleware that checks for a valid JWT in cookies and redirects unauthenticated users to `/login`. use codex7
 ```
 
 ```txt
-Configure a Cloudflare Worker script to cache JSON API responses for five minutes. use context7
+Configure a Cloudflare Worker script to cache JSON API responses for five minutes. use codex7
 ```
 
-Context7 завантажує свіжі приклади коду й документацію безпосередньо в контекст вашої великої мовної моделі.
+Codex7 завантажує свіжі приклади коду й документацію безпосередньо в контекст вашої великої мовної моделі.
 
 - 1️⃣ Написуйте ваш промпт природно
-- 2️⃣ Скажіть ШІ використати `use context7`
+- 2️⃣ Скажіть ШІ використати `use codex7`
 - 3️⃣ Отримайте робочі відповіді з кодом
 
 Без перемикання між вкладками, без неіснуючих API та без застарілого коду.
 
 ## 📚 Додавання проєктів
 
-Ознайомтеся з нашим [посібником з додавання проєктів](./adding-projects.md), щоб дізнатися, як додати (або оновити) ваші улюблені бібліотеки в Context7.
+Ознайомтеся з нашим [посібником з додавання проєктів](./adding-projects.md), щоб дізнатися, як додати (або оновити) ваші улюблені бібліотеки в Codex7.
 
 ## 🛠️ Встановлення
 
@@ -48,13 +48,13 @@ Context7 завантажує свіжі приклади коду й докум
 <details>
 <summary><b>Встановлення через Smithery</b></summary>
 
-Для автоматичного встановлення Context7 MCP Server для будь-якого клієнта через [Smithery](https://smithery.ai/server/@upstash/context7-mcp):
+Для автоматичного встановлення Codex7 MCP Server для будь-якого клієнта через [Smithery](https://smithery.ai/server/@upstash/codex7-mcp):
 
 ```bash
-npx -y @smithery/cli@latest install @upstash/context7-mcp --client <CLIENT_NAME> --key <YOUR_SMITHERY_KEY>
+npx -y @smithery/cli@latest install @upstash/codex7-mcp --client <CLIENT_NAME> --key <YOUR_SMITHERY_KEY>
 ```
 
-Ваш ключ Smithery можна знайти на [сторінці Smithery.ai](https://smithery.ai/server/@upstash/context7-mcp).
+Ваш ключ Smithery можна знайти на [сторінці Smithery.ai](https://smithery.ai/server/@upstash/codex7-mcp).
 
 </details>
 
@@ -69,13 +69,13 @@ npx -y @smithery/cli@latest install @upstash/context7-mcp --client <CLIENT_NAME>
 
 #### Підключення до віддаленого сервера Cursor
 
-[![Install MCP Server](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/install-mcp?name=context7&config=eyJ1cmwiOiJodHRwczovL21jcC5jb250ZXh0Ny5jb20vbWNwIn0%3D)
+[![Install MCP Server](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/install-mcp?name=codex7&config=eyJ1cmwiOiJodHRwczovL21jcC5jb250ZXh0Ny5jb20vbWNwIn0%3D)
 
 ```json
 {
   "mcpServers": {
-    "context7": {
-      "url": "https://mcp.context7.com/mcp"
+    "codex7": {
+      "url": "https://mcp.codex7.com/mcp"
     }
   }
 }
@@ -83,14 +83,14 @@ npx -y @smithery/cli@latest install @upstash/context7-mcp --client <CLIENT_NAME>
 
 #### Підключення до локального сервера Cursor
 
-[![Install MCP Server](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/install-mcp?name=context7&config=eyJjb21tYW5kIjoibnB4IC15IEB1cHN0YXNoL2NvbnRleHQ3LW1jcCJ9)
+[![Install MCP Server](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/install-mcp?name=codex7&config=eyJjb21tYW5kIjoibnB4IC15IEB1cHN0YXNoL2NvbnRleHQ3LW1jcCJ9)
 
 ```json
 {
   "mcpServers": {
-    "context7": {
+    "codex7": {
       "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp"]
+      "args": ["-y", "@upstash/codex7-mcp"]
     }
   }
 }
@@ -99,14 +99,14 @@ npx -y @smithery/cli@latest install @upstash/context7-mcp --client <CLIENT_NAME>
 <details>
 <summary>Альтернатива: використання Bun</summary>
 
-[![Install MCP Server](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/install-mcp?name=context7&config=eyJjb21tYW5kIjoiYnVueCAteSBAdXBzdGFzaC9jb250ZXh0Ny1tY3AifQ%3D%3D)
+[![Install MCP Server](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/install-mcp?name=codex7&config=eyJjb21tYW5kIjoiYnVueCAteSBAdXBzdGFzaC9jb250ZXh0Ny1tY3AifQ%3D%3D)
 
 ```json
 {
   "mcpServers": {
-    "context7": {
+    "codex7": {
       "command": "bunx",
-      "args": ["-y", "@upstash/context7-mcp"]
+      "args": ["-y", "@upstash/codex7-mcp"]
     }
   }
 }
@@ -117,18 +117,18 @@ npx -y @smithery/cli@latest install @upstash/context7-mcp --client <CLIENT_NAME>
 <details>
 <summary>Альтернатива: використання Deno</summary>
 
-[![Install MCP Server](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/install-mcp?name=context7&config=eyJjb21tYW5kIjoiZGVubyBydW4gLS1hbGxvdy1lbnYgLS1hbGxvdy1uZXQgbnBtOkB1cHN0YXNoL2NvbnRleHQ3LW1jcCJ9)
+[![Install MCP Server](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/install-mcp?name=codex7&config=eyJjb21tYW5kIjoiZGVubyBydW4gLS1hbGxvdy1lbnYgLS1hbGxvdy1uZXQgbnBtOkB1cHN0YXNoL2NvbnRleHQ3LW1jcCJ9)
 
 ```json
 {
   "mcpServers": {
-    "context7": {
+    "codex7": {
       "command": "deno",
       "args": [
         "run",
         "--allow-env=NO_DEPRECATION,TRACE_DEPRECATION",
         "--allow-net",
-        "npm:@upstash/context7-mcp"
+        "npm:@upstash/codex7-mcp"
       ]
     }
   }
@@ -149,8 +149,8 @@ npx -y @smithery/cli@latest install @upstash/context7-mcp --client <CLIENT_NAME>
 ```json
 {
   "mcpServers": {
-    "context7": {
-      "serverUrl": "https://mcp.context7.com/sse"
+    "codex7": {
+      "serverUrl": "https://mcp.codex7.com/sse"
     }
   }
 }
@@ -161,9 +161,9 @@ npx -y @smithery/cli@latest install @upstash/context7-mcp --client <CLIENT_NAME>
 ```json
 {
   "mcpServers": {
-    "context7": {
+    "codex7": {
       "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp"]
+      "args": ["-y", "@upstash/codex7-mcp"]
     }
   }
 }
@@ -182,8 +182,8 @@ npx -y @smithery/cli@latest install @upstash/context7-mcp --client <CLIENT_NAME>
 ```json
 {
   "mcpServers": {
-    "context7": {
-      "url": "https://mcp.context7.com/mcp"
+    "codex7": {
+      "url": "https://mcp.codex7.com/mcp"
     }
   }
 }
@@ -194,9 +194,9 @@ npx -y @smithery/cli@latest install @upstash/context7-mcp --client <CLIENT_NAME>
 ```json
 {
   "mcpServers": {
-    "context7": {
+    "codex7": {
       "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp"]
+      "args": ["-y", "@upstash/codex7-mcp"]
     }
   }
 }
@@ -207,8 +207,8 @@ npx -y @smithery/cli@latest install @upstash/context7-mcp --client <CLIENT_NAME>
 <details>
 <summary><b>Встановлення в VS Code</b></summary>
 
-[<img alt="Встановити в VS Code (npx)" src="https://img.shields.io/badge/VS_Code-VS_Code?style=flat-square&label=Встановити%20Context7%20MCP&color=0098FF">](https://insiders.vscode.dev/redirect?url=vscode%3Amcp%2Finstall%3F%7B%22name%22%3A%22context7%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22%40upstash%2Fcontext7-mcp%40latest%22%5D%7D)
-[<img alt="Встановити в VS Code Insiders (npx)" src="https://img.shields.io/badge/VS_Code_Insiders-VS_Code_Insiders?style=flat-square&label=Встановити%20Context7%20MCP&color=24bfa5">](https://insiders.vscode.dev/redirect?url=vscode-insiders%3Amcp%2Finstall%3F%7B%22name%22%3A%22context7%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22%40upstash%2Fcontext7-mcp%40latest%22%5D%7D)
+[<img alt="Встановити в VS Code (npx)" src="https://img.shields.io/badge/VS_Code-VS_Code?style=flat-square&label=Встановити%20Codex7%20MCP&color=0098FF">](https://insiders.vscode.dev/redirect?url=vscode%3Amcp%2Finstall%3F%7B%22name%22%3A%22codex7%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22%40upstash%2Fcodex7-mcp%40latest%22%5D%7D)
+[<img alt="Встановити в VS Code Insiders (npx)" src="https://img.shields.io/badge/VS_Code_Insiders-VS_Code_Insiders?style=flat-square&label=Встановити%20Codex7%20MCP&color=24bfa5">](https://insiders.vscode.dev/redirect?url=vscode-insiders%3Amcp%2Finstall%3F%7B%22name%22%3A%22codex7%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22%40upstash%2Fcodex7-mcp%40latest%22%5D%7D)
 
 Додайте це до вашого конфігураційного файлу VS Code MCP. Детальніше див. у [документації VS Code MCP](https://code.visualstudio.com/docs/copilot/chat/mcp-servers).
 
@@ -217,9 +217,9 @@ npx -y @smithery/cli@latest install @upstash/context7-mcp --client <CLIENT_NAME>
 ```json
 "mcp": {
   "servers": {
-    "context7": {
+    "codex7": {
       "type": "http",
-      "url": "https://mcp.context7.com/mcp"
+      "url": "https://mcp.codex7.com/mcp"
     }
   }
 }
@@ -230,10 +230,10 @@ npx -y @smithery/cli@latest install @upstash/context7-mcp --client <CLIENT_NAME>
 ```json
 "mcp": {
   "servers": {
-    "context7": {
+    "codex7": {
       "type": "stdio",
       "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp"]
+      "args": ["-y", "@upstash/codex7-mcp"]
     }
   }
 }
@@ -244,7 +244,7 @@ npx -y @smithery/cli@latest install @upstash/context7-mcp --client <CLIENT_NAME>
 <details>
 <summary><b>Встановлення в Visual Studio 2022</b></summary>
 
-Ви можете налаштувати Context7 MCP у Visual Studio 2022, дотримуючись [документації Visual Studio MCP Servers](https://learn.microsoft.com/visualstudio/ide/mcp-servers?view=vs-2022).
+Ви можете налаштувати Codex7 MCP у Visual Studio 2022, дотримуючись [документації Visual Studio MCP Servers](https://learn.microsoft.com/visualstudio/ide/mcp-servers?view=vs-2022).
 
 Додайте це до вашого конфігураційного файлу Visual Studio MCP (детальніше в [документації Visual Studio](https://learn.microsoft.com/visualstudio/ide/mcp-servers?view=vs-2022)):
 
@@ -252,9 +252,9 @@ npx -y @smithery/cli@latest install @upstash/context7-mcp --client <CLIENT_NAME>
 {
   "mcp": {
     "servers": {
-      "context7": {
+      "codex7": {
         "type": "http",
-        "url": "https://mcp.context7.com/mcp"
+        "url": "https://mcp.codex7.com/mcp"
       }
     }
   }
@@ -267,10 +267,10 @@ npx -y @smithery/cli@latest install @upstash/context7-mcp --client <CLIENT_NAME>
 {
   "mcp": {
     "servers": {
-      "context7": {
+      "codex7": {
         "type": "stdio",
         "command": "npx",
-        "args": ["-y", "@upstash/context7-mcp"]
+        "args": ["-y", "@upstash/codex7-mcp"]
       }
     }
   }
@@ -282,15 +282,15 @@ npx -y @smithery/cli@latest install @upstash/context7-mcp --client <CLIENT_NAME>
 <details>
 <summary><b>Встановлення в Zed</b></summary>
 
-Можна встановити через [розширення Zed](https://zed.dev/extensions?query=Context7) або додати це до вашого `settings.json`. Детальніше див. у [документації Zed Context Server](https://zed.dev/docs/assistant/context-servers).
+Можна встановити через [розширення Zed](https://zed.dev/extensions?query=Codex7) або додати це до вашого `settings.json`. Детальніше див. у [документації Zed Context Server](https://zed.dev/docs/assistant/context-servers).
 
 ```json
 {
   "context_servers": {
-    "Context7": {
+    "Codex7": {
       "command": {
         "path": "npx",
-        "args": ["-y", "@upstash/context7-mcp"]
+        "args": ["-y", "@upstash/codex7-mcp"]
       },
       "settings": {}
     }
@@ -311,9 +311,9 @@ npx -y @smithery/cli@latest install @upstash/context7-mcp --client <CLIENT_NAME>
 ```json
 {
   "mcpServers": {
-    "context7": {
+    "codex7": {
       "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp"]
+      "args": ["-y", "@upstash/codex7-mcp"]
     }
   }
 }
@@ -331,19 +331,19 @@ npx -y @smithery/cli@latest install @upstash/context7-mcp --client <CLIENT_NAME>
 #### Підключення до віддаленого сервера Claude Code
 
 ```sh
-claude mcp add --transport http context7 https://mcp.context7.com/mcp
+claude mcp add --transport http codex7 https://mcp.codex7.com/mcp
 ```
 
 Або з використанням SSE-транспорту:
 
 ```sh
-claude mcp add --transport sse context7 https://mcp.context7.com/sse
+claude mcp add --transport sse codex7 https://mcp.codex7.com/sse
 ```
 
 #### Підключення до локального сервера Claude Code
 
 ```sh
-claude mcp add context7 -- npx -y @upstash/context7-mcp
+claude mcp add codex7 -- npx -y @upstash/codex7-mcp
 ```
 
 </details>
@@ -356,9 +356,9 @@ claude mcp add context7 -- npx -y @upstash/context7-mcp
 ```json
 {
   "mcpServers": {
-    "Context7": {
+    "Codex7": {
       "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp"]
+      "args": ["-y", "@upstash/codex7-mcp"]
     }
   }
 }
@@ -369,11 +369,11 @@ claude mcp add context7 -- npx -y @upstash/context7-mcp
 <details>
 <summary><b>Встановлення в Cline</b></summary>
 
-Ви можете легко встановити Context7 через [торговий майданчик MCP-серверів Cline](https://cline.bot/mcp-marketplace), дотримуючись цих інструкцій:
+Ви можете легко встановити Codex7 через [торговий майданчик MCP-серверів Cline](https://cline.bot/mcp-marketplace), дотримуючись цих інструкцій:
 
 1. Відкрийте **Cline**.
 2. Натисніть значок меню гамбургер (☰), щоб увійти до розділу **MCP Servers**.
-3. Використовуйте панель пошуку у вкладці **Marketplace**, щоб знайти _Context7_.
+3. Використовуйте панель пошуку у вкладці **Marketplace**, щоб знайти _Codex7_.
 4. Натисніть кнопку **Install**.
 
 </details>
@@ -386,15 +386,15 @@ claude mcp add context7 -- npx -y @upstash/context7-mcp
 ```json
 {
   "mcpServers": {
-    "context7": {
+    "codex7": {
       "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp"]
+      "args": ["-y", "@upstash/codex7-mcp"]
     }
   }
 }
 ```
 
-Після збереження введіть у чаті `get-library-docs`, а потім ваш ідентифікатор документації Context7 (наприклад, `get-library-docs /nuxt/ui`). Додаткова інформація доступна на [сайті документації BoltAI](https://docs.boltai.com/docs/plugins/mcp-servers). Для BoltAI на iOS [див. цей посібник](https://docs.boltai.com/docs/boltai-mobile/mcp-servers).
+Після збереження введіть у чаті `get-library-docs`, а потім ваш ідентифікатор документації Codex7 (наприклад, `get-library-docs /nuxt/ui`). Додаткова інформація доступна на [сайті документації BoltAI](https://docs.boltai.com/docs/plugins/mcp-servers). Для BoltAI на iOS [див. цей посібник](https://docs.boltai.com/docs/boltai-mobile/mcp-servers).
 
 </details>
 
@@ -416,21 +416,21 @@ claude mcp add context7 -- npx -y @upstash/context7-mcp
    WORKDIR /app
 
    # Встановіть найновішу версію глобально
-   RUN npm install -g @upstash/context7-mcp
+   RUN npm install -g @upstash/codex7-mcp
 
    # Відкрийте стандартний порт, якщо потрібно (необов'язково, залежить від взаємодії з MCP-клієнтом)
    # EXPOSE 3000
 
    # Стандартна команда для запуску сервера
-   CMD ["context7-mcp"]
+   CMD ["codex7-mcp"]
    ```
 
    </details>
 
-   Потім створіть образ, використовуючи тег (наприклад, `context7-mcp`). **Переконайтеся, що Docker Desktop (або демон Docker) запущений.** Виконайте наступну команду в тій же теці, де ви зберегли `Dockerfile`:
+   Потім створіть образ, використовуючи тег (наприклад, `codex7-mcp`). **Переконайтеся, що Docker Desktop (або демон Docker) запущений.** Виконайте наступну команду в тій же теці, де ви зберегли `Dockerfile`:
 
    ```bash
-   docker build -t context7-mcp .
+   docker build -t codex7-mcp .
    ```
 
 2. **Налаштуйте ваш MCP-клієнт:**
@@ -442,12 +442,12 @@ claude mcp add context7 -- npx -y @upstash/context7-mcp
    ```json
    {
      "mcpServers": {
-       "Context7": {
+       "Codex7": {
          "autoApprove": [],
          "disabled": false,
          "timeout": 60,
          "command": "docker",
-         "args": ["run", "-i", "--rm", "context7-mcp"],
+         "args": ["run", "-i", "--rm", "codex7-mcp"],
          "transportType": "stdio"
        }
      }
@@ -466,9 +466,9 @@ claude mcp add context7 -- npx -y @upstash/context7-mcp
 ```json
 {
   "mcpServers": {
-    "github.com/upstash/context7-mcp": {
+    "github.com/upstash/codex7-mcp": {
       "command": "cmd",
-      "args": ["/c", "npx", "-y", "@upstash/context7-mcp@latest"],
+      "args": ["/c", "npx", "-y", "@upstash/codex7-mcp@latest"],
       "disabled": false,
       "autoApprove": []
     }
@@ -481,7 +481,7 @@ claude mcp add context7 -- npx -y @upstash/context7-mcp
 <details>
 <summary><b>Встановлення в Augment Code</b></summary>
 
-Для налаштування Context7 MCP в Augment Code ви можете використовувати або графічний інтерфейс, або ручну конфігурацію.
+Для налаштування Codex7 MCP в Augment Code ви можете використовувати або графічний інтерфейс, або ручну конфігурацію.
 
 ### **A. Використання інтерфейсу Augment Code**
 
@@ -492,10 +492,10 @@ claude mcp add context7 -- npx -y @upstash/context7-mcp
 5. Введіть наступну команду:
 
    ```
-   npx -y @upstash/context7-mcp@latest
+   npx -y @upstash/codex7-mcp@latest
    ```
 
-6. Назва MCP: **Context7**.
+6. Назва MCP: **Codex7**.
 7. Натисніть кнопку **Add**.
 
 ### **B. Ручна конфігурація**
@@ -509,9 +509,9 @@ claude mcp add context7 -- npx -y @upstash/context7-mcp
 "augment.advanced": {
   "mcpServers": [
     {
-      "name": "context7",
+      "name": "codex7",
       "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp"]
+      "args": ["-y", "@upstash/codex7-mcp"]
     }
   ]
 }
@@ -529,9 +529,9 @@ claude mcp add context7 -- npx -y @upstash/context7-mcp
 ```json
 {
   "mcpServers": {
-    "context7": {
+    "codex7": {
       "type": "streamable-http",
-      "url": "https://mcp.context7.com/mcp"
+      "url": "https://mcp.codex7.com/mcp"
     }
   }
 }
@@ -542,9 +542,9 @@ claude mcp add context7 -- npx -y @upstash/context7-mcp
 ```json
 {
   "mcpServers": {
-    "context7": {
+    "codex7": {
       "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp"]
+      "args": ["-y", "@upstash/codex7-mcp"]
     }
   }
 }
@@ -555,7 +555,7 @@ claude mcp add context7 -- npx -y @upstash/context7-mcp
 <details>
 <summary><b>Встановлення в Zencoder</b></summary>
 
-Для налаштування Context7 MCP в Zencoder виконайте наступні кроки:
+Для налаштування Codex7 MCP в Zencoder виконайте наступні кроки:
 
 1. Перейдіть до меню Zencoder (...)
 2. З випадного меню виберіть Agent tools
@@ -565,7 +565,7 @@ claude mcp add context7 -- npx -y @upstash/context7-mcp
 ```json
 {
   "command": "npx",
-  "args": ["-y", "@upstash/context7-mcp@latest"]
+  "args": ["-y", "@upstash/codex7-mcp@latest"]
 }
 ```
 
@@ -579,9 +579,9 @@ claude mcp add context7 -- npx -y @upstash/context7-mcp
 ```json
 {
   "mcpServers": {
-    "context7": {
+    "codex7": {
       "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp@latest"]
+      "args": ["-y", "@upstash/codex7-mcp@latest"]
     }
   }
 }
@@ -602,8 +602,8 @@ claude mcp add context7 -- npx -y @upstash/context7-mcp
 ```json
 {
   "mcpServers": {
-    "context7": {
-      "url": "https://mcp.context7.com/mcp"
+    "codex7": {
+      "url": "https://mcp.codex7.com/mcp"
     }
   }
 }
@@ -624,9 +624,9 @@ claude mcp add context7 -- npx -y @upstash/context7-mcp
 ```json
 {
   "mcpServers": {
-    "context7": {
+    "codex7": {
       "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp"]
+      "args": ["-y", "@upstash/codex7-mcp"]
     }
   }
 }
@@ -647,9 +647,9 @@ claude mcp add context7 -- npx -y @upstash/context7-mcp
 
 ```json
 {
-  "Context7": {
+  "Codex7": {
     "command": "npx",
-    "args": ["-y", "@upstash/context7-mcp"],
+    "args": ["-y", "@upstash/codex7-mcp"],
     "env": {},
     "working_directory": null,
     "start_on_launch": true
@@ -670,9 +670,9 @@ claude mcp add context7 -- npx -y @upstash/context7-mcp
 
 ```json
 "mcp": {
-  "context7": {
+  "codex7": {
     "type": "remote",
-    "url": "https://mcp.context7.com/mcp",
+    "url": "https://mcp.codex7.com/mcp",
     "enabled": true
   }
 }
@@ -683,9 +683,9 @@ claude mcp add context7 -- npx -y @upstash/context7-mcp
 ```json
 {
   "mcp": {
-    "context7": {
+    "codex7": {
       "type": "local",
-      "command": ["npx", "-y", "@upstash/context7-mcp"],
+      "command": ["npx", "-y", "@upstash/codex7-mcp"],
       "enabled": true
     }
   }
@@ -696,13 +696,13 @@ claude mcp add context7 -- npx -y @upstash/context7-mcp
 
 ## 🔨 Доступні інструменти
 
-Context7 MCP надає наступні інструменти, які можуть використовувати великі мовні моделі:
+Codex7 MCP надає наступні інструменти, які можуть використовувати великі мовні моделі:
 
-- `resolve-library-id`: Перетворює загальну назву бібліотеки на сумісний з Context7 ідентифікатор бібліотеки.
+- `resolve-library-id`: Перетворює загальну назву бібліотеки на сумісний з Codex7 ідентифікатор бібліотеки.
   - `libraryName` (обов'язково): Назва бібліотеки для пошуку
 
-- `get-library-docs`: Отримує документацію для бібліотеки, використовуючи сумісний з Context7 ідентифікатор бібліотеки.
-  - `context7CompatibleLibraryID` (обов'язково): Точний сумісний з Context7 ідентифікатор бібліотеки (наприклад, `/mongodb/docs`, `/vercel/next.js`)
+- `get-library-docs`: Отримує документацію для бібліотеки, використовуючи сумісний з Codex7 ідентифікатор бібліотеки.
+  - `codex7CompatibleLibraryID` (обов'язково): Точний сумісний з Codex7 ідентифікатор бібліотеки (наприклад, `/mongodb/docs`, `/vercel/next.js`)
   - `topic` (необов'язково): Сфокусувати документацію на конкретній темі (наприклад, "routing", "hooks")
   - `tokens` (необов'язково, за замовчуванням 10000): Максимальна кількість токенів для повернення. Значення менші за стандартне значення 10000 автоматично збільшуються до 10000.
 
@@ -710,19 +710,19 @@ Context7 MCP надає наступні інструменти, які можу
 
 ### Додайте правило
 
-> Якщо ви не хочете додавати `use context7` до кожного промпту, ви можете визначити просте правило у вашому файлі `.windsurfrules` в Windsurf або в розділі `Cursor Settings > Rules` в Cursor (або еквівалентному у вашому MCP-клієнті), щоб автоматично викликати Context7 для будь-яких запитань про код:
+> Якщо ви не хочете додавати `use codex7` до кожного промпту, ви можете визначити просте правило у вашому файлі `.windsurfrules` в Windsurf або в розділі `Cursor Settings > Rules` в Cursor (або еквівалентному у вашому MCP-клієнті), щоб автоматично викликати Codex7 для будь-яких запитань про код:
 >
 > ```toml
 > [[calls]]
 > match = "when the user requests code examples, setup or configuration steps, or library/API documentation"
-> tool  = "context7"
+> tool  = "codex7"
 > ```
 >
-> Відтоді ви отримуватимете документацію Context7 у будь-якій пов'язаній розмові без введення будь-чого додаткового. Ви можете додати свої випадки використання до частини match.
+> Відтоді ви отримуватимете документацію Codex7 у будь-якій пов'язаній розмові без введення будь-чого додаткового. Ви можете додати свої випадки використання до частини match.
 
 ### Використовуйте ідентифікатор бібліотеки
 
-> Якщо ви вже точно знаєте, яку бібліотеку хочете використовувати, додайте її ідентифікатор Context7 до вашого промпту. Таким чином Context7 MCP-сервер може пропустити крок пошуку бібліотеки та одразу перейти до отримання документації.
+> Якщо ви вже точно знаєте, яку бібліотеку хочете використовувати, додайте її ідентифікатор Codex7 до вашого промпту. Таким чином Codex7 MCP-сервер може пропустити крок пошуку бібліотеки та одразу перейти до отримання документації.
 >
 > ```txt
 > implement basic authentication with supabase. use library /supabase/supabase for api and docs
@@ -752,7 +752,7 @@ bun run dist/index.js
 
 ### Аргументи командного рядка
 
-`context7-mcp` приймає наступні прапори CLI:
+`codex7-mcp` приймає наступні прапори CLI:
 
 - `--transport <stdio|http|sse>` — Транспорт для використання (`stdio` за замовчуванням).
 - `--port <number>` — Порт для прослуховування при використанні транспорту `http` або `sse` (за замовчуванням `3000`).
@@ -769,9 +769,9 @@ bun run dist/index.js --transport http --port 8080
 ```json
 {
   "mcpServers": {
-    "context7": {
+    "codex7": {
       "command": "npx",
-      "args": ["tsx", "/path/to/folder/context7-mcp/src/index.ts"]
+      "args": ["tsx", "/path/to/folder/codex7-mcp/src/index.ts"]
     }
   }
 }
@@ -783,7 +783,7 @@ bun run dist/index.js --transport http --port 8080
 <summary><b>Тестування з MCP Inspector</b></summary>
 
 ```bash
-npx -y @modelcontextprotocol/inspector npx @upstash/context7-mcp
+npx -y @modelcontextprotocol/inspector npx @upstash/codex7-mcp
 ```
 
 </details>
@@ -798,9 +798,9 @@ npx -y @modelcontextprotocol/inspector npx @upstash/context7-mcp
 ```json
 {
   "mcpServers": {
-    "context7": {
+    "codex7": {
       "command": "bunx",
-      "args": ["-y", "@upstash/context7-mcp"]
+      "args": ["-y", "@upstash/codex7-mcp"]
     }
   }
 }
@@ -818,9 +818,9 @@ npx -y @modelcontextprotocol/inspector npx @upstash/context7-mcp
 ```json
 {
   "mcpServers": {
-    "context7": {
+    "codex7": {
       "command": "npx",
-      "args": ["-y", "--node-options=--experimental-vm-modules", "@upstash/context7-mcp@1.0.6"]
+      "args": ["-y", "--node-options=--experimental-vm-modules", "@upstash/codex7-mcp@1.0.6"]
     }
   }
 }
@@ -836,9 +836,9 @@ npx -y @modelcontextprotocol/inspector npx @upstash/context7-mcp
 ```json
 {
   "mcpServers": {
-    "context7": {
+    "codex7": {
       "command": "npx",
-      "args": ["-y", "--node-options=--experimental-fetch", "@upstash/context7-mcp"]
+      "args": ["-y", "--node-options=--experimental-fetch", "@upstash/codex7-mcp"]
     }
   }
 }
@@ -858,30 +858,30 @@ npx -y @modelcontextprotocol/inspector npx @upstash/context7-mcp
 
 ## ⚠️ Застереження
 
-Проєкти Context7 створюються спільнотою, і хоча ми прагнемо підтримувати високу якість, ми не можемо гарантувати точність, повноту або безпеку всієї документації бібліотек. Проєкти, перелічені в Context7, розробляються та підтримуються їхніми відповідними власниками, а не Context7. Якщо ви зіткнетеся з будь-яким підозрілим, неприйнятним або потенційно шкідливим контентом, будь ласка, використовуйте кнопку "Report" на сторінці проєкту, щоб негайно повідомити нас. Ми серйозно ставимося до всіх звітів і оперативно переглядаємо позначений контент для підтримання цілісності та безпеки нашої платформи. Використовуючи Context7, ви визнаєте, що робите це на власний розсуд і ризик.
+Проєкти Codex7 створюються спільнотою, і хоча ми прагнемо підтримувати високу якість, ми не можемо гарантувати точність, повноту або безпеку всієї документації бібліотек. Проєкти, перелічені в Codex7, розробляються та підтримуються їхніми відповідними власниками, а не Codex7. Якщо ви зіткнетеся з будь-яким підозрілим, неприйнятним або потенційно шкідливим контентом, будь ласка, використовуйте кнопку "Report" на сторінці проєкту, щоб негайно повідомити нас. Ми серйозно ставимося до всіх звітів і оперативно переглядаємо позначений контент для підтримання цілісності та безпеки нашої платформи. Використовуючи Codex7, ви визнаєте, що робите це на власний розсуд і ризик.
 
 ## 🤝 Зв'яжіться з нами
 
 Залишайтеся в курсі подій та приєднуйтеся до нашої спільноти:
 
 - 📢 Слідкуйте за нами в [X](https://x.com/contextai) для отримання останніх новин та оновлень
-- 🌐 Відвідайте наш [веб-сайт](https://context7.com)
+- 🌐 Відвідайте наш [веб-сайт](https://codex7.com)
 - 💬 Приєднуйтеся до нашої [спільноти Discord](https://upstash.com/discord)
 
-## 📺 Context7 у медіа
+## 📺 Codex7 у медіа
 
 - [Better Stack: "Free Tool Makes Cursor 10x Smarter"](https://youtu.be/52FC3qObp9E)
 - [Cole Medin: "This is Hands Down the BEST MCP Server for AI Coding Assistants"](https://www.youtube.com/watch?v=G7gK8H6u7Rs)
-- [Income Stream Surfers: "Context7 + SequentialThinking MCPs: Is This AGI?"](https://www.youtube.com/watch?v=-ggvzyLpK6o)
-- [Julian Goldie SEO: "Context7: New MCP AI Agent Update"](https://www.youtube.com/watch?v=CTZm6fBYisc)
+- [Income Stream Surfers: "Codex7 + SequentialThinking MCPs: Is This AGI?"](https://www.youtube.com/watch?v=-ggvzyLpK6o)
+- [Julian Goldie SEO: "Codex7: New MCP AI Agent Update"](https://www.youtube.com/watch?v=CTZm6fBYisc)
 - [JeredBlu: "Context 7 MCP: Get Documentation Instantly + VS Code Setup"](https://www.youtube.com/watch?v=-ls0D-rtET4)
-- [Income Stream Surfers: "Context7: The New MCP Server That Will CHANGE AI Coding"](https://www.youtube.com/watch?v=PS-2Azb-C3M)
-- [AICodeKing: "Context7 + Cline & RooCode: This MCP Server Makes CLINE 100X MORE EFFECTIVE!"](https://www.youtube.com/watch?v=qZfENAPMnyo)
+- [Income Stream Surfers: "Codex7: The New MCP Server That Will CHANGE AI Coding"](https://www.youtube.com/watch?v=PS-2Azb-C3M)
+- [AICodeKing: "Codex7 + Cline & RooCode: This MCP Server Makes CLINE 100X MORE EFFECTIVE!"](https://www.youtube.com/watch?v=qZfENAPMnyo)
 - [Sean Kochel: "5 MCP Servers For Vibe Coding Glory (Just Plug-In & Go)"](https://www.youtube.com/watch?v=LqTQi8qexJM)
 
 ## ⭐ Історія зірок
 
-[![Діаграма історії зірок](https://api.star-history.com/svg?repos=upstash/context7&type=Date)](https://www.star-history.com/#upstash/context7&Date)
+[![Діаграма історії зірок](https://api.star-history.com/svg?repos=upstash/codex7&type=Date)](https://www.star-history.com/#upstash/codex7&Date)
 
 ## 📄 Ліцензія
 

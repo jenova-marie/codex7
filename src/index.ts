@@ -105,7 +105,7 @@ function getClientIp(req: IncomingMessage): string | undefined {
 function createServerInstance(clientIp?: string, apiKey?: string) {
   const server = new McpServer(
     {
-      name: "Context7",
+      name: "Codex7",
       version: "1.0.13",
     },
     {
@@ -114,14 +114,14 @@ function createServerInstance(clientIp?: string, apiKey?: string) {
     }
   );
 
-  // Register Context7 tools
+  // Register Codex7 tools
   server.registerTool(
     "resolve-library-id",
     {
-      title: "Resolve Context7 Library ID",
-      description: `Resolves a package/product name to a Context7-compatible library ID and returns a list of matching libraries.
+      title: "Resolve Codex7 Library ID",
+      description: `Resolves a package/product name to a Codex7-compatible library ID and returns a list of matching libraries.
 
-You MUST call this function before 'get-library-docs' to obtain a valid Context7-compatible library ID UNLESS the user explicitly provides a library ID in the format '/org/project' or '/org/project/version' in their query.
+You MUST call this function before 'get-library-docs' to obtain a valid Codex7-compatible library ID UNLESS the user explicitly provides a library ID in the format '/org/project' or '/org/project/version' in their query.
 
 Selection Process:
 1. Analyze the query to understand what library/package the user is looking for
@@ -141,7 +141,7 @@ For ambiguous queries, request clarification before proceeding with a best-guess
       inputSchema: {
         libraryName: z
           .string()
-          .describe("Library name to search for and retrieve a Context7-compatible library ID."),
+          .describe("Library name to search for and retrieve a Codex7-compatible library ID."),
       },
     },
     async ({ libraryName }) => {
@@ -154,7 +154,7 @@ For ambiguous queries, request clarification before proceeding with a best-guess
               type: "text",
               text: searchResponse.error
                 ? searchResponse.error
-                : "Failed to retrieve library documentation data from Context7",
+                : "Failed to retrieve library documentation data from Codex7",
             },
           ],
         };
@@ -169,7 +169,7 @@ For ambiguous queries, request clarification before proceeding with a best-guess
             text: `Available Libraries (top matches):
 
 Each result includes:
-- Library ID: Context7-compatible identifier (format: /org/project)
+- Library ID: Codex7-compatible identifier (format: /org/project)
 - Name: Library or package name
 - Description: Short summary
 - Code Snippets: Number of available code examples
@@ -192,12 +192,12 @@ ${resultsText}`,
     {
       title: "Get Library Docs",
       description:
-        "Fetches up-to-date documentation for a library. You must call 'resolve-library-id' first to obtain the exact Context7-compatible library ID required to use this tool, UNLESS the user explicitly provides a library ID in the format '/org/project' or '/org/project/version' in their query.",
+        "Fetches up-to-date documentation for a library. You must call 'resolve-library-id' first to obtain the exact Codex7-compatible library ID required to use this tool, UNLESS the user explicitly provides a library ID in the format '/org/project' or '/org/project/version' in their query.",
       inputSchema: {
-        context7CompatibleLibraryID: z
+        codex7CompatibleLibraryID: z
           .string()
           .describe(
-            "Exact Context7-compatible library ID (e.g., '/mongodb/docs', '/vercel/next.js', '/supabase/supabase', '/vercel/next.js/v14.3.0-canary.87') retrieved from 'resolve-library-id' or directly from user query in the format '/org/project' or '/org/project/version'."
+            "Exact Codex7-compatible library ID (e.g., '/mongodb/docs', '/vercel/next.js', '/supabase/supabase', '/vercel/next.js/v14.3.0-canary.87') retrieved from 'resolve-library-id' or directly from user query in the format '/org/project' or '/org/project/version'."
           ),
         topic: z
           .string()
@@ -212,9 +212,9 @@ ${resultsText}`,
           ),
       },
     },
-    async ({ context7CompatibleLibraryID, tokens = DEFAULT_TOKENS, topic = "" }) => {
+    async ({ codex7CompatibleLibraryID, tokens = DEFAULT_TOKENS, topic = "" }) => {
       const fetchDocsResponse = await fetchLibraryDocumentation(
-        context7CompatibleLibraryID,
+        codex7CompatibleLibraryID,
         {
           tokens,
           topic,
@@ -228,7 +228,7 @@ ${resultsText}`,
           content: [
             {
               type: "text",
-              text: "Documentation not found or not finalized for this library. This might have happened because you used an invalid Context7-compatible library ID. To get a valid Context7-compatible library ID, use the 'resolve-library-id' with the package name you wish to retrieve documentation for.",
+              text: "Documentation not found or not finalized for this library. This might have happened because you used an invalid Codex7-compatible library ID. To get a valid Codex7-compatible library ID, use the 'resolve-library-id' with the package name you wish to retrieve documentation for.",
             },
           ],
         };
@@ -264,7 +264,7 @@ async function main() {
       res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS,DELETE");
       res.setHeader(
         "Access-Control-Allow-Headers",
-        "Content-Type, MCP-Session-Id, MCP-Protocol-Version, X-Context7-API-Key, Context7-API-Key, X-API-Key, Authorization"
+        "Content-Type, MCP-Session-Id, MCP-Protocol-Version, X-Codex7-API-Key, Codex7-API-Key, X-API-Key, Authorization"
       );
       res.setHeader("Access-Control-Expose-Headers", "MCP-Session-Id");
 
@@ -300,13 +300,13 @@ async function main() {
       // Check headers in order of preference
       const apiKey =
         extractBearerToken(req.headers.authorization) ||
-        extractHeaderValue(req.headers["Context7-API-Key"]) ||
+        extractHeaderValue(req.headers["Codex7-API-Key"]) ||
         extractHeaderValue(req.headers["X-API-Key"]) ||
-        extractHeaderValue(req.headers["context7-api-key"]) ||
+        extractHeaderValue(req.headers["codex7-api-key"]) ||
         extractHeaderValue(req.headers["x-api-key"]) ||
-        extractHeaderValue(req.headers["Context7_API_Key"]) ||
+        extractHeaderValue(req.headers["Codex7_API_Key"]) ||
         extractHeaderValue(req.headers["X_API_Key"]) ||
-        extractHeaderValue(req.headers["context7_api_key"]) ||
+        extractHeaderValue(req.headers["codex7_api_key"]) ||
         extractHeaderValue(req.headers["x_api_key"]);
 
       try {
@@ -406,7 +406,7 @@ async function main() {
       httpServer.listen(port, () => {
         actualPort = port;
         console.error(
-          `Context7 Documentation MCP Server running on ${transportType.toUpperCase()} at http://localhost:${actualPort}/mcp with SSE endpoint at /sse`
+          `Codex7 Documentation MCP Server running on ${transportType.toUpperCase()} at http://localhost:${actualPort}/mcp with SSE endpoint at /sse`
         );
       });
     };
@@ -419,7 +419,7 @@ async function main() {
     const server = createServerInstance(undefined, apiKey);
     const transport = new StdioServerTransport();
     await server.connect(transport);
-    console.error("Context7 Documentation MCP Server running on stdio");
+    console.error("Codex7 Documentation MCP Server running on stdio");
   }
 }
 

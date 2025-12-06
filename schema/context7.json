@@ -1,13 +1,13 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://context7.com/schema/context7.json",
-  "title": "Context7 Configuration Schema",
-  "description": "Configuration file for Context7 project parsing and documentation generation",
+  "$id": "https://codex7.com/schema/codex7.json",
+  "title": "Codex7 Configuration Schema",
+  "description": "Configuration file for Codex7 project parsing and documentation generation",
   "type": "object",
   "properties": {
     "projectTitle": {
       "type": "string",
-      "description": "The display name for your project in Context7. This overrides the default repository name.",
+      "description": "The display name for your project in Codex7. This overrides the default repository name.",
       "minLength": 1,
       "maxLength": 100,
       "examples": ["Upstash Ratelimit", "Next.js", "React Query"]
@@ -25,7 +25,7 @@
     },
     "folders": {
       "type": "array",
-      "description": "Specific folder paths to include when parsing documentation. If empty, Context7 will scan the entire repository. Supports regex patterns and requires full paths.",
+      "description": "Specific folder paths to include when parsing documentation. If empty, Codex7 will scan the entire repository. Supports regex patterns and requires full paths.",
       "items": {
         "type": "string",
         "minLength": 1
@@ -86,7 +86,7 @@
     },
     "previousVersions": {
       "type": "array",
-      "description": "Information about previous versions of your library that should also be available in Context7.",
+      "description": "Information about previous versions of your library that should also be available in Codex7.",
       "items": {
         "type": "object",
         "properties": {

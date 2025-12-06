@@ -1,26 +1,26 @@
-# Adding Projects to Context7
+# Adding Projects to Codex7
 
-Context7 allows you to add your favorite libraries and frameworks to help developers get up-to-date documentation directly in their coding environment.
+Codex7 allows you to add your favorite libraries and frameworks to help developers get up-to-date documentation directly in their coding environment.
 
 ## Quick Submission
 
 The easiest way to add a library is through our web interface:
 
-**[Submit a Library →](https://context7.com/add-library?tab=github)**
+**[Submit a Library →](https://codex7.com/add-library?tab=github)**
 
-Simply provide the GitHub repository URL and Context7 will automatically parse and index the project's documentation.
+Simply provide the GitHub repository URL and Codex7 will automatically parse and index the project's documentation.
 
-## Advanced Configuration with `context7.json`
+## Advanced Configuration with `codex7.json`
 
-For more control over how Context7 parses and presents your library, you can add a `context7.json` file to the root of your repository. This file works similar to `robots.txt` and tells Context7 how to handle your project.
+For more control over how Codex7 parses and presents your library, you can add a `codex7.json` file to the root of your repository. This file works similar to `robots.txt` and tells Codex7 how to handle your project.
 
 ### Configuration Fields
 
-Here's an example `context7.json` file with all available options:
+Here's an example `codex7.json` file with all available options:
 
 ```json
 {
-  "$schema": "https://context7.com/schema/context7.json",
+  "$schema": "https://codex7.com/schema/codex7.json",
   "projectTitle": "Upstash Ratelimit",
   "description": "Ratelimiting library based on Upstash Redis",
   "folders": [],
@@ -39,16 +39,16 @@ Here's an example `context7.json` file with all available options:
 
 ## Field Descriptions
 
-- **`projectTitle`** (string): Suggested display name for your project in Context7. Only used when LLM
+- **`projectTitle`** (string): Suggested display name for your project in Codex7. Only used when LLM
   can not generate a name with high confidence.
 
-- **`description`** (string): Suggested description for your project in Context7. Only used when LLM can
+- **`description`** (string): Suggested description for your project in Codex7. Only used when LLM can
   not generate a name with high confidence.
 
 - **`branch`** (string): The name of the git branch to parse. If not provided, the default branch will
   be used.
 
-- **`folders`** (array): Specific folder paths to include when parsing documentation. If empty, Context7
+- **`folders`** (array): Specific folder paths to include when parsing documentation. If empty, Codex7
   will scan the entire repository for relevant documentation files. Note: Root-level markdown files are
   always included regardless of this setting.
 
@@ -64,11 +64,11 @@ Here's an example `context7.json` file with all available options:
   agents.
 
 - **`previousVersions`** (array): Information about previous versions of your library that should also
-  be available in Context7.
+  be available in Codex7.
   - **`tag`**: The Git tag or version identifier
 
 - **`branchVersions`** (array): Information about previous versions (branch based) of your library that should also
-  be available in Context7.
+  be available in Codex7.
   - **`branch`**: The Git branch
 
 ### Exclusion Patterns
@@ -95,7 +95,7 @@ Examples:
 
 ### Default Exclusions
 
-If you don't specify `excludeFiles` or `excludeFolders` in your `context7.json`, Context7 uses these default patterns:
+If you don't specify `excludeFiles` or `excludeFolders` in your `codex7.json`, Codex7 uses these default patterns:
 
 #### Default Excluded Files
 
@@ -120,7 +120,7 @@ These defaults help ensure that coding agents receive relevant, current document
 
 ## Who Can Add Configuration?
 
-- **Library authors**: Add `context7.json` directly to your repository
+- **Library authors**: Add `codex7.json` directly to your repository
 - **Contributors**: Submit pull requests to add or update the configuration
 - **Community members**: Propose improvements to how popular libraries are parsed
 
@@ -135,7 +135,7 @@ These defaults help ensure that coding agents receive relevant, current document
 
 To add a new version to your existing library:
 
-1. **Add version to the `context7.json` file**: Update the `previousVersions` array with your new version:
+1. **Add version to the `codex7.json` file**: Update the `previousVersions` array with your new version:
 
    ```json
    "previousVersions": [
@@ -148,8 +148,8 @@ To add a new version to your existing library:
 
    > **Note**: The `tag` value must exactly match an existing Git tag in your GitHub repository.
 
-2. **Refresh your library**: Go to your library page on Context7 and trigger a refresh to index the new version.
+2. **Refresh your library**: Go to your library page on Codex7 and trigger a refresh to index the new version.
 
 ## Need Help?
 
-If you encounter issues or need assistance adding your project, please [report an issue](https://context7.com/add-library?tab=github) or reach out to our community.
+If you encounter issues or need assistance adding your project, please [report an issue](https://codex7.com/add-library?tab=github) or reach out to our community.

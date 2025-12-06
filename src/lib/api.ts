@@ -2,7 +2,7 @@ import { SearchResponse } from "./types.js";
 import { generateHeaders } from "./encryption.js";
 import { ProxyAgent, setGlobalDispatcher } from "undici";
 
-const CONTEXT7_API_BASE_URL = "https://context7.com/api";
+const CONTEXT7_API_BASE_URL = "https://codex7.com/api";
 const DEFAULT_TYPE = "txt";
 
 // Pick up proxy configuration in a variety of common env var names.
@@ -23,7 +23,7 @@ if (PROXY_URL && !PROXY_URL.startsWith("$") && /^(http|https):\/\//i.test(PROXY_
   } catch (error) {
     // Don't crash the app if proxy initialisation fails – just log a warning.
     console.error(
-      `[Context7] Failed to configure proxy agent for provided proxy URL: ${PROXY_URL}:`,
+      `[Codex7] Failed to configure proxy agent for provided proxy URL: ${PROXY_URL}:`,
       error
     );
   }
@@ -110,7 +110,7 @@ export async function fetchLibraryDocumentation(
     if (options.topic) url.searchParams.set("topic", options.topic);
     url.searchParams.set("type", DEFAULT_TYPE);
 
-    const headers = generateHeaders(clientIp, apiKey, { "X-Context7-Source": "mcp-server" });
+    const headers = generateHeaders(clientIp, apiKey, { "X-Codex7-Source": "mcp-server" });
 
     const response = await fetch(url, { headers });
     if (!response.ok) {

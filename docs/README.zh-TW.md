@@ -1,8 +1,8 @@
-# Context7 MCP - 即時更新的程式碼文件，適用於任何提示
+# Codex7 MCP - 即時更新的程式碼文件，適用於任何提示
 
-[![網站](https://img.shields.io/badge/Website-context7.com-blue)](https://context7.com) [![smithery 徽章](https://smithery.ai/badge/@upstash/context7-mcp)](https://smithery.ai/server/@upstash/context7-mcp) [<img alt="在 VS Code 中安裝 (npx)" src="https://img.shields.io/badge/VS_Code-VS_Code?style=flat-square&label=安裝%20Context7%20MCP&color=0098FF">](https://insiders.vscode.dev/redirect?url=vscode%3Amcp%2Finstall%3F%7B%22name%22%3A%22context7%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22%40upstash%2Fcontext7-mcp%40latest%22%5D%7D)
+[![網站](https://img.shields.io/badge/Website-codex7.com-blue)](https://codex7.com) [![smithery 徽章](https://smithery.ai/badge/@upstash/codex7-mcp)](https://smithery.ai/server/@upstash/codex7-mcp) [<img alt="在 VS Code 中安裝 (npx)" src="https://img.shields.io/badge/VS_Code-VS_Code?style=flat-square&label=安裝%20Codex7%20MCP&color=0098FF">](https://insiders.vscode.dev/redirect?url=vscode%3Amcp%2Finstall%3F%7B%22name%22%3A%22codex7%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22%40upstash%2Fcodex7-mcp%40latest%22%5D%7D)
 
-## ❌ 沒有 Context7
+## ❌ 沒有 Codex7
 
 大型語言模型（LLM）依賴過時或通用的函式庫資訊。你會遇到：
 
@@ -10,31 +10,31 @@
 - ❌ 產生不存在的 API
 - ❌ 舊版套件的通用答案
 
-## ✅ 有了 Context7
+## ✅ 有了 Codex7
 
-Context7 MCP 直接從來源拉取即時、特定版本的文件與程式碼範例，並直接放入你的提示中。
+Codex7 MCP 直接從來源拉取即時、特定版本的文件與程式碼範例，並直接放入你的提示中。
 
-在 Cursor 的提示中加入 `use context7`：
+在 Cursor 的提示中加入 `use codex7`：
 
 ```txt
-建立一個使用 app router 的基本 Next.js 專案。use context7
+建立一個使用 app router 的基本 Next.js 專案。use codex7
 ```
 
 ```txt
-根據 PostgreSQL 資訊，建立一個刪除 city 為 "" 的資料列的腳本。use context7
+根據 PostgreSQL 資訊，建立一個刪除 city 為 "" 的資料列的腳本。use codex7
 ```
 
-Context7 會將即時的程式碼範例與文件直接帶入你的 LLM 上下文。
+Codex7 會將即時的程式碼範例與文件直接帶入你的 LLM 上下文。
 
 - 1️⃣ 自然地撰寫你的提示
-- 2️⃣ 告訴 LLM `use context7`
+- 2️⃣ 告訴 LLM `use codex7`
 - 3️⃣ 取得可執行的程式碼解答
 
 不需切換分頁、不會產生不存在的 API、不會有過時的程式碼。
 
 ## 📚 新增專案
 
-請參考我們的[專案新增指南](./adding-projects.md)，學習如何將你喜愛的函式庫加入 Context7 或更新其內容。
+請參考我們的[專案新增指南](./adding-projects.md)，學習如何將你喜愛的函式庫加入 Codex7 或更新其內容。
 
 ## 🛠️ 安裝
 
@@ -46,13 +46,13 @@ Context7 會將即時的程式碼範例與文件直接帶入你的 LLM 上下文
 <details>
 <summary><b>透過 Smithery 安裝</b></summary>
 
-要透過 [Smithery](https://smithery.ai/server/@upstash/context7-mcp) 自動安裝 Context7 MCP Server：
+要透過 [Smithery](https://smithery.ai/server/@upstash/codex7-mcp) 自動安裝 Codex7 MCP Server：
 
 ```bash
-npx -y @smithery/cli@latest install @upstash/context7-mcp --client <CLIENT_NAME> --key <YOUR_SMITHERY_KEY>
+npx -y @smithery/cli@latest install @upstash/codex7-mcp --client <CLIENT_NAME> --key <YOUR_SMITHERY_KEY>
 ```
 
-你的 Smithery 金鑰可在 [Smithery.ai 網頁](https://smithery.ai/server/@upstash/context7-mcp) 取得。
+你的 Smithery 金鑰可在 [Smithery.ai 網頁](https://smithery.ai/server/@upstash/codex7-mcp) 取得。
 
 </details>
 
@@ -68,8 +68,8 @@ npx -y @smithery/cli@latest install @upstash/context7-mcp --client <CLIENT_NAME>
 ```json
 {
   "mcpServers": {
-    "context7": {
-      "url": "https://mcp.context7.com/mcp"
+    "codex7": {
+      "url": "https://mcp.codex7.com/mcp"
     }
   }
 }
@@ -77,14 +77,14 @@ npx -y @smithery/cli@latest install @upstash/context7-mcp --client <CLIENT_NAME>
 
 #### Cursor 本地伺服器連線
 
-[![Install MCP Server](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/install-mcp?name=context7&config=eyJjb21tYW5kIjoibnB4IC15IEB1cHN0YXNoL2NvbnRleHQ3LW1jcCJ9)
+[![Install MCP Server](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/install-mcp?name=codex7&config=eyJjb21tYW5kIjoibnB4IC15IEB1cHN0YXNoL2NvbnRleHQ3LW1jcCJ9)
 
 ```json
 {
   "mcpServers": {
-    "context7": {
+    "codex7": {
       "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp"]
+      "args": ["-y", "@upstash/codex7-mcp"]
     }
   }
 }
@@ -93,14 +93,14 @@ npx -y @smithery/cli@latest install @upstash/context7-mcp --client <CLIENT_NAME>
 <details>
 <summary>替代方案：使用 Bun</summary>
 
-[![Install MCP Server](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/install-mcp?name=context7&config=eyJjb21tYW5kIjoiYnVueCAteSBAdXBzdGFzaC9jb250ZXh0Ny1tY3AifQ%3D%3D)
+[![Install MCP Server](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/install-mcp?name=codex7&config=eyJjb21tYW5kIjoiYnVueCAteSBAdXBzdGFzaC9jb250ZXh0Ny1tY3AifQ%3D%3D)
 
 ```json
 {
   "mcpServers": {
-    "context7": {
+    "codex7": {
       "command": "bunx",
-      "args": ["-y", "@upstash/context7-mcp"]
+      "args": ["-y", "@upstash/codex7-mcp"]
     }
   }
 }
@@ -111,14 +111,14 @@ npx -y @smithery/cli@latest install @upstash/context7-mcp --client <CLIENT_NAME>
 <details>
 <summary>替代方案：使用 Deno</summary>
 
-[![Install MCP Server](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/install-mcp?name=context7&config=eyJjb21tYW5kIjoiZGVubyBydW4gLS1hbGxvdy1lbnYgLS1hbGxvdy1uZXQgbnBtOkB1cHN0YXNoL2NvbnRleHQ3LW1jcCJ9)
+[![Install MCP Server](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/install-mcp?name=codex7&config=eyJjb21tYW5kIjoiZGVubyBydW4gLS1hbGxvdy1lbnYgLS1hbGxvdy1uZXQgbnBtOkB1cHN0YXNoL2NvbnRleHQ3LW1jcCJ9)
 
 ```json
 {
   "mcpServers": {
-    "context7": {
+    "codex7": {
       "command": "deno",
-      "args": ["run", "--allow-env", "--allow-net", "npm:@upstash/context7-mcp"]
+      "args": ["run", "--allow-env", "--allow-net", "npm:@upstash/codex7-mcp"]
     }
   }
 }
@@ -138,8 +138,8 @@ npx -y @smithery/cli@latest install @upstash/context7-mcp --client <CLIENT_NAME>
 ```json
 {
   "mcpServers": {
-    "context7": {
-      "serverUrl": "https://mcp.context7.com/sse"
+    "codex7": {
+      "serverUrl": "https://mcp.codex7.com/sse"
     }
   }
 }
@@ -150,9 +150,9 @@ npx -y @smithery/cli@latest install @upstash/context7-mcp --client <CLIENT_NAME>
 ```json
 {
   "mcpServers": {
-    "context7": {
+    "codex7": {
       "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp"]
+      "args": ["-y", "@upstash/codex7-mcp"]
     }
   }
 }
@@ -171,8 +171,8 @@ npx -y @smithery/cli@latest install @upstash/context7-mcp --client <CLIENT_NAME>
 ```json
 {
   "mcpServers": {
-    "context7": {
-      "url": "https://mcp.context7.com/mcp"
+    "codex7": {
+      "url": "https://mcp.codex7.com/mcp"
     }
   }
 }
@@ -183,9 +183,9 @@ npx -y @smithery/cli@latest install @upstash/context7-mcp --client <CLIENT_NAME>
 ```json
 {
   "mcpServers": {
-    "context7": {
+    "codex7": {
       "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp"]
+      "args": ["-y", "@upstash/codex7-mcp"]
     }
   }
 }
@@ -196,8 +196,8 @@ npx -y @smithery/cli@latest install @upstash/context7-mcp --client <CLIENT_NAME>
 <details>
 <summary><b>在 VS Code 安裝</b></summary>
 
-[<img alt="在 VS Code 中安裝 (npx)" src="https://img.shields.io/badge/VS_Code-VS_Code?style=flat-square&label=安裝Context7%20MCP&color=0098FF">](https://insiders.vscode.dev/redirect?url=vscode%3Amcp%2Finstall%3F%7B%22name%22%3A%22context7%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22%40upstash%2Fcontext7-mcp%40latest%22%5D%7D)
-[<img alt="在 VS Code Insiders 中安裝 (npx)" src="https://img.shields.io/badge/VS_Code_Insiders-VS_Code_Insiders?style=flat-square&label=安裝Context7%20MCP&color=24bfa5">](https://insiders.vscode.dev/redirect?url=vscode-insiders%3Amcp%2Finstall%3F%7B%22name%22%3A%22context7%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22%40upstash%2Fcontext7-mcp%40latest%22%5D%7D)
+[<img alt="在 VS Code 中安裝 (npx)" src="https://img.shields.io/badge/VS_Code-VS_Code?style=flat-square&label=安裝Codex7%20MCP&color=0098FF">](https://insiders.vscode.dev/redirect?url=vscode%3Amcp%2Finstall%3F%7B%22name%22%3A%22codex7%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22%40upstash%2Fcodex7-mcp%40latest%22%5D%7D)
+[<img alt="在 VS Code Insiders 中安裝 (npx)" src="https://img.shields.io/badge/VS_Code_Insiders-VS_Code_Insiders?style=flat-square&label=安裝Codex7%20MCP&color=24bfa5">](https://insiders.vscode.dev/redirect?url=vscode-insiders%3Amcp%2Finstall%3F%7B%22name%22%3A%22codex7%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22%40upstash%2Fcodex7-mcp%40latest%22%5D%7D)
 
 將下列內容加入 VS Code MCP 設定檔。詳見 [VS Code MCP 文件](https://code.visualstudio.com/docs/copilot/chat/mcp-servers)。
 
@@ -206,9 +206,9 @@ npx -y @smithery/cli@latest install @upstash/context7-mcp --client <CLIENT_NAME>
 ```json
 "mcp": {
   "servers": {
-    "context7": {
+    "codex7": {
       "type": "http",
-      "url": "https://mcp.context7.com/mcp"
+      "url": "https://mcp.codex7.com/mcp"
     }
   }
 }
@@ -219,10 +219,10 @@ npx -y @smithery/cli@latest install @upstash/context7-mcp --client <CLIENT_NAME>
 ```json
 "mcp": {
   "servers": {
-    "context7": {
+    "codex7": {
       "type": "stdio",
       "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp"]
+      "args": ["-y", "@upstash/codex7-mcp"]
     }
   }
 }
@@ -233,7 +233,7 @@ npx -y @smithery/cli@latest install @upstash/context7-mcp --client <CLIENT_NAME>
 <details>
 <summary><b>在 Visual Studio 2022 安裝</b></summary>
 
-您可以按照 [Visual Studio MCP 伺服器文件](https://learn.microsoft.com/visualstudio/ide/mcp-servers?view=vs-2022) 的說明，在 Visual Studio 2022 中設定 Context7 MCP。
+您可以按照 [Visual Studio MCP 伺服器文件](https://learn.microsoft.com/visualstudio/ide/mcp-servers?view=vs-2022) 的說明，在 Visual Studio 2022 中設定 Codex7 MCP。
 
 請將以下內容新增至您的 Visual Studio MCP 設定檔（詳細資訊請參閱 [Visual Studio 文件](https://learn.microsoft.com/visualstudio/ide/mcp-servers?view=vs-2022)）：
 
@@ -241,9 +241,9 @@ npx -y @smithery/cli@latest install @upstash/context7-mcp --client <CLIENT_NAME>
 {
   "mcp": {
     "servers": {
-      "context7": {
+      "codex7": {
         "type": "http",
-        "url": "https://mcp.context7.com/mcp"
+        "url": "https://mcp.codex7.com/mcp"
       }
     }
   }
@@ -256,10 +256,10 @@ npx -y @smithery/cli@latest install @upstash/context7-mcp --client <CLIENT_NAME>
 {
   "mcp": {
     "servers": {
-      "context7": {
+      "codex7": {
         "type": "stdio",
         "command": "npx",
-        "args": ["-y", "@upstash/context7-mcp"]
+        "args": ["-y", "@upstash/codex7-mcp"]
       }
     }
   }
@@ -273,15 +273,15 @@ npx -y @smithery/cli@latest install @upstash/context7-mcp --client <CLIENT_NAME>
 <details>
 <summary><b>在 Zed 安裝</b></summary>
 
-可透過 [Zed 擴充套件](https://zed.dev/extensions?query=Context7) 安裝，或將下列內容加入 Zed `settings.json`。詳見 [Zed Context Server 文件](https://zed.dev/docs/assistant/context-servers)。
+可透過 [Zed 擴充套件](https://zed.dev/extensions?query=Codex7) 安裝，或將下列內容加入 Zed `settings.json`。詳見 [Zed Context Server 文件](https://zed.dev/docs/assistant/context-servers)。
 
 ```json
 {
   "context_servers": {
-    "Context7": {
+    "Codex7": {
       "command": {
         "path": "npx",
-        "args": ["-y", "@upstash/context7-mcp"]
+        "args": ["-y", "@upstash/codex7-mcp"]
       },
       "settings": {}
     }
@@ -302,8 +302,8 @@ npx -y @smithery/cli@latest install @upstash/context7-mcp --client <CLIENT_NAME>
 ```json
 {
   "mcpServers": {
-    "context7": {
-      "httpUrl": "https://mcp.context7.com/mcp"
+    "codex7": {
+      "httpUrl": "https://mcp.codex7.com/mcp"
     }
   }
 }
@@ -314,9 +314,9 @@ npx -y @smithery/cli@latest install @upstash/context7-mcp --client <CLIENT_NAME>
 ```json
 {
   "mcpServers": {
-    "context7": {
+    "codex7": {
       "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp"]
+      "args": ["-y", "@upstash/codex7-mcp"]
     }
   }
 }
@@ -334,19 +334,19 @@ npx -y @smithery/cli@latest install @upstash/context7-mcp --client <CLIENT_NAME>
 #### Claude Code 遠端伺服器連線
 
 ```sh
-claude mcp add --transport http context7 https://mcp.context7.com/mcp
+claude mcp add --transport http codex7 https://mcp.codex7.com/mcp
 ```
 
 或者使用 SSE 傳輸方式：
 
 ```sh
-claude mcp add --transport sse context7 https://mcp.context7.com/sse
+claude mcp add --transport sse codex7 https://mcp.codex7.com/sse
 ```
 
 #### Claude Code 本地伺服器連線
 
 ```sh
-claude mcp add context7 -- npx -y @upstash/context7-mcp
+claude mcp add codex7 -- npx -y @upstash/codex7-mcp
 ```
 
 </details>
@@ -359,9 +359,9 @@ claude mcp add context7 -- npx -y @upstash/context7-mcp
 ```json
 {
   "mcpServers": {
-    "Context7": {
+    "Codex7": {
       "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp"]
+      "args": ["-y", "@upstash/codex7-mcp"]
     }
   }
 }
@@ -374,11 +374,11 @@ claude mcp add context7 -- npx -y @upstash/context7-mcp
 <b>在 Cline 安裝</b>
 </summary>
 
-您可以按照以下說明，透過 [Cline MCP 伺服器市集](https://cline.bot/mcp-marketplace) 輕鬆安裝 Context7：
+您可以按照以下說明，透過 [Cline MCP 伺服器市集](https://cline.bot/mcp-marketplace) 輕鬆安裝 Codex7：
 
 1. 開啟 **Cline**。
 2. 點擊選單圖示（☰）進入 **MCP 伺服器** 區段。
-3. 在 **市集** 分頁的搜尋欄中尋找 _Context7_。
+3. 在 **市集** 分頁的搜尋欄中尋找 _Codex7_。
 4. 點擊 **安裝** 按鈕。
 
 您也可以直接修改 MCP servers 設定檔案：
@@ -387,13 +387,13 @@ claude mcp add context7 -- npx -y @upstash/context7-mcp
 2. 點擊選單圖示 (☰)，進入 MCP 伺服器部分。
 3. 選擇遠端伺服器標籤。
 4. 點擊編輯設定按鈕。
-5. 將 context7 相關設定新增至 mcpServers：
+5. 將 codex7 相關設定新增至 mcpServers：
 
 ```json
 {
   "mcpServers": {
-    "context7": {
-      "url": "https://mcp.context7.com/mcp",
+    "codex7": {
+      "url": "https://mcp.codex7.com/mcp",
       "type": "streamableHttp",
       "headers": {
         "Authorization": "Bearer YOUR_API_KEY"
@@ -413,31 +413,31 @@ claude mcp add context7 -- npx -y @upstash/context7-mcp
 ```json
 {
   "mcpServers": {
-    "context7": {
+    "codex7": {
       "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp"]
+      "args": ["-y", "@upstash/codex7-mcp"]
     }
   }
 }
 ```
 
-儲存後，在聊天中輸入 `get-library-docs` 並接上你的 Context7 文件 ID（例如 `get-library-docs /nuxt/ui`）。更多資訊請參考 [BoltAI 文件網站](https://docs.boltai.com/docs/plugins/mcp-servers)。如在 iOS 上使用 BoltAI，請參考[此指南](https://docs.boltai.com/docs/boltai-mobile/mcp-servers)。
+儲存後，在聊天中輸入 `get-library-docs` 並接上你的 Codex7 文件 ID（例如 `get-library-docs /nuxt/ui`）。更多資訊請參考 [BoltAI 文件網站](https://docs.boltai.com/docs/plugins/mcp-servers)。如在 iOS 上使用 BoltAI，請參考[此指南](https://docs.boltai.com/docs/boltai-mobile/mcp-servers)。
 
 </details>
 
 <details>
 <summary><b>在 Copilot Coding Agent 安裝</b></summary>
 
-## 在 Copilot Coding Agent 使用 Context7
+## 在 Copilot Coding Agent 使用 Codex7
 
 請將以下設定加入 Copilot Coding Agent 的 `mcp` 設定區塊（Repository->Settings->Copilot->Coding agent->MCP configuration）：
 
 ```json
 {
   "mcpServers": {
-    "context7": {
+    "codex7": {
       "type": "http",
-      "url": "https://mcp.context7.com/mcp",
+      "url": "https://mcp.codex7.com/mcp",
       "tools": ["get-library-docs", "resolve-library-id"]
     }
   }
@@ -466,21 +466,21 @@ claude mcp add context7 -- npx -y @upstash/context7-mcp
    WORKDIR /app
 
    # 全域安裝最新版
-   RUN npm install -g @upstash/context7-mcp
+   RUN npm install -g @upstash/codex7-mcp
 
    # 如有需要可開放預設埠（視 MCP 客戶端互動而定）
    # EXPOSE 3000
 
    # 預設啟動指令
-   CMD ["context7-mcp"]
+   CMD ["codex7-mcp"]
    ```
 
    </details>
 
-   然後使用標籤（如 `context7-mcp`）建構映像檔。**請確保 Docker Desktop（或 Docker daemon）已啟動。**在存有 `Dockerfile` 的目錄執行：
+   然後使用標籤（如 `codex7-mcp`）建構映像檔。**請確保 Docker Desktop（或 Docker daemon）已啟動。**在存有 `Dockerfile` 的目錄執行：
 
    ```bash
-   docker build -t context7-mcp .
+   docker build -t codex7-mcp .
    ```
 
 2. **設定 MCP 客戶端：**
@@ -497,7 +497,7 @@ claude mcp add context7 -- npx -y @upstash/context7-mcp
          "disabled": false,
          "timeout": 60,
          "command": "docker",
-         "args": ["run", "-i", "--rm", "context7-mcp"],
+         "args": ["run", "-i", "--rm", "codex7-mcp"],
          "transportType": "stdio"
        }
      }
@@ -516,9 +516,9 @@ Windows 的設定與 Linux 或 macOS 略有不同（_範例以 Cline 為例_）�
 ```json
 {
   "mcpServers": {
-    "github.com/upstash/context7-mcp": {
+    "github.com/upstash/codex7-mcp": {
       "command": "cmd",
-      "args": ["/c", "npx", "-y", "@upstash/context7-mcp@latest"],
+      "args": ["/c", "npx", "-y", "@upstash/codex7-mcp@latest"],
       "disabled": false,
       "autoApprove": []
     }
@@ -531,7 +531,7 @@ Windows 的設定與 Linux 或 macOS 略有不同（_範例以 Cline 為例_）�
 <details>
 <summary><b>在 Augment Code 安裝</b></summary>
 
-在 Augment Code 設定 Context7 MCP，請依下列步驟：
+在 Augment Code 設定 Codex7 MCP，請依下列步驟：
 
 1. 按 Cmd/Ctrl Shift P 或於 Augment 面板的漢堡選單中選擇
 2. 選擇 Edit Settings
@@ -542,9 +542,9 @@ Windows 的設定與 Linux 或 macOS 略有不同（_範例以 Cline 為例_）�
 "augment.advanced": {
     "mcpServers": [
         {
-            "name": "context7",
+            "name": "codex7",
             "command": "npx",
-            "args": ["-y", "@upstash/context7-mcp"]
+            "args": ["-y", "@upstash/codex7-mcp"]
         }
     ]
 }
@@ -564,9 +564,9 @@ Windows 的設定與 Linux 或 macOS 略有不同（_範例以 Cline 為例_）�
 ```json
 {
   "mcpServers": {
-    "context7": {
+    "codex7": {
       "type": "streamable-http",
-      "url": "https://mcp.context7.com/mcp"
+      "url": "https://mcp.codex7.com/mcp"
     }
   }
 }
@@ -577,9 +577,9 @@ Windows 的設定與 Linux 或 macOS 略有不同（_範例以 Cline 為例_）�
 ```json
 {
   "mcpServers": {
-    "context7": {
+    "codex7": {
       "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp"]
+      "args": ["-y", "@upstash/codex7-mcp"]
     }
   }
 }
@@ -590,7 +590,7 @@ Windows 的設定與 Linux 或 macOS 略有不同（_範例以 Cline 為例_）�
 <details>
 <summary><b>在 Zencoder 安裝</b></summary>
 
-要在 Zencoder 設定 Context7 MCP，請依照下列步驟操作：
+要在 Zencoder 設定 Codex7 MCP，請依照下列步驟操作：
 
 1. 前往 Zencoder 選單（...）
 2. 從下拉選單選擇 Agent tools
@@ -600,7 +600,7 @@ Windows 的設定與 Linux 或 macOS 略有不同（_範例以 Cline 為例_）�
 ```json
 {
   "command": "npx",
-  "args": ["-y", "@upstash/context7-mcp@latest"]
+  "args": ["-y", "@upstash/codex7-mcp@latest"]
 }
 ```
 
@@ -616,9 +616,9 @@ Windows 的設定與 Linux 或 macOS 略有不同（_範例以 Cline 為例_）�
 ```json
 {
   "mcpServers": {
-    "context7": {
+    "codex7": {
       "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp@latest"]
+      "args": ["-y", "@upstash/codex7-mcp@latest"]
     }
   }
 }
@@ -639,8 +639,8 @@ Windows 的設定與 Linux 或 macOS 略有不同（_範例以 Cline 為例_）�
 ```json
 {
   "mcpServers": {
-    "context7": {
-      "url": "https://mcp.context7.com/mcp"
+    "codex7": {
+      "url": "https://mcp.codex7.com/mcp"
     }
   }
 }
@@ -661,16 +661,16 @@ Windows 的設定與 Linux 或 macOS 略有不同（_範例以 Cline 為例_）�
 ```json
 {
   "mcpServers": {
-    "context7": {
+    "codex7": {
       "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp"]
+      "args": ["-y", "@upstash/codex7-mcp"]
     }
   }
 }
 ```
 
 5. 點擊 `Apply` 儲存變更。
-6. 同樣方式也可在 JetBrains Junie 的 `Settings` -> `Tools` -> `Junie` -> `MCP Settings` 新增 context7。
+6. 同樣方式也可在 JetBrains Junie 的 `Settings` -> `Tools` -> `Junie` -> `MCP Settings` 新增 codex7。
 
 </details>
 
@@ -685,9 +685,9 @@ Windows 的設定與 Linux 或 macOS 略有不同（_範例以 Cline 為例_）�
 
 ```json
 {
-  "Context7": {
+  "Codex7": {
     "command": "npx",
-    "args": ["-y", "@upstash/context7-mcp"],
+    "args": ["-y", "@upstash/codex7-mcp"],
     "env": {},
     "working_directory": null,
     "start_on_launch": true
@@ -708,9 +708,9 @@ Windows 的設定與 Linux 或 macOS 略有不同（_範例以 Cline 為例_）�
 
 ```json
 "mcp": {
-  "context7": {
+  "codex7": {
     "type": "remote",
-    "url": "https://mcp.context7.com/mcp",
+    "url": "https://mcp.codex7.com/mcp",
     "enabled": true
   }
 }
@@ -721,9 +721,9 @@ Windows 的設定與 Linux 或 macOS 略有不同（_範例以 Cline 為例_）�
 ```json
 {
   "mcp": {
-    "context7": {
+    "codex7": {
       "type": "local",
-      "command": ["npx", "-y", "@upstash/context7-mcp"],
+      "command": ["npx", "-y", "@upstash/codex7-mcp"],
       "enabled": true
     }
   }
@@ -745,9 +745,9 @@ Windows 的設定與 Linux 或 macOS 略有不同（_範例以 Cline 為例_）�
 ```json
 {
   "mcpServers": {
-    "Context7": {
+    "Codex7": {
       "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp"],
+      "args": ["-y", "@upstash/codex7-mcp"],
       "env": {},
       "disabled": false,
       "autoApprove": []
@@ -767,8 +767,8 @@ Windows 的設定與 Linux 或 macOS 略有不同（_範例以 Cline 為例_）�
 將下列設定加入你的 OpenAI Codex MCP 伺服器設定：
 
 ```toml
-[mcp_servers.context7]
-args = ["-y", "@upstash/context7-mcp"]
+[mcp_servers.codex7]
+args = ["-y", "@upstash/codex7-mcp"]
 command = "npx"
 ```
 
@@ -780,7 +780,7 @@ command = "npx"
 
 #### 一鍵安裝：
 
-[![將 MCP Server context7 加入 LM Studio](https://files.lmstudio.ai/deeplink/mcp-install-light.svg)](https://lmstudio.ai/install-mcp?name=context7&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsIkB1cHN0YXNoL2NvbnRleHQ3LW1jcCJdfQ%3D%3D)
+[![將 MCP Server codex7 加入 LM Studio](https://files.lmstudio.ai/deeplink/mcp-install-light.svg)](https://lmstudio.ai/install-mcp?name=codex7&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsIkB1cHN0YXNoL2NvbnRleHQ3LW1jcCJdfQ%3D%3D)
 
 #### 手動設定：
 
@@ -790,9 +790,9 @@ command = "npx"
 ```json
 {
   "mcpServers": {
-    "Context7": {
+    "Codex7": {
       "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp"]
+      "args": ["-y", "@upstash/codex7-mcp"]
     }
   }
 }
@@ -804,7 +804,7 @@ command = "npx"
 </details>
 ## 🔧 環境變數
 
-Context7 MCP 伺服器支援下列環境變數：
+Codex7 MCP 伺服器支援下列環境變數：
 
 - `DEFAULT_MINIMUM_TOKENS`：設定文件擷取的最小 token 數（預設：10000）
 
@@ -813,9 +813,9 @@ Context7 MCP 伺服器支援下列環境變數：
 ```json
 {
   "mcpServers": {
-    "context7": {
+    "codex7": {
       "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp"],
+      "args": ["-y", "@upstash/codex7-mcp"],
       "env": {
         "DEFAULT_MINIMUM_TOKENS": "6000"
       }
@@ -826,13 +826,13 @@ Context7 MCP 伺服器支援下列環境變數：
 
 ## 🔨 可用工具
 
-Context7 MCP 提供下列工具供 LLM 使用：
+Codex7 MCP 提供下列工具供 LLM 使用：
 
-- `resolve-library-id`：將一般函式庫名稱解析為 Context7 相容的函式庫 ID。
+- `resolve-library-id`：將一般函式庫名稱解析為 Codex7 相容的函式庫 ID。
   - `libraryName`（必填）：要查詢的函式庫名稱
 
-- `get-library-docs`：根據 Context7 相容的函式庫 ID 取得文件。
-  - `context7CompatibleLibraryID`（必填）：Context7 相容的函式庫 ID（如 `/mongodb/docs`, `/vercel/next.js`）
+- `get-library-docs`：根據 Codex7 相容的函式庫 ID 取得文件。
+  - `codex7CompatibleLibraryID`（必填）：Codex7 相容的函式庫 ID（如 `/mongodb/docs`, `/vercel/next.js`）
   - `topic`（選填）：聚焦於特定主題（如 "routing", "hooks"）
   - `tokens`（選填，預設 10000）：最大回傳 token 數。小於預設或 `DEFAULT_MINIMUM_TOKENS` 的值會自動提升。
 
@@ -856,9 +856,9 @@ bun run build
 ```json
 {
   "mcpServers": {
-    "context7": {
+    "codex7": {
       "command": "npx",
-      "args": ["tsx", "/path/to/folder/context7-mcp/src/index.ts"]
+      "args": ["tsx", "/path/to/folder/codex7-mcp/src/index.ts"]
     }
   }
 }
@@ -870,7 +870,7 @@ bun run build
 <summary><b>使用 MCP Inspector 測試</b></summary>
 
 ```bash
-npx -y @modelcontextprotocol/inspector npx @upstash/context7-mcp
+npx -y @modelcontextprotocol/inspector npx @upstash/codex7-mcp
 ```
 
 </details>
@@ -885,9 +885,9 @@ npx -y @modelcontextprotocol/inspector npx @upstash/context7-mcp
 ```json
 {
   "mcpServers": {
-    "context7": {
+    "codex7": {
       "command": "bunx",
-      "args": ["-y", "@upstash/context7-mcp"]
+      "args": ["-y", "@upstash/codex7-mcp"]
     }
   }
 }
@@ -905,9 +905,9 @@ npx -y @modelcontextprotocol/inspector npx @upstash/context7-mcp
 ```json
 {
   "mcpServers": {
-    "context7": {
+    "codex7": {
       "command": "npx",
-      "args": ["-y", "--node-options=--experimental-vm-modules", "@upstash/context7-mcp@1.0.6"]
+      "args": ["-y", "--node-options=--experimental-vm-modules", "@upstash/codex7-mcp@1.0.6"]
     }
   }
 }
@@ -923,9 +923,9 @@ npx -y @modelcontextprotocol/inspector npx @upstash/context7-mcp
 ```json
 {
   "mcpServers": {
-    "context7": {
+    "codex7": {
       "command": "npx",
-      "args": ["-y", "--node-options=--experimental-fetch", "@upstash/context7-mcp"]
+      "args": ["-y", "--node-options=--experimental-fetch", "@upstash/codex7-mcp"]
     }
   }
 }
@@ -945,30 +945,30 @@ npx -y @modelcontextprotocol/inspector npx @upstash/context7-mcp
 
 ## ⚠️ 免責聲明
 
-Context7 專案由社群貢獻，雖然我們致力於維持高品質，但無法保證所有函式庫文件的正確性、完整性或安全性。Context7 上的專案由各自擁有者開發與維護，非 Context7 官方。若發現可疑、不當或潛在有害內容，請於專案頁面點選「檢舉」按鈕通知我們。我們會嚴肅處理所有檢舉，並盡快審查標記內容，以維護平台的完整性與安全。使用 Context7 即表示你同意自行承擔風險。
+Codex7 專案由社群貢獻，雖然我們致力於維持高品質，但無法保證所有函式庫文件的正確性、完整性或安全性。Codex7 上的專案由各自擁有者開發與維護，非 Codex7 官方。若發現可疑、不當或潛在有害內容，請於專案頁面點選「檢舉」按鈕通知我們。我們會嚴肅處理所有檢舉，並盡快審查標記內容，以維護平台的完整性與安全。使用 Codex7 即表示你同意自行承擔風險。
 
 ## 🤝 與我們聯繫
 
 歡迎追蹤與加入社群：
 
 - 📢 追蹤我們的 [X](https://x.com/contextai) 以獲取最新消息
-- 🌐 造訪我們的 [官方網站](https://context7.com)
+- 🌐 造訪我們的 [官方網站](https://codex7.com)
 - 💬 加入我們的 [Discord 社群](https://upstash.com/discord)
 
-## 📺 Context7 媒體報導
+## 📺 Codex7 媒體報導
 
 - [Better Stack：「免費工具讓 Cursor 智慧提升 10 倍」](https://youtu.be/52FC3qObp9E)
 - [Cole Medin：「這絕對是 AI 程式助理最強 MCP 伺服器」](https://www.youtube.com/watch?v=G7gK8H6u7Rs)
-- [Income Stream Surfers：「Context7 + SequentialThinking MCPs：這是 AGI 嗎？」](https://www.youtube.com/watch?v=-ggvzyLpK6o)
-- [Julian Goldie SEO：「Context7：全新 MCP AI 代理更新」](https://www.youtube.com/watch?v=CTZm6fBYisc)
+- [Income Stream Surfers：「Codex7 + SequentialThinking MCPs：這是 AGI 嗎？」](https://www.youtube.com/watch?v=-ggvzyLpK6o)
+- [Julian Goldie SEO：「Codex7：全新 MCP AI 代理更新」](https://www.youtube.com/watch?v=CTZm6fBYisc)
 - [JeredBlu：「Context 7 MCP：即時獲取文件 + VS Code 設定」](https://www.youtube.com/watch?v=-ls0D-rtET4)
-- [Income Stream Surfers：「Context7：將改變 AI 程式開發的新 MCP 伺服器」](https://www.youtube.com/watch?v=PS-2Azb-C3M)
-- [AICodeKing：「Context7 + Cline & RooCode：這個 MCP 伺服器讓 CLINE 效率提升 100 倍！」](https://www.youtube.com/watch?v=qZfENAPMnyo)
+- [Income Stream Surfers：「Codex7：將改變 AI 程式開發的新 MCP 伺服器」](https://www.youtube.com/watch?v=PS-2Azb-C3M)
+- [AICodeKing：「Codex7 + Cline & RooCode：這個 MCP 伺服器讓 CLINE 效率提升 100 倍！」](https://www.youtube.com/watch?v=qZfENAPMnyo)
 - [Sean Kochel：「5 個 MCP 伺服器讓你程式開發如虎添翼（即插即用）」](https://www.youtube.com/watch?v=LqTQi8qexJM)
 
 ## ⭐ 星標歷史
 
-[![Star History Chart](https://api.star-history.com/svg?repos=upstash/context7&type=Date)](https://www.star-history.com/#upstash/context7&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=upstash/codex7&type=Date)](https://www.star-history.com/#upstash/codex7&Date)
 
 ## 📄 授權
 

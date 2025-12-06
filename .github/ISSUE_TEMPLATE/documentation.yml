@@ -6,7 +6,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Found an issue with Context7 documentation? Let us know!
+        Found an issue with Codex7 documentation? Let us know!
 
   - type: dropdown
     id: doc-type
