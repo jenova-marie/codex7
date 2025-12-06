@@ -2,7 +2,7 @@ import { SearchResponse } from "./types.js";
 import { generateHeaders } from "./encryption.js";
 import { ProxyAgent, setGlobalDispatcher } from "undici";
 
-const CONTEXT7_API_BASE_URL = "https://codex7.com/api";
+const CONTEXT7_API_BASE_URL = "https://context7.com/api";
 const DEFAULT_TYPE = "txt";
 
 // Pick up proxy configuration in a variety of common env var names.
