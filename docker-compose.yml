@@ -1,0 +1,22 @@
+services:
+  # Codex7 MCP Server
+  codex7:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: codex7-server
+    ports:
+      - "7007:7007"
+    env_file: .env
+    environment:
+      CODEX7_PG_URL: ${CODEX7_PG_URL}
+      CODEX7_QDRANT_URL: ${CODEX7_QDRANT_URL}
+      CODEX7_QDRANT_API_KEY: ${CODEX7_QDRANT_API_KEY}
+      NODE_ENV: development
+    networks:
+      - codex7-network
+    command: ["node", "dist/index.js", "--transport", "http", "--port", "7007"]
+
+networks:
+  codex7-network:
+    driver: bridge

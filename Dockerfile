@@ -26,7 +26,7 @@ COPY package.json ./
 RUN npm install --production --ignore-scripts
 
 # Expose HTTP port
-EXPOSE 8080
+EXPOSE 7007
 
 # Default command using CLI flags
-CMD ["node", "dist/index.js", "--transport", "http", "--port", "8080"]
+CMD ["node", "dist/index.js", "--transport", "http", "--port", "7007"]
