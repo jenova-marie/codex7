@@ -119,3 +119,23 @@ export function createEmbeddingText(
 
   return prepareTextForEmbedding(parts.join("\n\n"));
 }
+
+/**
+ * Generate text using OpenAI chat completion (for topic extraction)
+ * Uses gpt-4o-mini for cost efficiency
+ */
+export async function generateText(
+  prompt: string,
+  options: { maxTokens?: number } = {}
+): Promise<string> {
+  const client = getClient();
+
+  const response = await client.chat.completions.create({
+    model: "gpt-4o-mini",
+    messages: [{ role: "user", content: prompt }],
+    max_tokens: options.maxTokens || 100,
+    temperature: 0,
+  });
+
+  return response.choices[0]?.message?.content || "";
+}

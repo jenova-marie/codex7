@@ -17,6 +17,8 @@ export interface SearchResult {
   source: "local" | "remote";
   /** Available documents for local libraries */
   documents?: Array<{ path: string; title: string }>;
+  /** Available topics for filtering (local libraries) */
+  topics?: string[];
 }
 
 export interface SearchResponse {

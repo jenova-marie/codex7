@@ -23,6 +23,8 @@ export const localLibraries = pgTable("local_libraries", {
   keywords: text("keywords").array(),
   // Rules/best practices from codex7.json (shown to coding agents)
   rules: text("rules").array(),
+  // Aggregated topics across all snippets (for filtering)
+  topics: text("topics").array(),
   // Approximate token count of all snippets
   totalTokens: integer("total_tokens").default(0),
   // Number of code snippets
@@ -70,6 +72,8 @@ export const localSnippets = pgTable(
     codeBlocks: jsonb("code_blocks").$type<CodeBlock[]>(),
     // Approximate token count
     tokens: integer("tokens").default(0),
+    // Topic tags for filtering (extracted from headers or LLM)
+    topics: text("topics").array(),
     // Timestamp
     createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
   },

@@ -20,6 +20,7 @@ export interface VectorPayload {
   source_file: string;
   source_type: string;
   content_preview: string;
+  topics?: string[]; // Topic tags for filtering
   [key: string]: unknown; // Index signature for Qdrant compatibility
 }
 
@@ -141,25 +142,41 @@ export async function upsertVectors(
 
 /**
  * Search for similar vectors by topic
+ * @param queryVector - The embedding vector to search for
+ * @param libraryId - Filter to this library
+ * @param limit - Maximum number of results
+ * @param topics - Optional topic filter (matches any of the provided topics)
  */
 export async function searchVectors(
   queryVector: number[],
   libraryId: string,
-  limit: number = 20
+  limit: number = 20,
+  topics?: string[]
 ): Promise<Array<{ payload: VectorPayload; score: number }>> {
   const client = getQdrantClient();
 
   try {
+    // Build filter conditions
+    const mustConditions: Array<Record<string, unknown>> = [
+      {
+        key: "library_id",
+        match: { value: libraryId },
+      },
+    ];
+
+    // Add topic filter if provided (match any of the topics)
+    if (topics && topics.length > 0) {
+      mustConditions.push({
+        key: "topics",
+        match: { any: topics },
+      });
+    }
+
     const results = await client.search(COLLECTION_NAME, {
       vector: queryVector,
       limit,
       filter: {
-        must: [
-          {
-            key: "library_id",
-            match: { value: libraryId },
-          },
-        ],
+        must: mustConditions,
       },
       with_payload: true,
     });

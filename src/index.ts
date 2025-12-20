@@ -319,17 +319,21 @@ For remote Context7 libraries, use 'get-library-docs' instead.
 Parameters:
 - libraryId: The library ID from resolve-library-id (required)
 - path: Document path to fetch (e.g., 'README.md', 'docs/api.md') - returns full document
-- topic: Topic to focus snippet search on (ignored if path is provided)
+- topics: Topic filter array (e.g., ['routing', 'auth']) - pre-filters snippets by topic
+- topic: Semantic search query within filtered results
 - tokens: Maximum tokens to return (default: 5000)
 
 Usage:
 - To get a specific document: use 'path' parameter
-- To search by topic: use 'topic' parameter
+- To filter by topics: use 'topics' array (from resolve-library-id Topics field)
+- To search semantically: use 'topic' string for free-form search
+- Combine both: topics filter + topic query for focused results
 - Start with README.md to understand library structure`,
       inputSchema: {
         libraryId: z.string().describe("Library ID in /org/project format from resolve-library-id"),
         path: z.string().optional().describe("Document path: 'README.md' or 'docs/api.md'"),
-        topic: z.string().optional().describe("Topic to focus snippet search on (ignored if path provided)"),
+        topics: z.array(z.string()).optional().describe("Filter by topics: ['routing', 'auth'] (from Topics field)"),
+        topic: z.string().optional().describe("Semantic search query within filtered results"),
         tokens: z
           .preprocess((val) => (typeof val === "string" ? Number(val) : val), z.number())
           .transform((val) => (val < MINIMUM_TOKENS ? MINIMUM_TOKENS : val))
@@ -339,7 +343,7 @@ Usage:
           ),
       },
     },
-    async ({ libraryId, path, topic = "", tokens = DEFAULT_TOKENS }) => {
+    async ({ libraryId, path, topics, topic = "", tokens = DEFAULT_TOKENS }) => {
       // Validate: must be local library
       if (!isLocalStorageConfigured()) {
         return {
@@ -391,8 +395,8 @@ Use resolve-library-id to see available documents for this library.`,
         };
       }
 
-      // Otherwise, use topic-based snippet search
-      const fetchDocsResponse = await fetchLocalDocumentation(libraryId, { topic, tokens });
+      // Otherwise, use topic-based snippet search (with optional topics filter)
+      const fetchDocsResponse = await fetchLocalDocumentation(libraryId, { topics, topic, tokens });
 
       if (!fetchDocsResponse) {
         return {

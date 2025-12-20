@@ -67,6 +67,7 @@ export async function searchLocalLibraries(query: string): Promise<SearchRespons
           tool: "get-local-docs" as const,
           source: "local" as const,
           documents: docs.slice(0, 10).map((d) => ({ path: d.path, title: d.title })),
+          topics: lib.topics || [],
         };
       })
     );
@@ -106,12 +107,17 @@ export async function isLocalLibrary(libraryId: string): Promise<boolean> {
 /**
  * Fetch documentation for a local library
  * Uses semantic search with topic if provided, otherwise returns top snippets
+ * @param libraryId - The library ID to fetch docs for
+ * @param options.tokens - Max tokens to return
+ * @param options.topic - Semantic search query (free-form)
+ * @param options.topics - Pre-filter by these topics before semantic search
  */
 export async function fetchLocalDocumentation(
   libraryId: string,
   options: {
     tokens?: number;
     topic?: string;
+    topics?: string[];
   } = {}
 ): Promise<string | null> {
   if (!isLocalStorageConfigured()) {
@@ -136,13 +142,26 @@ export async function fetchLocalDocumentation(
 
     let snippetIds: string[] = [];
 
-    // If topic provided and OpenAI is configured, use semantic search
-    if (options.topic && isOpenAIConfigured()) {
+    // If topics filter or topic query provided, use vector search
+    if ((options.topics && options.topics.length > 0) || (options.topic && isOpenAIConfigured())) {
       try {
-        const queryVector = await generateEmbedding(options.topic);
-        const vectorResults = await searchVectors(queryVector, cleanId, 30);
+        // Generate embedding for semantic search if topic query provided
+        let queryVector: number[] | undefined;
+        if (options.topic && isOpenAIConfigured()) {
+          queryVector = await generateEmbedding(options.topic);
+        }
 
-        snippetIds = vectorResults.map((r) => r.payload.snippet_id);
+        // If no query vector but topics filter provided, use a neutral vector
+        // by searching without semantic ranking (we'll rely on topic filtering)
+        if (!queryVector && options.topics && options.topics.length > 0) {
+          // Create a zero vector - Qdrant will still apply topic filters
+          queryVector = new Array(1536).fill(0);
+        }
+
+        if (queryVector) {
+          const vectorResults = await searchVectors(queryVector, cleanId, 30, options.topics);
+          snippetIds = vectorResults.map((r) => r.payload.snippet_id);
+        }
       } catch (error) {
         console.error(`Semantic search failed, falling back: ${error}`);
       }

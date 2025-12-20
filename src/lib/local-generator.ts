@@ -4,7 +4,8 @@ import * as crypto from "crypto";
 import { eq } from "drizzle-orm";
 import { getDb, localLibraries, localSnippets, localDocuments, type NewLocalSnippet, type NewLocalDocument } from "../db/index.js";
 import { upsertVectors, deleteLibraryVectors, type VectorPayload } from "./local-vectors.js";
-import { generateEmbeddings, createEmbeddingText } from "./embeddings.js";
+import { generateEmbeddings, createEmbeddingText, isOpenAIConfigured } from "./embeddings.js";
+import { extractTopicsFromHeaders, extractTopicsWithLLM } from "./topic-extractor.js";
 
 /**
  * Source file type classification
@@ -37,6 +38,7 @@ interface ParsedSnippet {
   description: string;
   content: string;
   codeBlocks: Array<{ language: string; code: string }>;
+  topics: string[];
 }
 
 /**
@@ -223,6 +225,33 @@ export async function indexProject(config: IndexConfig): Promise<IndexResult> {
     throw new Error("No snippets extracted from documentation files");
   }
 
+  // Extract topics with LLM fallback for snippets without header-based topics
+  const snippetsNeedingTopics = allSnippets.filter((s) => s.topics.length === 0);
+  if (snippetsNeedingTopics.length > 0 && isOpenAIConfigured()) {
+    console.error(`Extracting topics with LLM for ${snippetsNeedingTopics.length} snippets...`);
+    for (const snippet of snippetsNeedingTopics) {
+      try {
+        snippet.topics = await extractTopicsWithLLM(snippet.content);
+      } catch (error) {
+        if (verbose) {
+          console.error(`Topic extraction failed for snippet: ${error}`);
+        }
+      }
+    }
+  }
+
+  // Aggregate all topics for the library
+  const allTopics = new Set<string>();
+  for (const snippet of allSnippets) {
+    for (const topic of snippet.topics) {
+      allTopics.add(topic);
+    }
+  }
+  const libraryTopics = Array.from(allTopics);
+  if (verbose && libraryTopics.length > 0) {
+    console.error(`Extracted ${libraryTopics.length} unique topics: ${libraryTopics.slice(0, 10).join(", ")}${libraryTopics.length > 10 ? "..." : ""}`);
+  }
+
   // Generate embeddings for all snippets
   console.error("Generating embeddings...");
   const embeddingTexts = allSnippets.map((s) =>
@@ -254,6 +283,7 @@ export async function indexProject(config: IndexConfig): Promise<IndexResult> {
     version: metadata.version,
     keywords,
     rules: rules.length > 0 ? rules : null,
+    topics: libraryTopics.length > 0 ? libraryTopics : null,
     totalTokens,
     totalSnippets: allSnippets.length,
     totalPages: processedFiles.length,
@@ -284,6 +314,7 @@ export async function indexProject(config: IndexConfig): Promise<IndexResult> {
       content: snippet.content,
       codeBlocks: snippet.codeBlocks,
       tokens: estimateTokens(snippet.content),
+      topics: snippet.topics.length > 0 ? snippet.topics : null,
     };
   });
 
@@ -305,6 +336,7 @@ export async function indexProject(config: IndexConfig): Promise<IndexResult> {
       source_file: snippet.sourceFile,
       source_type: snippet.sourceType,
       content_preview: snippet.content.slice(0, 500),
+      topics: snippet.topics || [],
     } as VectorPayload,
   }));
 
@@ -579,6 +611,9 @@ function parseMarkdownIntoSnippets(
     // Skip very short sections
     if (trimmed.length < 50) continue;
 
+    // Extract topics from headers in this section
+    const sectionTopics = extractTopicsFromHeaders(trimmed);
+
     // Check if section is too long and needs splitting
     const tokens = estimateTokens(trimmed);
     if (tokens > 1000) {
@@ -592,6 +627,7 @@ function parseMarkdownIntoSnippets(
           description: chunk.description,
           content: chunk.content,
           codeBlocks: chunk.codeBlocks,
+          topics: sectionTopics, // Inherit topics from parent section
         });
       }
     } else {
@@ -602,6 +638,7 @@ function parseMarkdownIntoSnippets(
         description,
         content: trimmed,
         codeBlocks,
+        topics: sectionTopics,
       });
     }
   }
@@ -619,6 +656,9 @@ function parseMarkdownIntoSnippets(
       });
     }
 
+    // Extract topics from the entire content
+    const fileTopics = extractTopicsFromHeaders(content);
+
     snippets.push({
       title: sourceFile,
       sourceFile,
@@ -626,6 +666,7 @@ function parseMarkdownIntoSnippets(
       description: content.slice(0, 500),
       content: content.slice(0, 4000), // Limit size
       codeBlocks: codeBlocks.slice(0, 10),
+      topics: fileTopics,
     });
   }
 
@@ -690,6 +731,7 @@ function createChunkSnippet(
     description: content.slice(0, 200),
     content: content.trim(),
     codeBlocks,
+    topics: [], // Topics will be inherited from parent section
   };
 }
 

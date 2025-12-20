@@ -8,6 +8,13 @@
       "when": 1766260709189,
       "tag": "0000_sudden_ma_gnuci",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1766262073862,
+      "tag": "0001_cute_norrin_radd",
+      "breakpoints": true
     }
   ]
 }

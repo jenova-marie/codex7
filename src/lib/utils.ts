@@ -44,6 +44,11 @@ export function formatSearchResult(result: SearchResult): string {
     }
   }
 
+  // Show available topics for local libraries
+  if (result.topics && result.topics.length > 0) {
+    formattedResult.push(`- Topics: ${result.topics.slice(0, 10).join(", ")}${result.topics.length > 10 ? ", ..." : ""}`);
+  }
+
   // Join all parts with newlines
   return formattedResult.join("\n");
 }
