@@ -11,6 +11,7 @@ import {
   searchLocalLibraries,
   isLocalLibrary,
   fetchLocalDocumentation,
+  fetchLocalDocument,
   isLocalStorageConfigured,
 } from "./lib/local-api.js";
 import { createServer } from "http";
@@ -317,11 +318,18 @@ For remote Context7 libraries, use 'get-library-docs' instead.
 
 Parameters:
 - libraryId: The library ID from resolve-library-id (required)
-- topic: Topic to focus documentation on (optional)
-- tokens: Maximum tokens to return (default: 5000)`,
+- path: Document path to fetch (e.g., 'README.md', 'docs/api.md') - returns full document
+- topic: Topic to focus snippet search on (ignored if path is provided)
+- tokens: Maximum tokens to return (default: 5000)
+
+Usage:
+- To get a specific document: use 'path' parameter
+- To search by topic: use 'topic' parameter
+- Start with README.md to understand library structure`,
       inputSchema: {
         libraryId: z.string().describe("Library ID in /org/project format from resolve-library-id"),
-        topic: z.string().optional().describe("Topic to focus documentation on (e.g., 'hooks', 'routing')"),
+        path: z.string().optional().describe("Document path: 'README.md' or 'docs/api.md'"),
+        topic: z.string().optional().describe("Topic to focus snippet search on (ignored if path provided)"),
         tokens: z
           .preprocess((val) => (typeof val === "string" ? Number(val) : val), z.number())
           .transform((val) => (val < MINIMUM_TOKENS ? MINIMUM_TOKENS : val))
@@ -331,7 +339,7 @@ Parameters:
           ),
       },
     },
-    async ({ libraryId, topic = "", tokens = DEFAULT_TOKENS }) => {
+    async ({ libraryId, path, topic = "", tokens = DEFAULT_TOKENS }) => {
       // Validate: must be local library
       if (!isLocalStorageConfigured()) {
         return {
@@ -358,7 +366,32 @@ Call: get-library-docs({ codex7CompatibleLibraryID: "${libraryId}", topic: "${to
         };
       }
 
-      // Fetch from local storage
+      // If path provided, fetch specific document
+      if (path) {
+        const doc = await fetchLocalDocument(libraryId, path, { tokens });
+        if (!doc) {
+          return {
+            content: [
+              {
+                type: "text",
+                text: `Document not found: ${path}
+
+Use resolve-library-id to see available documents for this library.`,
+              },
+            ],
+          };
+        }
+        return {
+          content: [
+            {
+              type: "text",
+              text: `# ${doc.title}\n\nSource: ${path}\n\n${doc.content}`,
+            },
+          ],
+        };
+      }
+
+      // Otherwise, use topic-based snippet search
       const fetchDocsResponse = await fetchLocalDocumentation(libraryId, { topic, tokens });
 
       if (!fetchDocsResponse) {

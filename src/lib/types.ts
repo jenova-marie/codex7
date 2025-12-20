@@ -15,6 +15,8 @@ export interface SearchResult {
   tool: "get-local-docs" | "get-library-docs";
   /** Source of the library */
   source: "local" | "remote";
+  /** Available documents for local libraries */
+  documents?: Array<{ path: string; title: string }>;
 }
 
 export interface SearchResponse {

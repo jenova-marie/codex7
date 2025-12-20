@@ -77,9 +77,40 @@ export const localSnippets = pgTable(
 );
 
 /**
+ * Local documents table - full markdown files for document-level access
+ */
+export const localDocuments = pgTable(
+  "local_documents",
+  {
+    // Unique ID: library_id + path hash
+    id: text("id").primaryKey(),
+    // Reference to parent library
+    libraryId: text("library_id")
+      .references(() => localLibraries.id, { onDelete: "cascade" })
+      .notNull(),
+    // Relative path to document (e.g., "/README.md", "/docs/api.md")
+    path: text("path").notNull(),
+    // Document title (extracted from first H1)
+    title: text("title"),
+    // Full markdown content
+    content: text("content").notNull(),
+    // Approximate token count
+    tokens: integer("tokens").default(0),
+    // Type of source: readme, api, docs, examples, content
+    sourceType: text("source_type").notNull(),
+    // Timestamps
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
+  },
+  (table) => [index("idx_documents_library").on(table.libraryId)]
+);
+
+/**
  * Type exports for use in application code
  */
 export type LocalLibrary = typeof localLibraries.$inferSelect;
 export type NewLocalLibrary = typeof localLibraries.$inferInsert;
 export type LocalSnippet = typeof localSnippets.$inferSelect;
 export type NewLocalSnippet = typeof localSnippets.$inferInsert;
+export type LocalDocument = typeof localDocuments.$inferSelect;
+export type NewLocalDocument = typeof localDocuments.$inferInsert;

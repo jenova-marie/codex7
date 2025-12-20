@@ -32,6 +32,18 @@ export function formatSearchResult(result: SearchResult): string {
     formattedResult.push(`- Versions: ${result.versions.join(", ")}`);
   }
 
+  // Show available documents for local libraries
+  if (result.documents && result.documents.length > 0) {
+    formattedResult.push(`- Documents:`);
+    // Show up to 5 documents
+    for (const doc of result.documents.slice(0, 5)) {
+      formattedResult.push(`  • ${doc.path} - ${doc.title}`);
+    }
+    if (result.documents.length > 5) {
+      formattedResult.push(`  • ... and ${result.documents.length - 5} more`);
+    }
+  }
+
   // Join all parts with newlines
   return formattedResult.join("\n");
 }

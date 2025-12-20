@@ -2,7 +2,7 @@ import * as fs from "fs";
 import * as path from "path";
 import * as crypto from "crypto";
 import { eq } from "drizzle-orm";
-import { getDb, localLibraries, localSnippets, type NewLocalSnippet } from "../db/index.js";
+import { getDb, localLibraries, localSnippets, localDocuments, type NewLocalSnippet, type NewLocalDocument } from "../db/index.js";
 import { upsertVectors, deleteLibraryVectors, type VectorPayload } from "./local-vectors.js";
 import { generateEmbeddings, createEmbeddingText } from "./embeddings.js";
 
@@ -178,14 +178,32 @@ export async function indexProject(config: IndexConfig): Promise<IndexResult> {
     warnings.push("No documentation files found");
   }
 
-  // Parse all files into snippets
+  // Parse all files into snippets and collect document records
   const allSnippets: ParsedSnippet[] = [];
   const processedFiles: string[] = [];
+  const documentRecords: NewLocalDocument[] = [];
 
   for (const file of docFiles) {
     try {
       const relativePath = path.relative(projectPath, file.path);
       const content = fs.readFileSync(file.path, "utf-8");
+
+      // Store full document record
+      const docPath = "/" + relativePath.replace(/\\/g, "/");
+      const docTitle = extractTitleFromMarkdown(content, relativePath);
+      const docId = `${libraryId}:${hashContent(docPath)}`;
+
+      documentRecords.push({
+        id: docId,
+        libraryId,
+        path: docPath,
+        title: docTitle,
+        content,
+        tokens: estimateTokens(content),
+        sourceType: file.type,
+      });
+
+      // Parse into snippets
       const snippets = parseMarkdownIntoSnippets(content, relativePath, file.type);
 
       allSnippets.push(...snippets);
@@ -241,6 +259,16 @@ export async function indexProject(config: IndexConfig): Promise<IndexResult> {
     totalPages: processedFiles.length,
     trustScore: 10.0, // Local projects get highest trust
   });
+
+  // Insert document records in batches
+  if (documentRecords.length > 0) {
+    console.error(`Storing ${documentRecords.length} documents...`);
+    const docBatchSize = 50;
+    for (let i = 0; i < documentRecords.length; i += docBatchSize) {
+      const batch = documentRecords.slice(i, i + docBatchSize);
+      await db.insert(localDocuments).values(batch);
+    }
+  }
 
   // Prepare snippets for insertion - use index to ensure unique IDs
   const snippetRecords: NewLocalSnippet[] = allSnippets.map((snippet, idx) => {
@@ -670,6 +698,18 @@ function createChunkSnippet(
  */
 function estimateTokens(text: string): number {
   return Math.ceil(text.length / 4);
+}
+
+/**
+ * Extract title from markdown (first H1 heading)
+ */
+function extractTitleFromMarkdown(content: string, filename: string): string {
+  const h1Match = content.match(/^#\s+(.+)$/m);
+  if (h1Match) {
+    return h1Match[1].trim();
+  }
+  // Fallback to filename without extension
+  return path.basename(filename, path.extname(filename));
 }
 
 /**
