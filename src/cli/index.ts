@@ -168,16 +168,77 @@ program
   });
 
 /**
- * Sync command - re-index an existing library
+ * Sync command - re-index an existing library or all libraries
  */
 program
-  .command("sync <library-id>")
-  .description("Re-index an existing library (updates from source)")
+  .command("sync [library-id]")
+  .description("Re-index libraries (single library or all with --all)")
+  .option("--all", "Re-index all indexed libraries")
   .option("--verbose", "Show detailed output of files being processed")
-  .action(async (libraryId: string, options) => {
+  .action(async (libraryId: string | undefined, options) => {
     checkEnvironment();
 
     try {
+      const { getDb, localLibraries } = await import("../db/index.js");
+      const { eq } = await import("drizzle-orm");
+      const db = getDb();
+
+      // Handle --all flag
+      if (options.all) {
+        const libraries = await listLibraries();
+
+        if (libraries.length === 0) {
+          console.log("No libraries to re-index.");
+          return;
+        }
+
+        console.log(`Re-indexing ${libraries.length} libraries...\n`);
+
+        let successCount = 0;
+        let errorCount = 0;
+
+        for (const libSummary of libraries) {
+          const [lib] = await db
+            .select()
+            .from(localLibraries)
+            .where(eq(localLibraries.id, libSummary.id))
+            .limit(1);
+
+          if (!lib?.sourcePath) {
+            console.error(`Skipping ${libSummary.id}: source path not found`);
+            errorCount++;
+            continue;
+          }
+
+          try {
+            console.log(`Re-indexing: ${lib.title} (${lib.id})`);
+            const result = await indexProject({
+              projectPath: lib.sourcePath,
+              libraryId: lib.id,
+              title: lib.title,
+              description: lib.description || undefined,
+              keywords: lib.keywords || undefined,
+              verbose: options.verbose,
+            });
+            console.log(`  ✓ ${result.snippetCount} snippets, ${result.totalTokens} tokens\n`);
+            successCount++;
+          } catch (error) {
+            console.error(`  ✗ Failed: ${error instanceof Error ? error.message : error}\n`);
+            errorCount++;
+          }
+        }
+
+        console.log(`\nSync complete: ${successCount} succeeded, ${errorCount} failed`);
+        return;
+      }
+
+      // Single library sync
+      if (!libraryId) {
+        console.error("Please specify a library ID or use --all to sync all libraries.");
+        console.error("Usage: codex7 sync <library-id> | codex7 sync --all");
+        process.exit(1);
+      }
+
       // Ensure library ID starts with /
       if (!libraryId.startsWith("/")) {
         libraryId = "/" + libraryId;
@@ -192,12 +253,6 @@ program
         console.error("Use 'codex7 list' to see available libraries.");
         process.exit(1);
       }
-
-      // Re-index using the stored source path
-      // Note: We need to get the full library record for source path
-      const { getDb, localLibraries } = await import("../db/index.js");
-      const { eq } = await import("drizzle-orm");
-      const db = getDb();
 
       const [lib] = await db
         .select()

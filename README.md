@@ -1081,13 +1081,21 @@ See [Local and Remote MCPs for Perplexity](https://www.perplexity.ai/help-center
 
 Codex7 MCP provides the following tools that LLMs can use:
 
-- `resolve-library-id`: Resolves a general library name into a Codex7-compatible library ID.
+- `resolve-library-id`: Resolves a library name to a Codex7-compatible library ID.
   - `libraryName` (required): The name of the library to search for
+  - Returns: Library matches with tool guidance, available documents, and topics
 
-- `get-library-docs`: Fetches documentation for a library using a Codex7-compatible library ID.
-  - `codex7CompatibleLibraryID` (required): Exact Codex7-compatible library ID (e.g., `/mongodb/docs`, `/vercel/next.js`)
-  - `topic` (optional): Focus the docs on a specific topic (e.g., "routing", "hooks")
-  - `tokens` (optional, default 5000): Max number of tokens to return. Values less than 1000 are automatically increased to 1000.
+- `get-library-docs`: Fetches documentation for REMOTE libraries via Context7 API.
+  - `codex7CompatibleLibraryID` (required): Library ID (e.g., `/mongodb/docs`, `/vercel/next.js`)
+  - `topic` (optional): Focus on a specific topic (e.g., "routing", "hooks")
+  - `tokens` (optional, default 5000): Max tokens to return (minimum 1000)
+
+- `get-local-docs`: Fetches documentation for LOCAL indexed libraries.
+  - `libraryId` (required): Library ID from resolve-library-id
+  - `path` (optional): Fetch a specific document (e.g., `README.md`, `docs/api.md`)
+  - `topics` (optional): Filter by topic tags (e.g., `["routing", "auth"]`)
+  - `topic` (optional): Semantic search query within filtered results
+  - `tokens` (optional, default 5000): Max tokens to return
 
 ## 🛟 Tips
 
@@ -1127,7 +1135,14 @@ If you are behind an HTTP proxy, Codex7 uses the standard `https_proxy` / `HTTPS
 
 ## 📦 Local Knowledge Management
 
-Codex7 supports indexing local project documentation for retrieval alongside remote libraries. Local libraries always take priority (trust score 10) over remote Context7 results.
+Codex7 supports indexing local project documentation with advanced features for retrieval alongside remote libraries. Local libraries always take priority (trust score 10) over remote Context7 results.
+
+### Features
+
+- **Document Access**: Fetch full markdown files by path (README.md, docs/*.md)
+- **Topic Filtering**: Pre-extracted topics for browsing and filtering
+- **Quality Scoring**: Snippets ranked by code examples and content quality
+- **Semantic Search**: Vector-based relevance matching with topic pre-filtering
 
 ### Requirements
 
@@ -1160,7 +1175,8 @@ codex7 index /path/to/project \
   --id /my-org/my-library \
   --title "My Library" \
   --description "A great library" \
-  --keywords "typescript,utilities"
+  --keywords "typescript,utilities" \
+  --verbose
 ```
 
 The indexer scans for documentation in:
@@ -1175,26 +1191,36 @@ The indexer scans for documentation in:
 codex7 list
 ```
 
+#### Re-index Libraries
+
+```bash
+# Re-index all libraries (after schema updates)
+codex7 sync --all
+
+# Re-index a single library
+codex7 sync /my-org/my-library
+```
+
 #### Remove a Library
 
 ```bash
 codex7 remove /my-org/my-library
 ```
 
-#### Re-index a Library
+### Workflow
 
-```bash
-# Updates documentation from the original source path
-codex7 sync /my-org/my-library
-```
+1. **resolve-library-id** returns available documents and topics
+2. **get-local-docs** with `path` fetches full documents (start with README.md)
+3. **get-local-docs** with `topics` filters by topic tags
+4. **get-local-docs** with `topic` performs semantic search
 
 ### How It Works
 
-1. **Indexing**: Documents are parsed, chunked by markdown headers (~500-1000 tokens each), and embeddings are generated using OpenAI's `text-embedding-3-small` model.
+1. **Indexing**: Documents are parsed, chunked by markdown headers (~500-1000 tokens each), and embeddings are generated using OpenAI's `text-embedding-3-small` model. Topics are extracted from headers with LLM fallback.
 
-2. **Storage**: Library metadata and snippets are stored in PostgreSQL. Vector embeddings are stored in Qdrant for semantic search.
+2. **Storage**: Library metadata, documents, and snippets are stored in PostgreSQL. Vector embeddings with topics and quality scores are stored in Qdrant.
 
-3. **Retrieval**: When you use `resolve-library-id`, local libraries are searched first. When fetching docs with `get-library-docs`, if the library is local, Qdrant performs semantic search by topic to return the most relevant snippets.
+3. **Retrieval**: When you use `resolve-library-id`, local libraries are searched first and return available documents and topics. When fetching docs with `get-local-docs`, Qdrant performs topic-filtered semantic search, ranked by 70% vector similarity + 30% quality score.
 
 4. **Priority**: Local libraries always appear first in search results with a trust score of 10, ensuring your project documentation takes precedence over remote results.
 

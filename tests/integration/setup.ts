@@ -4,6 +4,7 @@
  */
 
 import "dotenv/config";
+import { vi } from "vitest";
 
 // Set up test environment variables before any imports
 export function setupTestEnv() {
@@ -14,6 +15,35 @@ export function setupTestEnv() {
   // CODEX7_QDRANT_URL and CODEX7_QDRANT_API_KEY should come from .env
 
   // OpenAI key should be set in environment from .env
+}
+
+/**
+ * Mock the topic extractor to avoid LLM calls in tests
+ */
+export async function mockTopicExtractor() {
+  vi.mock("../../src/lib/topic-extractor.js", () => ({
+    extractTopicsFromHeaders: vi.fn().mockReturnValue(["test-topic"]),
+    extractTopicsWithLLM: vi.fn().mockResolvedValue(["mock-topic"]),
+    extractTopics: vi.fn().mockResolvedValue(["mock-topic"]),
+  }));
+}
+
+/**
+ * Check if Qdrant is accessible
+ */
+export async function isQdrantAccessible(): Promise<boolean> {
+  const qdrantUrl = process.env.CODEX7_QDRANT_URL;
+  if (!qdrantUrl) return false;
+
+  try {
+    const response = await fetch(`${qdrantUrl}/collections`, {
+      method: "GET",
+      signal: AbortSignal.timeout(5000),
+    });
+    return response.ok;
+  } catch {
+    return false;
+  }
 }
 
 // Test collection name to avoid conflicts with production data

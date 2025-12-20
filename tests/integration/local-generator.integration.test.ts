@@ -2,10 +2,13 @@ import { describe, it, expect, beforeAll, afterAll, beforeEach } from "vitest";
 import * as fs from "fs";
 import * as path from "path";
 import * as os from "os";
-import { setupTestEnv, cleanupTestData, TEST_LIBRARY_PREFIX } from "./setup.js";
+import { setupTestEnv, cleanupTestData, TEST_LIBRARY_PREFIX, isQdrantAccessible } from "./setup.js";
 
 // Set up test environment before imports
 setupTestEnv();
+
+// Check if Qdrant is accessible for tests that need it
+let qdrantAvailable = false;
 
 import {
   indexProject,
@@ -22,6 +25,12 @@ describe("Local Generator Integration Tests", { sequential: true }, () => {
   const testLibraryId = `${TEST_LIBRARY_PREFIX}generator-test-${Date.now()}`;
 
   beforeAll(async () => {
+    // Check if Qdrant is accessible
+    qdrantAvailable = await isQdrantAccessible();
+    if (!qdrantAvailable) {
+      console.warn("Qdrant not accessible - some tests will be skipped");
+    }
+
     // Create a temporary test project
     testProjectPath = path.join(os.tmpdir(), "codex7-test-project-" + Date.now());
     fs.mkdirSync(testProjectPath, { recursive: true });
@@ -181,6 +190,11 @@ console.log(result);
 
   describe("indexProject", { sequential: true }, () => {
     it("should index a project and store in database", async () => {
+      if (!qdrantAvailable) {
+        console.log("Skipping: Qdrant not accessible");
+        return;
+      }
+
       const config: IndexConfig = {
         projectPath: testProjectPath,
         libraryId: testLibraryId,
@@ -195,6 +209,8 @@ console.log(result);
     });
 
     it("should use project config file values", async () => {
+      if (!qdrantAvailable) return;
+
       const config: IndexConfig = {
         projectPath: testProjectPath,
         libraryId: testLibraryId,
@@ -223,6 +239,8 @@ console.log(result);
     });
 
     it("should extract code blocks from markdown", async () => {
+      if (!qdrantAvailable) return;
+
       const config: IndexConfig = {
         projectPath: testProjectPath,
         libraryId: testLibraryId,
@@ -245,6 +263,8 @@ console.log(result);
     });
 
     it("should process README, docs, and examples directories", async () => {
+      if (!qdrantAvailable) return;
+
       const config: IndexConfig = {
         projectPath: testProjectPath,
         libraryId: testLibraryId,
@@ -259,6 +279,8 @@ console.log(result);
     });
 
     it("should store vectors in Qdrant", async () => {
+      if (!qdrantAvailable) return;
+
       const config: IndexConfig = {
         projectPath: testProjectPath,
         libraryId: testLibraryId,
@@ -274,6 +296,8 @@ console.log(result);
     });
 
     it("should replace existing library on re-index", async () => {
+      if (!qdrantAvailable) return;
+
       const config: IndexConfig = {
         projectPath: testProjectPath,
         libraryId: testLibraryId,
@@ -299,6 +323,8 @@ console.log(result);
     });
 
     it("should use CLI overrides over config file", async () => {
+      if (!qdrantAvailable) return;
+
       const config: IndexConfig = {
         projectPath: testProjectPath,
         libraryId: testLibraryId,
