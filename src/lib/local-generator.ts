@@ -315,6 +315,9 @@ export async function indexProject(config: IndexConfig): Promise<IndexResult> {
       codeBlocks: snippet.codeBlocks,
       tokens: estimateTokens(snippet.content),
       topics: snippet.topics.length > 0 ? snippet.topics : null,
+      qualityScore: scoreSnippetQuality(snippet),
+      hasCode: snippet.codeBlocks.length > 0,
+      codeBlockCount: snippet.codeBlocks.length,
     };
   });
 
@@ -337,6 +340,7 @@ export async function indexProject(config: IndexConfig): Promise<IndexResult> {
       source_type: snippet.sourceType,
       content_preview: snippet.content.slice(0, 500),
       topics: snippet.topics || [],
+      quality_score: snippet.qualityScore || 0.5,
     } as VectorPayload,
   }));
 
@@ -740,6 +744,28 @@ function createChunkSnippet(
  */
 function estimateTokens(text: string): number {
   return Math.ceil(text.length / 4);
+}
+
+/**
+ * Score snippet quality based on content characteristics
+ * Returns 0.0 - 1.0
+ */
+function scoreSnippetQuality(snippet: ParsedSnippet): number {
+  let score = 0.5; // Base score
+
+  // Bonus for having code blocks
+  if (snippet.codeBlocks.length > 0) score += 0.2;
+
+  // Extra bonus for multiple code blocks
+  if (snippet.codeBlocks.length > 2) score += 0.1;
+
+  // Bonus for substantial content
+  if (snippet.content.length > 500) score += 0.1;
+
+  // Bonus for having a description
+  if (snippet.description && snippet.description.length > 50) score += 0.1;
+
+  return Math.min(score, 1.0);
 }
 
 /**

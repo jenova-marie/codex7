@@ -1,4 +1,4 @@
-import { pgTable, text, integer, real, timestamp, jsonb, index } from "drizzle-orm/pg-core";
+import { pgTable, text, integer, real, timestamp, jsonb, index, boolean } from "drizzle-orm/pg-core";
 
 /**
  * Local libraries table - stores metadata for indexed projects
@@ -74,6 +74,10 @@ export const localSnippets = pgTable(
     tokens: integer("tokens").default(0),
     // Topic tags for filtering (extracted from headers or LLM)
     topics: text("topics").array(),
+    // Quality scoring fields for retrieval ranking
+    qualityScore: real("quality_score").default(0.5),
+    hasCode: boolean("has_code").default(false),
+    codeBlockCount: integer("code_block_count").default(0),
     // Timestamp
     createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
   },

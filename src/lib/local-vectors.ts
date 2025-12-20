@@ -21,6 +21,7 @@ export interface VectorPayload {
   source_type: string;
   content_preview: string;
   topics?: string[]; // Topic tags for filtering
+  quality_score?: number; // Pre-computed quality score for ranking
   [key: string]: unknown; // Index signature for Qdrant compatibility
 }
 

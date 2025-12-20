@@ -141,6 +141,7 @@ export async function fetchLocalDocumentation(
     }
 
     let snippetIds: string[] = [];
+    let vectorScores: Map<string, number> = new Map();
 
     // If topics filter or topic query provided, use vector search
     if ((options.topics && options.topics.length > 0) || (options.topic && isOpenAIConfigured())) {
@@ -161,6 +162,8 @@ export async function fetchLocalDocumentation(
         if (queryVector) {
           const vectorResults = await searchVectors(queryVector, cleanId, 30, options.topics);
           snippetIds = vectorResults.map((r) => r.payload.snippet_id);
+          // Store vector scores for blending with quality scores
+          vectorScores = new Map(vectorResults.map((r) => [r.payload.snippet_id, r.score]));
         }
       } catch (error) {
         console.error(`Semantic search failed, falling back: ${error}`);
@@ -171,6 +174,7 @@ export async function fetchLocalDocumentation(
     if (snippetIds.length === 0) {
       const vectorResults = await getLibraryVectors(cleanId, 50);
       snippetIds = vectorResults.map((r) => r.payload.snippet_id);
+      // No vector scores for scroll results - use quality score only
     }
 
     // Fetch snippets from database
@@ -183,16 +187,28 @@ export async function fetchLocalDocumentation(
           sql`${localSnippets.id} IN ${snippetIds}`
         );
 
-      // Sort by the order from vector search
-      const idOrder = new Map(snippetIds.map((id, idx) => [id, idx]));
-      snippets.sort((a, b) => (idOrder.get(a.id) ?? 999) - (idOrder.get(b.id) ?? 999));
+      // Sort by blended score: 70% vector similarity + 30% quality score
+      snippets.sort((a, b) => {
+        const aVectorScore = vectorScores.get(a.id) ?? 0.5;
+        const bVectorScore = vectorScores.get(b.id) ?? 0.5;
+        const aQuality = a.qualityScore ?? 0.5;
+        const bQuality = b.qualityScore ?? 0.5;
+
+        const aFinal = (aVectorScore * 0.7) + (aQuality * 0.3);
+        const bFinal = (bVectorScore * 0.7) + (bQuality * 0.3);
+
+        return bFinal - aFinal;
+      });
     } else {
-      // Fallback: get snippets directly from database
+      // Fallback: get snippets directly from database, sorted by quality
       snippets = await db
         .select()
         .from(localSnippets)
         .where(eq(localSnippets.libraryId, cleanId))
         .limit(30);
+
+      // Sort by quality score only
+      snippets.sort((a, b) => (b.qualityScore ?? 0.5) - (a.qualityScore ?? 0.5));
     }
 
     if (snippets.length === 0) {

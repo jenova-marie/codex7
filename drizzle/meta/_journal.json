@@ -15,6 +15,13 @@
       "when": 1766262073862,
       "tag": "0001_cute_norrin_radd",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1766263412213,
+      "tag": "0002_curved_warlock",
+      "breakpoints": true
     }
   ]
 }
