@@ -3,7 +3,7 @@ import { QdrantClient } from "@qdrant/js-client-rest";
 /**
  * Qdrant collection name for local docs
  */
-const COLLECTION_NAME = "codex7_local_docs";
+const COLLECTION_NAME = "codex7";
 
 /**
  * Vector dimensions for text-embedding-3-small
@@ -60,19 +60,28 @@ export function getQdrantClient(): QdrantClient {
     const url = getQdrantUrl();
     const apiKey = getQdrantApiKey();
 
-    // Parse URL to detect if we need to set explicit port for HTTPS
+    // Parse URL to extract host and port
     const parsedUrl = new URL(url);
     const isHttps = parsedUrl.protocol === "https:";
+    const host = parsedUrl.hostname;
     const port = parsedUrl.port ? parseInt(parsedUrl.port, 10) : isHttps ? 443 : 6333;
 
     _client = new QdrantClient({
-      url,
-      apiKey,
+      host,
       port,
+      apiKey,
+      https: isHttps,
       checkCompatibility: false, // Skip version check
     });
   }
   return _client;
+}
+
+/**
+ * Reset the Qdrant client (for testing)
+ */
+export function resetQdrantClient(): void {
+  _client = null;
 }
 
 /**
