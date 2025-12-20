@@ -15,7 +15,6 @@ import {
 } from "./lib/local-api.js";
 import { createServer } from "http";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
-import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
 import { Command } from "commander";
 import { IncomingMessage } from "http";
 
@@ -74,9 +73,6 @@ const CLI_PORT = (() => {
   return isNaN(parsed) ? undefined : parsed;
 })();
 
-// Store SSE transports by session ID
-const sseTransports: Record<string, SSEServerTransport> = {};
-
 function getClientIp(req: IncomingMessage): string | undefined {
   // Check both possible header casings
   const forwardedFor = req.headers["x-forwarded-for"] || req.headers["X-Forwarded-For"];
@@ -128,7 +124,11 @@ function createServerInstance(clientIp?: string, apiKey?: string) {
       title: "Resolve Codex7 Library ID",
       description: `Resolves a package/product name to a Codex7-compatible library ID and returns a list of matching libraries.
 
-You MUST call this function before 'get-library-docs' to obtain a valid Codex7-compatible library ID UNLESS the user explicitly provides a library ID in the format '/org/project' or '/org/project/version' in their query.
+IMPORTANT: Each result includes a "Use Tool" field indicating which tool to call:
+- "get-local-docs": For local libraries indexed by Codex7
+- "get-library-docs": For remote libraries via Context7 API
+
+Always check the "Use Tool" field and call the appropriate tool for that library.
 
 Selection Process:
 1. Analyze the query to understand what library/package the user is looking for
@@ -140,7 +140,7 @@ Selection Process:
 
 Response Format:
 - Return the selected library ID in a clearly marked section
-- Provide a brief explanation for why this library was chosen
+- Note which tool to use based on the "Use Tool" field
 - If multiple good matches exist, acknowledge this but proceed with the most relevant one
 - If no good matches exist, clearly state this and suggest query refinements
 
@@ -165,9 +165,16 @@ For ambiguous queries, request clarification before proceeding with a best-guess
       // Then check remote
       const remoteResponse: SearchResponse = await searchLibraries(libraryName, clientIp, apiKey);
 
+      // Add tool/source to remote results
+      const remoteResultsWithTool = remoteResponse.results.map((result) => ({
+        ...result,
+        tool: "get-library-docs" as const,
+        source: "remote" as const,
+      }));
+
       // Merge results: local first (higher trust), then remote
       const mergedResponse: SearchResponse = {
-        results: [...localResults.results, ...remoteResponse.results],
+        results: [...localResults.results, ...remoteResultsWithTool],
         error: remoteResponse.error,
       };
 
@@ -200,13 +207,13 @@ For ambiguous queries, request clarification before proceeding with a best-guess
 
 Each result includes:
 - Library ID: Codex7-compatible identifier (format: /org/project)
-- Name: Library or package name
+- Use Tool: Which tool to call (get-local-docs or get-library-docs)
+- Source: Where the library is stored (local or remote)
 - Description: Short summary
 - Code Snippets: Number of available code examples
 - Trust Score: Authority indicator
-- Versions: List of versions if available. Use one of those versions if the user provides a version in their query. The format of the version is /org/project/version.
 
-For best results, select libraries based on name match, trust score, snippet coverage, and relevance to your use case.
+IMPORTANT: Always check the "Use Tool" field to know which tool to call for each library.
 
 ----------
 
@@ -243,36 +250,29 @@ ${resultsText}`,
       },
     },
     async ({ codex7CompatibleLibraryID, tokens = DEFAULT_TOKENS, topic = "" }) => {
-      let fetchDocsResponse: string | null = null;
-
-      // Check if this is a local library first
+      // Check if this is a local library - redirect to get-local-docs
       if (isLocalStorageConfigured()) {
         try {
           const isLocal = await isLocalLibrary(codex7CompatibleLibraryID);
           if (isLocal) {
-            fetchDocsResponse = await fetchLocalDocumentation(codex7CompatibleLibraryID, {
-              tokens,
-              topic,
-            });
+            return {
+              content: [
+                {
+                  type: "text",
+                  text: `This is a local library. Use 'get-local-docs' tool instead for enhanced local documentation access.
 
-            if (fetchDocsResponse) {
-              return {
-                content: [
-                  {
-                    type: "text",
-                    text: fetchDocsResponse,
-                  },
-                ],
-              };
-            }
+Call: get-local-docs({ libraryId: "${codex7CompatibleLibraryID}", topic: "${topic || "your topic"}" })`,
+                },
+              ],
+            };
           }
         } catch (error) {
-          console.error(`Local docs fetch failed: ${error}`);
+          console.error(`Local library check failed: ${error}`);
         }
       }
 
-      // Fall back to remote API
-      fetchDocsResponse = await fetchLibraryDocumentation(
+      // Remote API only
+      const fetchDocsResponse = await fetchLibraryDocumentation(
         codex7CompatibleLibraryID,
         {
           tokens,
@@ -288,6 +288,85 @@ ${resultsText}`,
             {
               type: "text",
               text: "Documentation not found or not finalized for this library. This might have happened because you used an invalid Codex7-compatible library ID. To get a valid Codex7-compatible library ID, use the 'resolve-library-id' with the package name you wish to retrieve documentation for.",
+            },
+          ],
+        };
+      }
+
+      return {
+        content: [
+          {
+            type: "text",
+            text: fetchDocsResponse,
+          },
+        ],
+      };
+    }
+  );
+
+  // Register get-local-docs tool for local libraries
+  server.registerTool(
+    "get-local-docs",
+    {
+      title: "Get Local Docs",
+      description: `Fetches documentation for a LOCAL library indexed by Codex7.
+
+IMPORTANT: Only use this tool when resolve-library-id returns "tool": "get-local-docs"
+
+For remote Context7 libraries, use 'get-library-docs' instead.
+
+Parameters:
+- libraryId: The library ID from resolve-library-id (required)
+- topic: Topic to focus documentation on (optional)
+- tokens: Maximum tokens to return (default: 5000)`,
+      inputSchema: {
+        libraryId: z.string().describe("Library ID in /org/project format from resolve-library-id"),
+        topic: z.string().optional().describe("Topic to focus documentation on (e.g., 'hooks', 'routing')"),
+        tokens: z
+          .preprocess((val) => (typeof val === "string" ? Number(val) : val), z.number())
+          .transform((val) => (val < MINIMUM_TOKENS ? MINIMUM_TOKENS : val))
+          .optional()
+          .describe(
+            `Maximum number of tokens of documentation to retrieve (default: ${DEFAULT_TOKENS}).`
+          ),
+      },
+    },
+    async ({ libraryId, topic = "", tokens = DEFAULT_TOKENS }) => {
+      // Validate: must be local library
+      if (!isLocalStorageConfigured()) {
+        return {
+          content: [
+            {
+              type: "text",
+              text: "Local storage is not configured. Use 'get-library-docs' for remote Context7 libraries.",
+            },
+          ],
+        };
+      }
+
+      const isLocal = await isLocalLibrary(libraryId);
+      if (!isLocal) {
+        return {
+          content: [
+            {
+              type: "text",
+              text: `This library is not locally indexed. Use 'get-library-docs' for remote Context7 libraries.
+
+Call: get-library-docs({ codex7CompatibleLibraryID: "${libraryId}", topic: "${topic || "your topic"}" })`,
+            },
+          ],
+        };
+      }
+
+      // Fetch from local storage
+      const fetchDocsResponse = await fetchLocalDocumentation(libraryId, { topic, tokens });
+
+      if (!fetchDocsResponse) {
+        return {
+          content: [
+            {
+              type: "text",
+              text: "No documentation found for this local library.",
             },
           ],
         };
@@ -385,55 +464,6 @@ async function main() {
           });
           await requestServer.connect(transport);
           await transport.handleRequest(req, res);
-        } else if (pathname === "/sse" && req.method === "GET") {
-          // Create new SSE transport for GET request
-          const sseTransport = new SSEServerTransport("/messages", res);
-          // Store the transport by session ID
-          sseTransports[sseTransport.sessionId] = sseTransport;
-          // Clean up transport when connection closes
-          res.on("close", () => {
-            delete sseTransports[sseTransport.sessionId];
-            sseTransport.close();
-            requestServer.close();
-          });
-          await requestServer.connect(sseTransport);
-
-          // Send initial message to establish communication
-          res.write(
-            "data: " +
-              JSON.stringify({
-                type: "connection_established",
-                sessionId: sseTransport.sessionId,
-                timestamp: new Date().toISOString(),
-              }) +
-              "\n\n"
-          );
-        } else if (pathname === "/messages" && req.method === "POST") {
-          // Get session ID from query parameters
-          const sessionId =
-            new URL(req.url || "/", "http://localhost").searchParams.get("sessionId") ?? "";
-
-          if (!sessionId) {
-            res.writeHead(400, { "Content-Type": "application/json" });
-            res.end(JSON.stringify({ error: "Missing sessionId parameter", status: 400 }));
-            return;
-          }
-
-          // Get existing transport for this session
-          const sseTransport = sseTransports[sessionId];
-          if (!sseTransport) {
-            res.writeHead(400, { "Content-Type": "application/json" });
-            res.end(
-              JSON.stringify({
-                error: `No transport found for sessionId: ${sessionId}`,
-                status: 400,
-              })
-            );
-            return;
-          }
-
-          // Handle the POST message with the existing transport
-          await sseTransport.handlePostMessage(req, res);
         } else if (pathname === "/ping") {
           res.writeHead(200, { "Content-Type": "application/json" });
           res.end(JSON.stringify({ status: "ok", message: "pong" }));
@@ -465,7 +495,7 @@ async function main() {
       httpServer.listen(port, () => {
         actualPort = port;
         console.error(
-          `Codex7 Documentation MCP Server running on ${transportType.toUpperCase()} at http://localhost:${actualPort}/mcp with SSE endpoint at /sse`
+          `Codex7 Documentation MCP Server running on ${transportType.toUpperCase()} at http://localhost:${actualPort}/mcp`
         );
       });
     };

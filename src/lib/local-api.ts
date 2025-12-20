@@ -58,6 +58,8 @@ export async function searchLocalLibraries(query: string): Promise<SearchRespons
       totalSnippets: lib.totalSnippets || 0,
       totalPages: lib.totalPages || 0,
       trustScore: lib.trustScore || 10,
+      tool: "get-local-docs" as const,
+      source: "local" as const,
     }));
 
     return { results };

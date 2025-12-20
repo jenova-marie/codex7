@@ -11,6 +11,10 @@ export interface SearchResult {
   stars?: number;
   trustScore?: number;
   versions?: string[];
+  /** Which tool to use for fetching docs */
+  tool: "get-local-docs" | "get-library-docs";
+  /** Source of the library */
+  source: "local" | "remote";
 }
 
 export interface SearchResponse {

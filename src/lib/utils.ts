@@ -12,6 +12,8 @@ export function formatSearchResult(result: SearchResult): string {
   const formattedResult = [
     `- Title: ${result.title}`,
     `- Codex7-compatible library ID: ${result.id}`,
+    `- Use Tool: ${result.tool}`,
+    `- Source: ${result.source}`,
     `- Description: ${result.description}`,
   ];
 
