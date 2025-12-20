@@ -50,11 +50,6 @@ Check out our [project addition guide](./docs/adding-projects.md) to learn how t
 - Cursor, Claude Code, VSCode, Windsurf or another MCP Client
 - Codex7 API Key (Optional) for higher rate limits and private repositories (Get yours by creating an account at [codex7.com/dashboard](https://codex7.com/dashboard))
 
-> [!WARNING]
-> **SSE Protocol Deprecation Notice**
->
-> The Server-Sent Events (SSE) transport protocol is deprecated and its endpoint will be removed in upcoming releases. Please use HTTP or stdio transport methods instead.
-
 <details>
 <summary><b>Installing via Smithery</b></summary>
 
@@ -1227,7 +1222,7 @@ bun run dist/index.js
 
 `codex7-mcp` accepts the following CLI flags:
 
-- `--transport <stdio|http>` – Transport to use (`stdio` by default). Note that HTTP transport automatically provides both HTTP and SSE endpoints.
+- `--transport <stdio|http>` – Transport to use (`stdio` by default).
 - `--port <number>` – Port to listen on when using `http` transport (default `3000`).
 - `--api-key <key>` – API key for authentication (or set `CONTEXT7_API_KEY` env var). You can get your API key by creating an account at [codex7.com/dashboard](https://codex7.com/dashboard).
 
