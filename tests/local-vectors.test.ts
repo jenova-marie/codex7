@@ -108,10 +108,10 @@ describe("local-vectors module", () => {
   });
 
   describe("COLLECTION_NAME constant", () => {
-    const COLLECTION_NAME = "codex7_local_docs";
+    const COLLECTION_NAME = "codex7";
 
     it("should be a valid collection name", () => {
-      expect(COLLECTION_NAME).toBe("codex7_local_docs");
+      expect(COLLECTION_NAME).toBe("codex7");
       expect(COLLECTION_NAME).toMatch(/^[a-z0-9_]+$/);
     });
   });

@@ -63,9 +63,9 @@ export async function cleanupTestData() {
     const db = getDb();
 
     // Delete all test libraries (those starting with /test/)
-    await db.delete(localLibraries).where(
-      sql`${localLibraries.id} LIKE ${TEST_LIBRARY_PREFIX + "%"}`
-    );
+    await db
+      .delete(localLibraries)
+      .where(sql`${localLibraries.id} LIKE ${TEST_LIBRARY_PREFIX + "%"}`);
   } catch (error) {
     console.error("Cleanup error:", error);
   }
@@ -85,7 +85,7 @@ export async function cleanupTestVectors() {
     const client = getQdrantClient();
 
     // Delete all points with test library IDs
-    await client.delete("codex7_local_docs", {
+    await client.delete("codex7", {
       filter: {
         must: [
           {
