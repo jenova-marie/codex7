@@ -1,9 +1,17 @@
 import { QdrantClient } from "@qdrant/js-client-rest";
 
 /**
- * Qdrant collection name for local docs
+ * Default Qdrant collection name for local docs
+ * Can be overridden via CODEX7_QDRANT_COLLECTION env var (useful for testing)
  */
-const COLLECTION_NAME = "codex7";
+const DEFAULT_COLLECTION_NAME = "codex7";
+
+/**
+ * Get the collection name (configurable for testing)
+ */
+export function getCollectionName(): string {
+  return process.env.CODEX7_QDRANT_COLLECTION || DEFAULT_COLLECTION_NAME;
+}
 
 /**
  * Vector dimensions for text-embedding-3-small
@@ -97,20 +105,22 @@ export function isQdrantConfigured(): boolean {
 export async function ensureCollection(): Promise<void> {
   const client = getQdrantClient();
 
+  const collectionName = getCollectionName();
+
   try {
     // Check if collection exists
     const collections = await client.getCollections();
-    const exists = collections.collections.some((c) => c.name === COLLECTION_NAME);
+    const exists = collections.collections.some((c) => c.name === collectionName);
 
     if (!exists) {
       // Create collection with cosine distance
-      await client.createCollection(COLLECTION_NAME, {
+      await client.createCollection(collectionName, {
         vectors: {
           size: VECTOR_SIZE,
           distance: "Cosine",
         },
       });
-      console.error(`Created Qdrant collection: ${COLLECTION_NAME}`);
+      console.error(`Created Qdrant collection: ${collectionName}`);
     }
   } catch (error) {
     throw new Error(`Failed to ensure Qdrant collection: ${error}`);
@@ -141,9 +151,10 @@ export async function upsertVectors(
 
   // Upsert in batches of 100
   const batchSize = 100;
+  const collectionName = getCollectionName();
   for (let i = 0; i < qdrantPoints.length; i += batchSize) {
     const batch = qdrantPoints.slice(i, i + batchSize);
-    await client.upsert(COLLECTION_NAME, {
+    await client.upsert(collectionName, {
       wait: true,
       points: batch,
     });
@@ -182,7 +193,7 @@ export async function searchVectors(
       });
     }
 
-    const results = await client.search(COLLECTION_NAME, {
+    const results = await client.search(getCollectionName(), {
       vector: queryVector,
       limit,
       filter: {
@@ -211,7 +222,7 @@ export async function getLibraryVectors(
   const client = getQdrantClient();
 
   try {
-    const results = await client.scroll(COLLECTION_NAME, {
+    const results = await client.scroll(getCollectionName(), {
       filter: {
         must: [
           {
@@ -240,7 +251,7 @@ export async function deleteLibraryVectors(libraryId: string): Promise<void> {
   const client = getQdrantClient();
 
   try {
-    await client.delete(COLLECTION_NAME, {
+    await client.delete(getCollectionName(), {
       filter: {
         must: [
           {

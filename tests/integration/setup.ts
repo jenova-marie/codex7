@@ -11,10 +11,11 @@ export function setupTestEnv() {
   // Use test database - override the production URL
   process.env.CODEX7_PG_URL = "postgres://jenova:d3cad30n3@db.rso:5432/codex7_test";
 
-  // Use the same Qdrant instance but with test collection
+  // Use test collection for Qdrant - separate from production
+  process.env.CODEX7_QDRANT_COLLECTION = "codex7_test";
+
   // CODEX7_QDRANT_URL and CODEX7_QDRANT_API_KEY should come from .env
   // NODE_EXTRA_CA_CERTS should be set in .env for TLS certificate trust
-
   // OpenAI key should be set in environment from .env
 }
 
@@ -55,8 +56,8 @@ export async function isQdrantAccessible(): Promise<boolean> {
   }
 }
 
-// Test collection name to avoid conflicts with production data
-export const TEST_COLLECTION_NAME = "codex7_test_docs";
+// Test collection name - matches CODEX7_QDRANT_COLLECTION env var set in setupTestEnv()
+export const TEST_COLLECTION_NAME = "codex7_test";
 
 // Test library ID prefix
 export const TEST_LIBRARY_PREFIX = "/test/";
@@ -84,7 +85,9 @@ export async function cleanupTestData() {
  * Clean up test vectors from Qdrant
  */
 export async function cleanupTestVectors() {
-  const { getQdrantClient, isQdrantConfigured } = await import("../../src/lib/local-vectors.js");
+  const { getQdrantClient, isQdrantConfigured, getCollectionName } = await import(
+    "../../src/lib/local-vectors.js"
+  );
 
   if (!isQdrantConfigured()) {
     return;
@@ -92,9 +95,10 @@ export async function cleanupTestVectors() {
 
   try {
     const client = getQdrantClient();
+    const collectionName = getCollectionName(); // Will be "codex7_test" due to setupTestEnv()
 
     // Delete all points with test library IDs
-    await client.delete("codex7", {
+    await client.delete(collectionName, {
       filter: {
         must: [
           {

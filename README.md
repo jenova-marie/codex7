@@ -1081,21 +1081,35 @@ See [Local and Remote MCPs for Perplexity](https://www.perplexity.ai/help-center
 
 Codex7 MCP provides the following tools that LLMs can use:
 
-- `resolve-library-id`: Resolves a library name to a Codex7-compatible library ID.
-  - `libraryName` (required): The name of the library to search for
-  - Returns: Library matches with tool guidance, available documents, and topics
+### `resolve-library-id`
 
-- `get-library-docs`: Fetches documentation for REMOTE libraries via Context7 API.
-  - `codex7CompatibleLibraryID` (required): Library ID (e.g., `/mongodb/docs`, `/vercel/next.js`)
-  - `topic` (optional): Focus on a specific topic (e.g., "routing", "hooks")
-  - `tokens` (optional, default 5000): Max tokens to return (minimum 1000)
+Resolves a library name to a Codex7-compatible library ID.
 
-- `get-local-docs`: Fetches documentation for LOCAL indexed libraries.
-  - `libraryId` (required): Library ID from resolve-library-id
-  - `path` (optional): Fetch a specific document (e.g., `README.md`, `docs/api.md`)
-  - `topics` (optional): Filter by topic tags (e.g., `["routing", "auth"]`)
-  - `topic` (optional): Semantic search query within filtered results
-  - `tokens` (optional, default 5000): Max tokens to return
+- `libraryName` (required): The name of the library to search for
+
+**Returns** for each match:
+- `id`: Library ID in `/org/project` format
+- `tool`: Which tool to use (`get-library-docs` for remote, `get-local-docs` for local)
+- `documents`: Available documents (local only) - e.g., `[{ path: "README.md", title: "Overview" }]`
+- `topics`: Pre-extracted topic tags (local only) - e.g., `["routing", "auth", "middleware"]`
+
+### `get-library-docs`
+
+Fetches documentation for REMOTE libraries via Context7 API.
+
+- `codex7CompatibleLibraryID` (required): Library ID (e.g., `/mongodb/docs`, `/vercel/next.js`)
+- `topic` (optional): Focus on a specific topic (e.g., "routing", "hooks")
+- `tokens` (optional, default 5000): Max tokens to return (minimum 1000)
+
+### `get-local-docs`
+
+Fetches documentation for LOCAL indexed libraries.
+
+- `libraryId` (required): Library ID from resolve-library-id
+- `path` (optional): Fetch a specific document (e.g., `README.md`, `docs/api.md`)
+- `topics` (optional): Filter by topic tags from resolve-library-id (e.g., `["routing", "auth"]`)
+- `topic` (optional): Semantic search query within filtered results
+- `tokens` (optional, default 5000): Max tokens to return
 
 ## 🛟 Tips
 
@@ -1160,7 +1174,12 @@ OPENAI_API_KEY=sk-...
 
 # Optional: Qdrant API key if your instance requires authentication
 CODEX7_QDRANT_API_KEY=your-qdrant-api-key
+
+# Optional: TLS certificate for HTTPS Qdrant with self-signed certs
+NODE_EXTRA_CA_CERTS=/path/to/ca-bundle.pem
 ```
+
+**Note:** When using HTTPS with Qdrant, the default port is 443. For HTTP, the default port is 80. Explicit ports can be specified in the URL (e.g., `https://qdrant.example.com:6334`).
 
 ### CLI Commands
 
@@ -1209,10 +1228,30 @@ codex7 remove /my-org/my-library
 
 ### Workflow
 
-1. **resolve-library-id** returns available documents and topics
-2. **get-local-docs** with `path` fetches full documents (start with README.md)
-3. **get-local-docs** with `topics` filters by topic tags
-4. **get-local-docs** with `topic` performs semantic search
+1. **resolve-library-id** returns library info including:
+   - Available `documents` (paths like `README.md`, `docs/api.md`)
+   - Pre-extracted `topics` (tags like `routing`, `auth`, `middleware`)
+   - Which `tool` to use for fetching docs
+
+2. **get-local-docs** with `path` fetches a full document:
+   ```
+   get-local-docs({ libraryId: "/my-org/lib", path: "README.md" })
+   ```
+
+3. **get-local-docs** with `topics` filters snippets by topic tags:
+   ```
+   get-local-docs({ libraryId: "/my-org/lib", topics: ["routing", "middleware"] })
+   ```
+
+4. **get-local-docs** with `topic` performs semantic search:
+   ```
+   get-local-docs({ libraryId: "/my-org/lib", topic: "how to handle authentication" })
+   ```
+
+5. Combine `topics` + `topic` for pre-filtered semantic search:
+   ```
+   get-local-docs({ libraryId: "/my-org/lib", topics: ["auth"], topic: "JWT tokens" })
+   ```
 
 ### How It Works
 
