@@ -34,7 +34,7 @@ function getQdrantUrl(): string {
     throw new Error(
       "CODEX7_QDRANT_URL environment variable is required. " +
         "Set it to your Qdrant instance URL, e.g., " +
-        "http://qdrant.rso:6333"
+        "http://qdrant.rso"
     );
   }
   return url;
@@ -64,7 +64,7 @@ export function getQdrantClient(): QdrantClient {
     const parsedUrl = new URL(url);
     const isHttps = parsedUrl.protocol === "https:";
     const host = parsedUrl.hostname;
-    const port = parsedUrl.port ? parseInt(parsedUrl.port, 10) : isHttps ? 443 : 6333;
+    const port = parsedUrl.port ? parseInt(parsedUrl.port, 10) : isHttps ? 443 : 80;
 
     _client = new QdrantClient({
       host,

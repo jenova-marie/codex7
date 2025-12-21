@@ -13,6 +13,7 @@ export function setupTestEnv() {
 
   // Use the same Qdrant instance but with test collection
   // CODEX7_QDRANT_URL and CODEX7_QDRANT_API_KEY should come from .env
+  // NODE_EXTRA_CA_CERTS should be set in .env for TLS certificate trust
 
   // OpenAI key should be set in environment from .env
 }
@@ -35,9 +36,17 @@ export async function isQdrantAccessible(): Promise<boolean> {
   const qdrantUrl = process.env.CODEX7_QDRANT_URL;
   if (!qdrantUrl) return false;
 
+  const apiKey = process.env.CODEX7_QDRANT_API_KEY;
+
   try {
+    const headers: Record<string, string> = {};
+    if (apiKey) {
+      headers["api-key"] = apiKey;
+    }
+
     const response = await fetch(`${qdrantUrl}/collections`, {
       method: "GET",
+      headers,
       signal: AbortSignal.timeout(5000),
     });
     return response.ok;

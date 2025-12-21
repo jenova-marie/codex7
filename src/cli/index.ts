@@ -9,10 +9,7 @@ import { isOpenAIConfigured } from "../lib/embeddings.js";
 
 const program = new Command();
 
-program
-  .name("codex7")
-  .description("Codex7 local knowledge management CLI")
-  .version("1.0.0");
+program.name("codex7").description("Codex7 local knowledge management CLI").version("1.0.0");
 
 /**
  * Check required environment variables
@@ -37,7 +34,7 @@ function checkEnvironment(): void {
     }
     console.error("\nExample configuration:");
     console.error("  export CODEX7_PG_URL=postgres://user:pass@db.rso:5432/codex7");
-    console.error("  export CODEX7_QDRANT_URL=http://qdrant.rso:6333");
+    console.error("  export CODEX7_QDRANT_URL=http://qdrant.rso");
     console.error("  export OPENAI_API_KEY=sk-...");
     process.exit(1);
   }

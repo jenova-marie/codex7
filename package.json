@@ -4,10 +4,10 @@
   "mcpName": "io.github.upstash/codex7",
   "description": "MCP server for Codex7",
   "scripts": {
-    "test": "vitest run",
+    "test": "NODE_EXTRA_CA_CERTS=spiffe-bundle.pem vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "build": "tsc && chmod 755 dist/index.js && chmod 755 dist/cli/index.js",
+    "build": "tsc && chmod 755 dist/index.js && chmod 755 dist/cli/index.js && cp spiffe-bundle.pem dist/ 2>/dev/null || true",
     "format": "prettier --write .",
     "lint": "eslint \"**/*.{js,ts,tsx}\" --fix",
     "lint:check": "eslint \"**/*.{js,ts,tsx}\"",

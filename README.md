@@ -1155,7 +1155,7 @@ Codex7 supports indexing local project documentation with advanced features for 
 ```bash
 # Required for local knowledge features
 CODEX7_PG_URL=postgres://user:pass@localhost:5432/codex7
-CODEX7_QDRANT_URL=http://localhost:6333
+CODEX7_QDRANT_URL=http://localhost
 OPENAI_API_KEY=sk-...
 
 # Optional: Qdrant API key if your instance requires authentication
