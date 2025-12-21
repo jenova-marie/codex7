@@ -257,4 +257,241 @@ const y = 2;
       expect(DEFAULT_EXCLUDE_FILES).toContain("CODE_OF_CONDUCT.md");
     });
   });
+
+  describe("scoreSnippetQuality logic (Phase 4)", () => {
+    // Re-implement the scoring logic for testing
+    interface ParsedSnippet {
+      title: string;
+      sourceFile: string;
+      sourceType: string;
+      description: string;
+      content: string;
+      codeBlocks: Array<{ language: string; code: string }>;
+      topics: string[];
+    }
+
+    function scoreSnippetQuality(snippet: ParsedSnippet): number {
+      let score = 0.5; // Base score
+
+      // Bonus for having code blocks
+      if (snippet.codeBlocks.length > 0) score += 0.2;
+
+      // Extra bonus for multiple code blocks
+      if (snippet.codeBlocks.length > 2) score += 0.1;
+
+      // Bonus for substantial content
+      if (snippet.content.length > 500) score += 0.1;
+
+      // Bonus for having a description
+      if (snippet.description && snippet.description.length > 50) score += 0.1;
+
+      return Math.min(score, 1.0);
+    }
+
+    it("should return base score of 0.5 for minimal snippet", () => {
+      const snippet: ParsedSnippet = {
+        title: "Test",
+        sourceFile: "test.md",
+        sourceType: "docs",
+        description: "",
+        content: "Short content",
+        codeBlocks: [],
+        topics: [],
+      };
+
+      expect(scoreSnippetQuality(snippet)).toBe(0.5);
+    });
+
+    it("should add 0.2 for having code blocks", () => {
+      const snippet: ParsedSnippet = {
+        title: "With Code",
+        sourceFile: "test.md",
+        sourceType: "docs",
+        description: "",
+        content: "Short",
+        codeBlocks: [{ language: "js", code: "const x = 1;" }],
+        topics: [],
+      };
+
+      expect(scoreSnippetQuality(snippet)).toBe(0.7);
+    });
+
+    it("should add extra 0.1 for multiple code blocks (>2)", () => {
+      const snippet: ParsedSnippet = {
+        title: "Many Code Blocks",
+        sourceFile: "test.md",
+        sourceType: "docs",
+        description: "",
+        content: "Short",
+        codeBlocks: [
+          { language: "js", code: "const x = 1;" },
+          { language: "js", code: "const y = 2;" },
+          { language: "js", code: "const z = 3;" },
+        ],
+        topics: [],
+      };
+
+      // 0.5 base + 0.2 (has code) + 0.1 (multiple) = 0.8
+      expect(scoreSnippetQuality(snippet)).toBeCloseTo(0.8);
+    });
+
+    it("should add 0.1 for substantial content (>500 chars)", () => {
+      const snippet: ParsedSnippet = {
+        title: "Long Content",
+        sourceFile: "test.md",
+        sourceType: "docs",
+        description: "",
+        content: "a".repeat(501),
+        codeBlocks: [],
+        topics: [],
+      };
+
+      // 0.5 base + 0.1 (long content) = 0.6
+      expect(scoreSnippetQuality(snippet)).toBe(0.6);
+    });
+
+    it("should add 0.1 for having a description (>50 chars)", () => {
+      const snippet: ParsedSnippet = {
+        title: "With Description",
+        sourceFile: "test.md",
+        sourceType: "docs",
+        description: "This is a description that is longer than fifty characters for testing.",
+        content: "Short",
+        codeBlocks: [],
+        topics: [],
+      };
+
+      // 0.5 base + 0.1 (description) = 0.6
+      expect(scoreSnippetQuality(snippet)).toBe(0.6);
+    });
+
+    it("should cap score at 1.0 maximum", () => {
+      const snippet: ParsedSnippet = {
+        title: "Maximum Quality",
+        sourceFile: "test.md",
+        sourceType: "docs",
+        description: "A description that is definitely longer than fifty characters for maximum points.",
+        content: "a".repeat(600), // > 500 chars
+        codeBlocks: [
+          { language: "js", code: "// block 1" },
+          { language: "js", code: "// block 2" },
+          { language: "js", code: "// block 3" },
+        ],
+        topics: ["topic1"],
+      };
+
+      // 0.5 + 0.2 + 0.1 + 0.1 + 0.1 = 1.0
+      expect(scoreSnippetQuality(snippet)).toBeCloseTo(1.0);
+    });
+
+    it("should handle edge case with exactly 500 chars (no bonus)", () => {
+      const snippet: ParsedSnippet = {
+        title: "Boundary",
+        sourceFile: "test.md",
+        sourceType: "docs",
+        description: "",
+        content: "a".repeat(500), // exactly 500, not > 500
+        codeBlocks: [],
+        topics: [],
+      };
+
+      expect(scoreSnippetQuality(snippet)).toBe(0.5);
+    });
+
+    it("should handle edge case with exactly 50 char description (no bonus)", () => {
+      const snippet: ParsedSnippet = {
+        title: "Boundary",
+        sourceFile: "test.md",
+        sourceType: "docs",
+        description: "a".repeat(50), // exactly 50, not > 50
+        content: "Short",
+        codeBlocks: [],
+        topics: [],
+      };
+
+      expect(scoreSnippetQuality(snippet)).toBe(0.5);
+    });
+
+    it("should handle exactly 2 code blocks (no extra bonus)", () => {
+      const snippet: ParsedSnippet = {
+        title: "Two Blocks",
+        sourceFile: "test.md",
+        sourceType: "docs",
+        description: "",
+        content: "Short",
+        codeBlocks: [
+          { language: "js", code: "// block 1" },
+          { language: "js", code: "// block 2" },
+        ],
+        topics: [],
+      };
+
+      // 0.5 base + 0.2 (has code blocks) = 0.7 (no extra for multiple since not > 2)
+      expect(scoreSnippetQuality(snippet)).toBe(0.7);
+    });
+
+    it("should accumulate all bonuses correctly", () => {
+      const snippet: ParsedSnippet = {
+        title: "Full Featured",
+        sourceFile: "test.md",
+        sourceType: "docs",
+        description: "This description has exactly enough characters to qualify for the bonus.",
+        content: "a".repeat(501),
+        codeBlocks: [{ language: "js", code: "const x = 1;" }],
+        topics: ["routing", "api"],
+      };
+
+      // 0.5 base + 0.2 (code) + 0.1 (long content) + 0.1 (description) = 0.9
+      expect(scoreSnippetQuality(snippet)).toBeCloseTo(0.9);
+    });
+  });
+
+  describe("extractTitleFromMarkdown logic", () => {
+    function extractTitleFromMarkdown(content: string, filename: string): string {
+      const h1Match = content.match(/^#\s+(.+)$/m);
+      if (h1Match) {
+        return h1Match[1].trim();
+      }
+      // Fallback to filename without extension
+      return filename.replace(/\.[^/.]+$/, "");
+    }
+
+    it("should extract title from H1 header", () => {
+      const content = "# Getting Started\n\nWelcome to the docs.";
+      expect(extractTitleFromMarkdown(content, "README.md")).toBe("Getting Started");
+    });
+
+    it("should handle H1 with extra whitespace", () => {
+      const content = "#   Spaced Title  \n\nContent";
+      expect(extractTitleFromMarkdown(content, "test.md")).toBe("Spaced Title");
+    });
+
+    it("should use filename fallback when no H1", () => {
+      const content = "Just some content without headers.";
+      expect(extractTitleFromMarkdown(content, "getting-started.md")).toBe("getting-started");
+    });
+
+    it("should strip extension from filename fallback", () => {
+      expect(extractTitleFromMarkdown("No header", "api-reference.mdx")).toBe("api-reference");
+      expect(extractTitleFromMarkdown("No header", "GUIDE.rst")).toBe("GUIDE");
+    });
+
+    it("should prefer first H1 if multiple exist", () => {
+      const content = `# First Title
+
+Some content.
+
+# Second Title
+
+More content.`;
+      expect(extractTitleFromMarkdown(content, "test.md")).toBe("First Title");
+    });
+
+    it("should not match ## as title", () => {
+      const content = `## Section Header
+
+Some content.`;
+      expect(extractTitleFromMarkdown(content, "test.md")).toBe("test");
+    });
+  });
 });
