@@ -1,0 +1,88 @@
+name: Build & Push Docker Images to AWS ECR
+
+on:
+  push:
+    branches-ignore:
+      - root
+
+permissions:
+  id-token: write # This is required for requesting the JWT
+  contents: read
+
+env:
+  ENV: ${{ github.ref_name }}
+  AWS_REGION: ${{ github.ref_name == 'dev' && 'us-east-2' || github.ref_name == 'staging' && 'us-west-2' || github.ref_name == 'prod' && 'us-east-1' || 'us-east-2' }}
+
+jobs:
+  docker-build-and-push:
+    runs-on: hestia
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Set environment from branch
+        run: |
+          # Branch name is directly available from github.ref_name
+          BRANCH="${{ github.ref_name }}"
+          echo "ENV=$BRANCH" >> $GITHUB_ENV
+
+          # Set AWS region based on branch
+          case "$BRANCH" in
+            dev)     echo "AWS_REGION=us-east-2" >> $GITHUB_ENV ;;
+            staging) echo "AWS_REGION=us-west-2" >> $GITHUB_ENV ;;
+            prod)    echo "AWS_REGION=us-east-1" >> $GITHUB_ENV ;;
+          esac
+
+          echo "Branch: $BRANCH"
+
+      - name: Check for build relevant file changes
+        id: build_filter
+        uses: ./.forgejo/actions/check-build-changes
+        with:
+          before-ref: ${{ github.event.before }}
+          current-sha: ${{ github.sha }}
+
+      - name: Configure AWS Credentials via OIDC
+        if: steps.build_filter.outputs.build_required == 'true'
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Set up Docker Buildx
+        if: steps.build_filter.outputs.build_required == 'true'
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Amazon ECR
+        if: steps.build_filter.outputs.build_required == 'true'
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Extract metadata
+        if: steps.build_filter.outputs.build_required == 'true'
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ secrets.AWS_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ github.event.repository.name }}
+          tags: |
+            type=raw,value=${{ env.ENV }}
+
+      - name: Build and Push Docker Image
+        if: steps.build_filter.outputs.build_required == 'true'
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          platforms: linux/arm64
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=registry,ref=${{ secrets.AWS_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ github.event.repository.name }}:cache-${{ github.sha }}
+          cache-to: type=registry,ref=${{ secrets.AWS_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ github.event.repository.name }}:cache-${{ github.sha }},mode=max
+
+      - name: Deploy to AWS Service (Optional)
+        # if: steps.build_filter.outputs.build_required == 'true'
+        run: |
+          echo "Trigger image deployment here if needed"
